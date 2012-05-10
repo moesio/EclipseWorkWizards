@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<EclipseWork>
+	<wizard>
+		<title>Create the Hibernate mapping file</title>
+		
+		<model-page required="true">
+			<description>POJO: Java -> hbm.xml</description>
+		</model-page>
+		
+		<component-page required="true">
+			<description>Create the Hibernate mapping file (*.hbm.xml)</description>
+			
+			<!--<type name="model" label="POJO:" required="true"/>-->
+			
+			<radio name="hibernate" label="Version" value="Hibernate 3" listener="true" >
+				<elements>
+					<!-- TODO 'key': <option key="3">Hibernate 3</option>-->
+					<option>Hibernate 3</option>
+					<option>Hibernate 2.x</option>
+				</elements>
+			</radio>
+			
+			<group checkbox="cfg">
+				<!-- 
+				The '#' sintax find the value in the window->preferences->eclipsework->static variables.
+				Create the variable hibernate.cfg.xml.location to set the default value...
+				-->
+				<checkbox label="Update hibernate.cfg.xml ?" name="cfg" value=""/>
+				<file name="hibernate.cfg.xml" label="hibernate.cfg.xml" type="folder" extensions="xml" value="#hibernate.cfg.xml"/>
+			</group>
+			
+			<group checkbox="spring">
+				<checkbox label="Update Spring applicationContext ?" name="spring" value=""/>
+				<file name="applicationContext.xml" label="applicationContext.xml" type="folder" extensions="xml" value="#applicationContext.xml"/>
+			</group>
+			
+		</component-page>
+		
+		<!-- Output Files -->
+		<output>
+			<!-- *.hbm.xml -->
+			<template component="hbm" expression="${model.name}" velocity="hbm.xml.vm" extension="hbm.xml" container="${model.package}"/>
+			
+			<!-- update hibernate.cfg.xml -->
+			<xml-update file="hibernate.cfg.xml">
+				<condition variable="cfg" value="true"/>
+				<session-factory check-before-create="true">
+					<mapping resource="${stringUtils.replace($model.fullyName,'.','/')}.hbm.xml"/>
+				</session-factory>
+			</xml-update>
+			
+			<!-- update applicationContext.xml -->
+			<xml-update file="applicationContext.xml">
+				<condition variable="spring" value="true"/>
+				<bean id="sessionFactory" check-before-create="true">
+					<property name="mappingResources" check-before-create="true">
+						<list check-before-create="true">
+							<value>${stringUtils.replace($model.fullyName,'.','/')}.hbm.xml</value>
+						</list>
+					</property>
+				</bean>
+			</xml-update>
+		</output>
+	</wizard>
+</EclipseWork>

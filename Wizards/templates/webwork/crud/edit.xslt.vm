@@ -1,0 +1,59 @@
+#set($pojo = ${model.uncapName})
+<?xml version="1.0"?>
+<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.0">
+    <xsl:output method="html" media-type="text/html"/>
+
+    <xsl:template match="result">
+        <html>
+            <head>
+                <title>${model.capName}s:</title>
+            </head>
+			<body>
+				<xsl:apply-templates select="${pojo}"/>
+			</body>
+        </html>
+    </xsl:template>
+	
+	<xsl:template match="${pojo}">
+		<form id="save" name="form" action="save.action" method="POST">
+					<table class="wwFormTable">
+#foreach($f in $model.fields)
+#if(${f.name} == "id" )
+					<xsl:choose>
+						<xsl:when test="id = 'null'">
+							<input type="hidden" name="${pojo}.id" />
+						</xsl:when>
+						<xsl:otherwise>
+							<input type="hidden" name="${pojo}.id" value="{id}" />
+						</xsl:otherwise>
+					 </xsl:choose>
+#else
+						<tr>
+							<td align="right" valign="top">
+								<label for="save_${pojo}.${f.name}" class="label">${f.capName}:</label>
+							</td>
+							<td>
+							<xsl:choose>
+								<xsl:when test="id = 'null'">
+									<input type="text" name="${pojo}.${f.name}"/>
+								</xsl:when>
+								<xsl:otherwise>
+									<input type="text" name="${pojo}.${f.name}" value="{${f.name}}"/>
+								</xsl:otherwise>
+							 </xsl:choose>
+							</td>
+						</tr>
+#end
+#end
+						<tr>
+							<td colspan="2">
+								<div align="'right'" >
+									<input type="submit" value="Save ${model.capName}" />
+								</div>
+							</td>
+						</tr>
+					</table>
+				</form>
+    </xsl:template>
+
+</xsl:stylesheet>

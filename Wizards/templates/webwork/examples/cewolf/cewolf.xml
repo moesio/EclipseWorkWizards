@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<EclipseWork>
+    <wizard>
+        <title>CeWolf Action!</title>
+
+        <component-page required="false">
+            <description>Demo: Create a Pie Chart with CeWolf. 
+The wizard will create a demo page with JSP, Velocity and FreeMarker
+			</description>
+
+			<!-- Action -->
+			<group label="Action">
+				<textfield name="actionClass" label="Action Name:" required="true" value="CeWolfPieAction" />
+				<container name="packageClass" label="Package:" required="true" type="package" value="#webwork.action.package"/>
+			</group>
+
+			<!-- CeWolf -->
+			<group label="Create a Pie Chart with CeWolf">
+	            <textfield name="cewolfClass" label="CeWolf DataProducer Name:" required="true" value="PieChart" />
+		        <container name="cewolfClass_package" label="Package:" required="true" type="package" value=""/>
+			</group>
+
+			<!-- Result -->
+			<group label="Result Page">
+				<textfield name="resultName" label="JSP Name:" required="true" value="pie" />
+				<container name="resultName_folder" label="Folder:" required="true" type="folder" value="#webroot" />
+			</group>
+
+        </component-page>
+
+		<component-page required="true">
+			<include file="includes/xwork_package.xml" />
+			<include file="includes/xwork_action.xml" />
+		</component-page>
+
+        <output>
+			<!-- 
+				Create the chart before the Action! Then you can use the $cewolfClass.fullyName in the CewolfAction.vm :-) 
+				This is because the wizard put a org.eclipse.eclipsework.wizard.component.Type object in the velocity context
+				after create the template. (if it is a java class file).
+			-->
+			<template component="cewolfClass" velocity="PieChart.vm" extension="java" container="cewolfClass_package"/>
+
+            <template component="actionClass" velocity="CewolfAction.vm" extension="java" container="packageClass"/>
+
+           	<template component="resultName" velocity="cewolf.vm" container="resultName_folder" extension="vm"/>
+            <template component="resultName" velocity="cewolf.jsp.vm" container="resultName_folder" extension="jsp"/>
+			<template component="resultName" velocity="cewolf.ftl.vm" container="resultName_folder" extension="ftl"/>
+
+			<xml-update file="xwork.xml">
+
+				<package name="${xwork_package_name}" extends="${xwork_package_extends}" check-before-create="true"> 
+					<action name="${xwork_action_name}" class="${actionClass}">
+						<!--
+							Look at the org.eclipse.eclipsework.wizard.model.java.Output class
+							You can use any VTL expression inside the ${}
+							The result of "${resultName.path}${resultName.name}.vm" will be -> "/path/vm/../page.vm"
+						-->
+						<!--<comment>FreeMarker is the default</comment>-->
+						<result name="success" type="freemarker">${resultName.path}${resultName.name}.ftl</result>
+						<result name="successJSP" type="dispatcher">${resultName.path}${resultName.name}.jsp</result>
+						<result name="successVM" type="velocity">${resultName.path}${resultName.name}.vm</result>
+					</action>
+				</package>
+
+			</xml-update>
+		</output>
+    </wizard>
+</EclipseWork>

@@ -1,0 +1,32 @@
+<?xml version="1.0"?>
+#if($hibernate == "Hibernate 2.x")
+<!DOCTYPE hibernate-mapping PUBLIC
+	"-//Hibernate/Hibernate Mapping DTD//EN"
+	"http://hibernate.sourceforge.net/hibernate-mapping-2.0.dtd">
+#end
+#if($hibernate == "Hibernate 3")
+<!DOCTYPE hibernate-mapping PUBLIC
+    "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+    "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+#end
+<hibernate-mapping>
+	<!-- $model root -->
+	<class name="$model" table="$model.name">
+#foreach($f in $model.fields)
+#if($f.name == "id")
+		<id name="id" type="long" column="id">
+			<generator class="native"/>
+		</id>
+#elseif($f.bean)
+		<many-to-one name="$f.name" class="$f.bean.fullyName" column="${f.name.toUpperCase()}_ID" />
+#elseif($f.type=="Collection")
+		<set name="$f.name" lazy="true" inverse="true">
+			<key column="${model.name.toUpperCase()}_ID" not-null="true"/>
+			<one-to-many class="$f.javaClass.fullyName" />
+		</set>
+#else
+		<property name="$f.name" column="$f.name" type="#if(${f.type}=="String")string#else$stringUtils.uncapitalise(${f.type})#end"/>
+#end
+#end
+	</class>
+</hibernate-mapping>

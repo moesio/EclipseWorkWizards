@@ -1,0 +1,24 @@
+#if($package)
+package $package;
+#end
+
+/**
+ * TODO improve this :-)
+ *
+ * @author $author
+ */
+public class $class {
+	public static void main(String[] args) throws Exception {
+
+		$dao dao = ${daoFactory}.get${framework}DAOFactory().get${dao.name}();
+
+		System.out.println(dao.list());
+
+		//please help me to create the object :-)
+		dao.save(new $model());
+
+		System.out.println(dao.list());
+
+		System.exit(0);
+	}
+}

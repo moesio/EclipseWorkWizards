@@ -1,0 +1,118 @@
+<?xml version="1.0"?>
+<!DOCTYPE jasperReport PUBLIC "-//JasperReports//DTD Report Design//EN" "http://jasperreports.sourceforge.net/dtds/jasperreport.dtd">
+
+<jasperReport
+    name="$jasper.name"
+    pageWidth="595"
+    pageHeight="842"
+    columnWidth="515"
+    columnSpacing="0"
+    leftMargin="40"
+    rightMargin="40"
+    topMargin="50"
+    bottomMargin="50">
+    <reportFont name="Arial_Normal" isDefault="true" fontName="Arial" size="12" pdfFontName="Helvetica" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+    <reportFont name="Arial_Small" isDefault="true" fontName="Arial" size="8" pdfFontName="Helvetica" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+    <reportFont name="Arial_Bold" isDefault="false" fontName="Arial" size="12" isBold="true" pdfFontName="Helvetica-Bold" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+    <reportFont name="Arial_Italic" isDefault="false" fontName="Arial" size="12" isItalic="true" pdfFontName="Helvetica-Oblique" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+    <parameter name="title" class="java.lang.String"/>
+    <parameter name="reportDirectory" class="java.io.File"/>
+
+## Show Only Strings :-)
+#foreach($f in $bean.fields)
+#if($f.type=="String")
+    <field name="$f.name" class="java.lang.String">
+        <fieldDescription>$f.name</fieldDescription>
+    </field>
+#end
+#end
+    <!-- Title -->
+    <title>
+        <band height="50">
+            <line>
+                <reportElement x="0" y="0" width="515" height="0"/>
+                <graphicElement stretchType="NoStretch"/>
+            </line>
+            <staticText>
+                <reportElement x="0" y="10" width="515" height="30"/>
+                <textElement textAlignment="Center" lineSpacing="Single">
+                    <font reportFont="Arial_Normal" size="20"/>
+                </textElement>
+                <text>WebWork + Jasper Reports</text>
+            </staticText>
+        </band>
+    </title>
+    <!-- Header -->
+    <pageHeader>
+        <band height="20">
+            <rectangle>
+                <reportElement x="0" y="5" width="515" height="15" backcolor="#666666"/>
+                <graphicElement stretchType="NoStretch" pen="None"/>
+            </rectangle>
+            <staticText>
+                <reportElement x="5" y="5" width="100" height="15" forecolor="#FFFFFF"/>
+                <textElement>
+                    <font reportFont="Arial_Bold"/>
+                </textElement>
+                <text>$textReport</text>
+            </staticText>
+            <line>
+                <reportElement x="0" y="20" width="515" height="0"/>
+                <graphicElement stretchType="NoStretch"/>
+            </line>
+        </band>
+    </pageHeader>
+    <columnHeader>
+        <band height="2"/>
+    </columnHeader>
+    <detail>
+        <band height="100">
+#set( $y = 25 )
+#foreach($f in $bean.fields)
+#if($f.type=="String")
+            <textField>
+                <reportElement x="210" y="$y" width="300" height="15"/>
+                <textElement>
+                    <font reportFont="Arial_Small"/>
+                </textElement>
+                <textFieldExpression>"${f.name}:" + $F{${f.name}}</textFieldExpression>
+            </textField>
+#set( $y = $y + 25 )
+#end
+#end
+			<line>
+                <reportElement x="0" y="20" width="515" height="0"/>
+                <graphicElement stretchType="NoStretch"/>
+            </line>
+
+        </band>
+    </detail>
+    <columnFooter>
+        <band height="2"/>
+    </columnFooter>
+    <pageFooter>
+        <band height="40">
+            <line>
+                <reportElement x="0" y="10" width="515" height="0"/>
+                <graphicElement stretchType="NoStretch"/>
+            </line>
+            <textField>
+                <reportElement x="200" y="20" width="80" height="15"/>
+                <textElement textAlignment="Right"/>
+                <textFieldExpression class="java.lang.String">
+                    "Page " + String.valueOf($pageNumber) + " of"
+                </textFieldExpression>
+            </textField>
+            <textField evaluationTime="Report">
+                <reportElement x="280" y="20" width="75" height="15"/>
+                <textElement textAlignment="Left"/>
+                <textFieldExpression class="java.lang.String">
+                    " " + String.valueOf($pageNumber)
+                </textFieldExpression>
+            </textField>
+        </band>
+    </pageFooter>
+    <summary>
+        <band height="2"/>
+    </summary>
+</jasperReport>

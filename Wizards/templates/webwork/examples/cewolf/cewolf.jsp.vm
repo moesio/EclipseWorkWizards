@@ -1,0 +1,26 @@
+<center>CeWolf && JSP</center><hr>
+
+<%@taglib uri='cewolf' prefix='cewolf' %>
+
+<p align="center">
+
+<cewolf:chart id="pieChart" title="What´s the best MVC Framework ?" type="pie">
+    <cewolf:gradientpaint>
+        <cewolf:point x="0" y="0" color="#FFFFFF" />
+        <cewolf:point x="300" y="0" color="#DDDDFF" />
+    </cewolf:gradientpaint>
+    <cewolf:data>
+        <cewolf:producer id="dataSet" />
+    </cewolf:data>
+</cewolf:chart>
+<cewolf:img chartid="pieChart" renderer="cewolf" width="400" height="300"/>
+
+</p>
+	
+<p>
+<a href="${xwork_action_name}.action?view=jsp">JSP</a>
+  -
+<a href="${xwork_action_name}.action?view=vm">Velocity</a>
+  -
+<a href="${xwork_action_name}.action?view=ftl">Freemarker</a>
+</p>

@@ -1,0 +1,9 @@
+#set($prop = $stringUtils.capitalise(${property}))
+#set($vo = $stringUtils.uncapitalise(${model.elementName}))
+<b>Find by $property:<br>
+<%@ taglib uri="webwork" prefix="ww" %>
+
+<ww:form name="form" #if($namespace)namespace="${namespace}"#end action="find${model.name}By${prop}" validate="true" method="POST">
+	<ww:textfield label="$property" name="${vo}.${property}" />
+	<ww:submit value="Find" />
+</ww:form>

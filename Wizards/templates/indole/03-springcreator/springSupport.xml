@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<EclipseWork>
+    <wizard>
+        <title>Adiciona Spring/IoC + Hibernate support!</title>
+
+		<component-page required="true">
+			<description>Spring</description>
+
+<!-- 
+			<container name="webinf_container" label="WEB-INF:" required="true" type="folder" value="#webinf"/>
+ -->
+			<container name="src" label="Pasta dos fontes:" required="true" type="source" value="#srcFolder"/>
+			<container name="configPackage" label="Pacote de configuração:" required="true" type="package" value="#confPackage"/>
+
+			<group label="Conexão com o banco">
+				
+				<textfield name="username"  label="Username:" required="true" />
+				<textfield name="password"  label="Password:"  />
+				
+				<combo name="hibernate_dialect" label="Hibernate dialect:" value="" edit="true">
+					<elements>
+						<option>org.hibernate.dialect.PostgreSQLDialect</option>
+						<option>org.hibernate.dialect.HSQLDialect</option>
+						<option>org.hibernate.dialect.MySQLDialect</option>
+						<option>org.hibernate.dialect.MySQLInnoDBDialect</option>
+						<option>org.hibernate.dialect.MySQLMyISAMDialect</option>
+						<option>org.hibernate.dialect.OracleDialect</option>
+						<option>org.hibernate.dialect.Oracle9Dialect</option>
+						<option>org.hibernate.dialect.DB2Dialect</option>
+						<option>org.hibernate.dialect.SybaseDialect</option>
+						<option>org.hibernate.dialect.PointbaseDialect</option>
+					</elements>
+				</combo>
+				
+				<combo name="hibernate_driver" label="JDBC Driver:" value="" edit="true">
+					<elements>
+						<option>org.postgresql.Driver</option>
+						<option>org.hsqldb.jdbcDriver</option>
+						<option>com.mysql.jdbc.Driver</option>
+						<option>oracle.jdbc.driver.OracleDriver</option>
+						<option>COM.ibm.db2.jdbc.app.DB2Driver</option>
+						<option>com.sybase.jdbc2.jdbc.SybDriver</option>
+						<option>com.pointbase.jdbc.jdbcUniversalDriver</option>
+					</elements>
+				</combo>
+
+				<combo name="hibernate_url" label="JDBC URL:" value="" edit="true">
+					<elements>
+						<option>jdbc:postgresql://&lt;host&gt;:&lt;port&gt;/&lt;dbname&gt;</option>
+						<option>jdbc:hsqldb:hsql://localhost</option>
+						<option>jdbc:hsqldb:</option>
+						<option>jdbc:hsqldb:.</option>
+						<option>jdbc:mysql://localhost/db</option>
+						<option>jdbc:oracle:thin:@localhost:1521:db</option>
+						<option>jdbc:db2:db</option>
+						<option>jdbc:sybase:Tds:co3061835-a:5000/tempdb</option>
+						<option>jdbc:pointbase:embedded:db</option>
+					</elements>
+				</combo>
+			</group>
+
+		</component-page>
+
+		<!-- Output Files -->
+        <output>
+            <template component="hibernate.cfg" velocity="hibernate.cfg.xml.vm" extension="xml" container="src"/>
+            <template component="applicationContext" velocity="applicationContext.vm" extension="xml" container="configPackage"/>
+			<template component="applicationContext-dao" velocity="applicationContext-empty.vm" extension="xml" container="configPackage"/>
+			<template component="applicationContext-dao-hibernate" velocity="applicationContext-empty.vm" extension="xml" container="configPackage"/>
+			<template component="applicationContext-business" velocity="applicationContext-empty.vm" extension="xml" container="configPackage"/>
+			<template component="applicationContext-actions" velocity="applicationContext-empty.vm" extension="xml" container="configPackage"/>
+			<template component="applicationContext-security" velocity="applicationContext-security.vm" extension="xml" container="configPackage"/>
+			<template component="applicationContext-datasource" velocity="applicationContext-datasource.vm" extension="xml" container="configPackage"/>
+			<!--
+				-->
+        </output>
+    </wizard>
+</EclipseWork>

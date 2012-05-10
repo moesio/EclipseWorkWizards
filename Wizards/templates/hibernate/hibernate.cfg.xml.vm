@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+#if($hibernate == "Hibernate 2.x")
+<!DOCTYPE hibernate-configuration PUBLIC "-//Hibernate/Hibernate ConfigurationDTD//EN" "http://hibernate.sourceforge.net/hibernate-configuration-2.0.dtd">
+#end
+#if($hibernate == "Hibernate 3")
+<!DOCTYPE hibernate-configuration PUBLIC "-//Hibernate/Hibernate Configuration DTD//EN" "http://hibernate.sourceforge.net/hibernate-configuration-3.0.dtd">
+#end
+<hibernate-configuration>
+    <session-factory>
+
+        <property name="dialect">$hibernate_dialect</property>
+
+        <property name="connection.driver_class">$hibernate_driver</property>
+        <property name="connection.url">$hibernate_url</property>
+        <property name="connection.username">$username</property>
+#if($password)
+        <property name="connection.password">$!password</property>
+#else
+        <property name="connection.password" />
+#end
+
+        <!-- Config -->
+        <property name="show_sql">true</property>
+        <property name="use_outer_join">true</property>
+        <property name="jdbc.batch_size">0</property>
+        <property name="jdbc.use_streams_for_binary">true</property>
+        <property name="hibernate.cglib.use_reflection_optimizer">true</property>
+
+		<!-- Mapping files -->
+
+    </session-factory>
+</hibernate-configuration>
+

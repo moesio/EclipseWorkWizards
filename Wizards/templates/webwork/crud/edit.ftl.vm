@@ -1,0 +1,44 @@
+<b>$stringUtils.capitalise(${model.name}):</b><br>
+<#assign ww=JspTaglibs["/WEB-INF/webwork.tld"] />
+
+<@ww.form name="form" #if($namespace)namespace="${namespace}"#end action="save" validate="true" method="POST">
+#foreach($f in $model.fields)
+#if(${f.name} == "id" )
+	<@ww.hidden label="$stringUtils.capitalise($f.name)" name="$stringUtils.uncapitalise(${model.name}).${f.name}" />
+#elseif($f.bean)
+
+<\#if ${f.bean.uncapName}s?exists>
+	<@ww.select label="${f.bean.name}s" name="${f.bean.uncapName}Id" list="${f.bean.uncapName}s" listKey="id" listValue="Please fill this with the name of some ${f.bean.name} property" headerValue="-------------" headerKey=""/>
+</\#if>
+#elseif($f.type=="Collection")
+
+#else
+	<@ww.textfield label="$stringUtils.capitalise($f.name)" name="$stringUtils.uncapitalise(${model.name}).${f.name}" />
+#end
+#end
+	<@ww.submit value="Save $stringUtils.capitalise(${model.name})" />
+</@ww.form>
+
+#foreach($f in $model.fields)
+#if($f.bean)
+
+<!-- ${f.bean} -->
+<hr>
+<\#if ${model.uncapName}.${f.bean.uncapName}?exists>
+<ul>
+<li><a href="../${f.bean.uncapName}/load.action?${f.bean.uncapName}.id=${${model.uncapName}.${f.bean.uncapName}.id}">${${model.uncapName}.${f.bean.uncapName}}</a></li>
+</ul>
+</\#if>
+<hr>
+#elseif($f.collection)
+
+<!-- $f.javaClass -->
+<\#if ${model.uncapName}.${f.javaClass.uncapName}s?exists>
+<#list ${model.uncapName}.${f.javaClass.uncapName}s as c>
+<ul>
+<li><a href="../${f.javaClass.uncapName}/load.action?${f.javaClass.uncapName}.id=${c.id}">${c}</a></li>
+</ul>
+</#list>
+</\#if>
+#end
+#end

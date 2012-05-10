@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<EclipseWork>
+    <wizard>
+        <title>Demo - Prepare Interceptor</title>
+
+		<model-page type="java" required="true">
+            <description>Choose a POJO for your Action.</description>
+        </model-page>
+
+        <component-page>
+            <description>Demo - Prepare Interceptor.</description>
+
+			<textfield name="actionClass" label="Action Name:" required="true" value=""/>
+            <container name="actionPackage" label="Package:" required="true" type="package" value="#webwork.action.package"/>
+
+			<textfield name="listPageName" label="List Page:" required="true" extensions="vm,jsp,ftl,xstl" value=""/>
+			<textfield name="editPageName" label="Edit Page:" required="true" extensions="vm,jsp" value=""/>
+
+			<container name="resultName_folder" label="WebRoot:" required="true" type="folder" value="#webroot" />
+
+			<combo name="viewType" label="View Layer:" value="FreeMarker">
+				<elements>
+					<option value="freemarker">FreeMarker</option>
+					<option value="velocity">Velocity</option>
+					<option value="dispatcher">JSP</option>
+				</elements>
+			</combo>
+
+        </component-page>
+
+		<component-page required="true">
+			<include file="includes/xwork_package.xml" />
+		</component-page>
+
+		<variables>
+			<var name="namespace" value="xwork_package_namespace" />
+		</variables>
+
+		<!-- Output Files -->
+        <output>
+
+			<!-- Action -->
+			<template component="actionClass" velocity="PrepareAction.vm" extension="java" container="actionPackage" />
+
+			<!-- Velocity -->
+            <template component="listPageName" velocity="../../crud/list.vm" extension="vm" container="resultName_folder">
+				<condition variable="viewType" value="Velocity" />
+			</template>
+			<template component="editPageName" velocity="../../crud/edit.vm" extension="vm" container="resultName_folder">
+				<condition variable="viewType" value="Velocity" />
+			</template>
+
+			<!-- JSP -->
+            <template component="listPageName" velocity="../../crud/list.jsp.vm" extension="jsp" container="resultName_folder">
+				<condition variable="viewType" value="JSP" />
+			</template>
+			<template component="editPageName" velocity="../../crud/edit.jsp.vm" extension="jsp" container="resultName_folder">
+				<condition variable="viewType" value="JSP" />
+			</template>
+
+			<!-- FreeMarker -->
+			<template component="listPageName" velocity="../../crud/list.ftl.vm" extension="ftl" container="resultName_folder">
+				<condition variable="viewType" value="FreeMarker" />
+			</template>
+			<template component="editPageName" velocity="../../crud/edit.ftl.vm" extension="ftl" container="resultName_folder">
+				<condition variable="viewType" value="FreeMarker" />
+			</template>
+
+			<!-- 
+				Update xwork.xml 
+				EclipseWork will look at the ProjectProperties settings to find the xwork.xml location.
+			-->
+
+			<!--
+				Prepare Interceptor
+			-->
+			<xml-update file="xwork.xml">
+
+				<package name="${xwork_package_name}" extends="${xwork_package_extends}" namespace="$!namespace" check-before-create="true">
+
+					<comment> Prepare Stack. Apply the parameters interceptor before and after the prepare. </comment>
+					<interceptors>
+							<interceptor-stack name="prepareStack">
+								<comment>set the parameters (like ID)</comment>
+								<interceptor-ref name="params"/>
+								<comment>so, load the instance from the database</comment>
+								<interceptor-ref name="prepare"/>
+								<comment>let parameters interceptor be applied into the instance you just loaded from the database. </comment>
+								<interceptor-ref name="params"/>
+								<comment>check conversion errors</comment>
+								<interceptor-ref name="conversionError"/>
+							</interceptor-stack>
+					</interceptors>
+
+					<comment> default interceptor for all Actions in this package</comment>
+					<default-interceptor-ref name="defaultStack" />
+
+					<action name="list" class="${actionClass}" method="list">
+						<result name="success" type="${viewType}">${listPageName}</result>
+					</action>
+					<action name="save" class="${actionClass}" method="save">
+						<comment> I will only use prepareStack when the user clicks in the submit button to save the instance </comment>
+						<interceptor-ref name="prepareStack" />
+						<result name="success" type="redirect">list.action</result>
+						<result name="input" type="${viewType}">${editPageName}</result>
+					</action>
+					<action name="load" class="${actionClass}" method="load">
+						<result name="success" type="${viewType}">${editPageName}</result>
+					</action>
+					<action name="delete" class="${actionClass}" method="delete">
+						<result name="success" type="redirect">list.action</result>
+					</action>
+				</package>
+			</xml-update>
+
+        </output>
+    </wizard>
+</EclipseWork>

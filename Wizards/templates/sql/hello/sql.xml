@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<EclipseWork>
+    <wizard>
+        <title>SQL Wizard!</title>
+
+		<model-page type="sql" required="false">
+            <description>Choose the tables.</description>
+        </model-page>
+
+		<!-- Output Files -->
+        <output>
+			<template component="fileName" velocity="sql/hello/tables.vm" extension="sql"/>
+        </output>
+    </wizard>
+</EclipseWork>

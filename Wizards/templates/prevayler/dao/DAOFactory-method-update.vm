@@ -1,0 +1,9 @@
+
+	/**
+	 * Get the DAOFactory to Prevayler
+	 * @return
+	 */
+	public static DAOFactory get${prevaylerDAOFactory.name}() {
+		return new ${prevaylerDAOFactory.name}();
+	}
+

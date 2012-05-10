@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<EclipseWork>
+    <wizard>
+        <title>ExceptionHandler Interceptor</title>
+
+        <component-page required="false">
+            <description>Interceptor to handle Exceptions thrown by Actions.</description>
+
+			<container name="package" label="Package:" required="true" type="package" value=""/>
+            <textfield name="class" label="Class Name:" required="true" extension="java" value="ExceptionInterceptor"/>
+
+        </component-page>
+
+        <output>
+            <template component="class" velocity="ExceptionHandler.vm" extension="java" container="package"/>
+        </output>
+    </wizard>
+</EclipseWork>

@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<EclipseWork>
+    <wizard>
+        <title>A Xwork Result that prints the content of a StringBuffer </title>
+
+        <component-page required="true">
+            <description>StringBuffer!</description>
+
+			<textfield name="action" label="Action Name:" required="true" value="HelloAction"/>
+			<container name="actionPackage" label="Package:" required="true" type="package" value="action"/>
+
+			<textfield name="msg" label="Type some message :" required="true" value="teste"/>
+
+			<group name="groupResult" label="Create BUfferResult" checkbox="createResult">
+				<checkbox name="createResult" label="Create ? " value="true"/>
+				<file name="xwork-results.xml" label="xwork.xml to add the Result" value=""/>
+
+				<textfield name="result" label="Result Name:" required="true" value="BufferResult"/>
+				<container name="resultPackage" label="Package:" required="true" type="package" value="result" />
+			</group>
+
+		</component-page>
+
+		<component-page required="true">
+			<group label="XWork" >
+				<include file="includes/xwork_package.xml" />
+				<include file="includes/xwork_action.xml" />
+			</group>
+
+			<!-- To create a method different from execute() -->
+			<group name="methodGroup" label="(Optional) If you would like to create a method different from execute()" >
+				<textfield name="methodName" label="Method name:" />
+			</group>
+		</component-page>
+
+        <output>
+			<!-- Create -->
+            <template component="action" velocity="Action.vm" extension="java" container="actionPackage" />
+
+            <template component="result" velocity="Result.vm" extension="java" container="resultPackage" >
+				<condition variable="createResult" value="true" />
+			</template>
+
+			<!-- update xwork.xml -->
+			<xml-update file="xwork.xml" >
+				<package name="${xwork_package_name}" extends="${xwork_package_extends}" namespace="$!xwork_package_namespace" check-before-create="true"> 
+					<action name="${xwork_action_name}" class="${action}" method="$!methodName">
+						<result name="success" type="buffer" />
+					</action>
+				</package>
+			</xml-update>
+
+			<!-- BufferResult -->
+			<xml-update file="xwork-results.xml">
+				<condition variable="createResult" value="true"/>
+				<package name="${xwork_package_name}" extends="${xwork_package_extends}" namespace="$!xwork_package_namespace" check-before-create="true"> 
+					<result-types >
+						<result-type name="buffer" class="${result}"/>
+					</result-types>
+				</package>
+			</xml-update>
+        </output>
+
+    </wizard>
+</EclipseWork>

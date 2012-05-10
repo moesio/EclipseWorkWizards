@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<EclipseWork>
+    <wizard>
+        <title>DAO Interface</title>
+
+        <component-page required="true">
+            <description>Create a DAO interface for a POJO</description>
+
+			<container name="package" label="Package:" required="true" type="package" />
+
+			<type name="model" label="POJO: " required="true" />
+
+            <textfield name="daoModelInterface" label="Name:" required="true" extension="java" default-value="${model.name}DAO"/>
+			<type name="daoInterface" label="Extends (DAO interface): " required="true"/>
+
+			<group checkbox="updateDAOFactory" label="don´t need to use DAOFactory with Spring...">
+				<checkbox name="updateDAOFactory" label="Update? " />
+				<type name="daoFactory" label="Update DAOFactory: " required="true" />
+			</group>
+
+        </component-page>
+
+		<!-- Output Files -->
+        <output>
+			<!-- Create the DAO interface -->
+            <template component="daoModelInterface" velocity="SubDAO.vm" extension="java" container="package"/>
+
+			<!-- Update DAOFactory -->
+			<template component="daoFactory" method="DAOFactory-method.vm" extension="java" container="package">
+				<condition variable="updateDAOFactory" value="true"/>
+			</template>
+        </output>
+    </wizard>
+</EclipseWork>

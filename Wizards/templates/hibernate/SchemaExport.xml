@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<EclipseWork>
+    <wizard>
+        <title>Hibernate Tools</title>
+
+        <component-page required="true">
+            <description>SchemaExport: Hibernate Tools</description>
+
+				<textfield name="name" label="Name:" required="true" value="SchemaExportUtil" />
+				<container name="package" label="Package:" required="true" type="package" />
+
+        </component-page>
+
+		<!-- Output Files -->
+        <output>
+			<template component="name" velocity="SchemaExport.vm" extension="java" container="package"/>
+        </output>
+    </wizard>
+</EclipseWork>

@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<EclipseWork>
+    <wizard>
+        <title>DAO Pattern with Hibernate</title>
+
+        <component-page required="true">
+            <description>Hibernate DAO</description>
+
+			<container name="packageHibDAO" label="Package:" required="true" type="package" />
+            <textfield name="classHibDAO" label="Hibernate DAO:" required="true" extension="java" value="HibernateDAO"/>
+
+			<type name="daoInterface" label="DAO Interface: " />
+
+			<checkbox name="spring" label="Use Spring ?" />
+
+        </component-page>
+
+		<!-- Output Files -->
+        <output>
+
+			<template component="classHibDAO" velocity="HibernateDAO.vm" extension="java" container="packageHibDAO" >
+				<condition variable="spring" value="false" />
+			</template>
+			<template component="classHibDAO" velocity="HibernateSpringDAO.vm" extension="java" container="packageHibDAO" >
+				<condition variable="spring" value="true" />
+			</template>
+        </output>
+    </wizard>
+</EclipseWork>

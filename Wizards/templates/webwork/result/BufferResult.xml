@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<EclipseWork>
+    <wizard>
+        <title>WW2 Buffer Result</title>
+
+        <component-page required="true">
+            <description>Result: Print the content of the StringBuffer</description>
+
+				<textfield name="name" label="Name:" required="true" value="BufferResult" />
+				<container name="package" label="Package:" required="true" type="package" />
+
+        </component-page>
+
+		<!-- Output Files -->
+        <output>
+			<template component="name" velocity="BufferResult.vm" extension="java" container="package"/>
+        </output>
+    </wizard>
+</EclipseWork>

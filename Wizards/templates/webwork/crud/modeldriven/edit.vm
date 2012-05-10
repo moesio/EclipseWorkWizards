@@ -1,0 +1,14 @@
+<b>$stringUtils.capitalise(${model.name})s ModelDriven example:</b><br>
+#bodytag( Form "name=form" #if($namespace)"namespace=${namespace}"#end "action=save" "method=POST")
+
+#foreach($f in $model.fields)
+#if(${f.name} == "id" )
+	$tag( Hidden "label=$stringUtils.capitalise($f.name)" "name=${f.name}" )
+#else
+	$tag( TextField "label=$stringUtils.capitalise($f.name)" "name=${f.name}" )
+#end
+#end
+
+#tag( Submit "value=Save")
+
+\#end

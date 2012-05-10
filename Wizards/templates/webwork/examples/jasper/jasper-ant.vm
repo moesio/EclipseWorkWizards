@@ -1,0 +1,24 @@
+<project name="EclipseWork" default="jasperreports" basedir="$basedir">
+
+	<property name="lib" value="WEB-INF/lib"/>
+
+	<!-- Classpath -->
+	<path id="jasperreports.class.path">
+		<fileset dir="${lib}" includes="*.jar"/>
+	</path>
+
+	<!-- ========================================== -->
+	<!-- WebWork: Compiles the Jasper Reports XML   -->
+	<!-- ========================================== -->
+	<target name="jasperreports">
+		<java classname="com.opensymphony.webwork.views.jasperreports.CompileReport" fork="true">
+			<sysproperty key="org.xml.sax.driver" value="org.apache.xerces.parsers.SAXParser"/>
+
+			<!-- Will compile all jasper files from the WebRoot/jasper folder -->
+			<arg value="jasper/*.xml"/>
+
+			<!-- classpath: WEB-INF/lib -->
+			<classpath refid="jasperreports.class.path" />
+		</java>
+	</target>
+</project>

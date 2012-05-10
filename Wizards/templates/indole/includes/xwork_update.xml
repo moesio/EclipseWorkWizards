@@ -1,0 +1,36 @@
+<include>
+	<description>XWork Page. Configure how the Action will be created in xwork.xml</description>
+	<!--<file name="xwork.xml" label="XWork File" required="true" type="folder" value="/WWPlugin/src/xwork.xml" extensions="xml" />-->
+	<!--<textfield name="xwork.package.extends" label="Extends Package:" required="true" value="webwork-default" use-pattern="text" />-->
+	<combo name="xwork_package_extends" label="Extends Package:" value="webwork-default">
+		<elements file="xwork.xml" path="/xwork" filter="package">
+			<option>webwork-default</option>
+		</elements>
+	</combo>
+
+	<combo name="xwork_package_name" label="XWork Package:" required="true" value="default" edit="true">
+		<elements file="xwork.xml,webwork-default.xml" path="/xwork" filter="package">
+			<!-- Blank Field -->
+			<!--<option></option>-->
+<!--			<option>default</option>-->
+		</elements>
+	</combo>
+<!--	<textfield name="xwork.package.name" label="XWork Package:" required="true" value="default" use-pattern="model" />-->
+	<textfield name="xwork_package_namespace" label="Namespace:" required="false" value="" use-pattern="model" tooltip=""/>
+	<textfield name="xwork_action_name" label="Action Name:" required="true" value="" />
+
+	<!-- read from webwork-default.xml -->
+	<combo name="resultType" label="XWork Result:" value="dispatcher">
+		<elements file="webwork-default.xml" path="/xwork/package/result-types/">
+		<!--<elements>
+			<option>dispatcher</option>
+			<option>redirect</option>
+			<option>velocity</option>
+			<option>chain</option>
+			<option>xslt</option>
+			<option>jasper</option>
+			<option>freemarker</option>
+			<option>httpheader</option>-->
+		</elements>
+	</combo>
+</include>

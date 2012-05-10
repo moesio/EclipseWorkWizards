@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<EclipseWork>
+    <wizard>
+        <title>Configuração básica web</title>
+
+		<component-page required="true">
+			<description>Configuração básica web (Lembre-se de criar a pasta /web/decorators, /web/WEB-INF/tlds, /web/css, /web/imgs e /web/js antes deste passo</description>
+			
+			<textfield label="Nome da aplicação:" name="display-name" value=""/>
+			<textfield label="Projeto:" name="nomeProjeto" value=""/>
+			
+			<container name="src" label="Pasta src:" required="true" type="source" value=""/>
+			<container name="webinf" label="WEB-INF:" required="true" type="folder" value="/projeto/web/WEB-INF"/>
+			<container name="tldsFolder" label="Pasta TLDs:" required="true" type="folder" value="/projeto/web/WEB-INF/tlds"/>
+			
+			<group>
+				<checkbox label="Adiciona suporte ao Spring?" name="springSupport" value="true"/>
+				<group checkbox="sitemeshSupport" >
+					<checkbox label="Adiciona suporte ao Sitemesh?" name="sitemeshSupport" value="true"/>
+					<container name="decoratorsFolder" label="Pasta dos decorators:" required="true" type="folder" value="/$projeto/web/decorators"/>
+				</group>
+				<group checkbox="dwrSupport" >
+					<checkbox label="Adiciona suporte ao DWR?" name="dwrSupport" value="true"/>
+					<container name="web" label="Pasta web:" type="folder" value="/$projeto/web/"/>
+				</group>
+			</group>
+			
+		</component-page>
+
+		<!-- Output Files -->
+        <output>
+			<template component="xwork" velocity="xwork.xml.vm" extension="xml" container="src" />
+			<template component="application.properties" velocity="application.properties.vm" container="src" />
+			<template component="displaytag.properties" velocity="displaytag.properties.vm" container="src" />
+			<template component="messages.properties" velocity="messages.properties.vm" container="src" />
+			<template component="webwork.properties" velocity="webwork.properties.vm" container="src" />
+			<template component="xwork-conversion.properties" velocity="xwork-conversion.properties.vm" container="src" />
+			
+            <template component="web.xml" velocity="web.xml.vm" container="webinf"/>
+            <template component="sitemesh.xml" velocity="sitemesh.vm" container="webinf">
+				<condition variable="sitemeshSupport" value="true"/>
+			</template>
+            <template component="decorators.xml" velocity="decorators.vm" container="webinf">
+				<condition variable="sitemeshSupport" value="true"/>
+			</template>
+            <template component="main.ftl" velocity="main.ftl.vm" container="decoratorsFolder">
+				<condition variable="sitemeshSupport" value="true"/>
+			</template>
+            <template component="dwr.xml" velocity="dwr.vm" container="webinf">
+				<condition variable="dwrSupport" value="true"/>
+			</template>
+            <template component="displaytag.tld" velocity="displaytag.tld.vm" container="tldsFolder"/>
+            <template component="webwork.tld" velocity="webwork.tld.vm" container="tldsFolder"/>
+            <template component="index.html" velocity="index.html.vm" container="web"/>
+            <template component="index.ftl" velocity="index.ftl.vm" container="webinf"/>
+        </output>
+    </wizard>
+</EclipseWork>

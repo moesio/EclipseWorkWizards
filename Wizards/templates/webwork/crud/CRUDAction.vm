@@ -1,0 +1,159 @@
+#set($classe = ${model.elementName})
+#set($vo = $stringUtils.uncapitalise(${model.elementName}))
+#set($daoVar = $stringUtils.uncapitalise(${dao.name}))
+#if($crud_spring)
+#set($daoVar = $bean_dao)
+#end
+#set($daoType = $stringUtils.capitalise(${type}))
+#if($package)
+package $package;
+#end
+
+import java.util.Collection;
+
+import com.opensymphony.xwork.Action;
+#if($extends)import $extends.fullyName;#end
+import com.opensymphony.xwork.ActionSupport;
+#if($model)
+import $model.fullyName;
+#if($daoFactory)
+import $daoFactory.fullyName;
+#end
+import $dao.fullyName;
+#end
+
+/**
+* Demo: Simple CRUD Application with WebWork2
+* 
+* author $author
+*/
+public class $class extends ActionSupport
+{
+#if($daoFactory)
+	private ${dao.name} ${daoVar} =#if($ioc) null#else ${daoFactory.name}.get${daoType}Factory().get${dao.name}()#end;
+#else
+	private ${dao.name} ${daoVar} = null;
+#end
+
+	private Collection ${vo}s = null;
+
+#if($model)
+	private $model.name $vo;
+#end
+
+	/** Relationships **/
+
+#foreach($f in $model.fields)
+#if($f.bean)
+	/// --- ${f.bean.fullyName} --- //
+	private ${f.bean.name}DAO ${f.bean.uncapName}DAO = null;
+	private Collection ${f.bean.uncapName}s = null;
+	private Long ${f.bean.uncapName}Id = null;
+#end 
+#end
+
+	/**
+	 * @see com.opensymphony.xwork.Action#execute()
+	 */
+	public String execute() throws Exception {
+		return Action.SUCCESS;
+	}
+
+	public String list() throws Exception {
+		${vo}s = ${daoVar}.list();
+
+		return Action.SUCCESS;
+	}
+
+	public String load() throws Exception {
+		if($vo != null && ${vo}.getId() != null) {
+			$vo = ($classe) ${daoVar}.load(${vo}.getId());
+		}
+
+#foreach($f in $model.fields)
+#if($f.bean)
+		//${f.bean.fullyName}
+		this.${f.bean.uncapName}s = ${f.bean.uncapName}DAO.list();
+		if(${vo} != null && ${vo}.get${f.bean.name}() != null) {
+			${f.bean.uncapName}Id = ${vo}.get${f.bean.name}().getId();
+		}
+#end
+#end
+
+		return Action.SUCCESS;
+	}
+
+	public String save() throws Exception {
+#foreach($f in $model.fields)
+#if($f.bean)
+		if(${f.bean.uncapName}Id!=null) {
+			${f.bean.name} ${f.bean.uncapName} = (${f.bean.name}) ${f.bean.uncapName}DAO.load(${f.bean.uncapName}Id);
+			${vo}.set${f.bean.name}(${f.bean.uncapName});
+		}
+
+#end
+#end
+		${daoVar}.saveOrUpdate($vo, ${vo}.getId());
+
+		return Action.SUCCESS;
+	}
+
+	public String delete() throws Exception {
+		${daoVar}.delete(get${classe}());
+
+		return Action.SUCCESS;
+	}
+
+	/**
+	 * @return
+	 */
+	public Collection get${classe}s() {
+		return ${vo}s;
+	}
+
+#if($validate)
+	public void validate(){
+		// validate your objects here!
+	}	
+#end
+
+	public $classe get${classe}(){
+		if($vo == null){
+			$vo = new ${classe}();
+		}
+		return $vo;
+	}
+
+	public void set${classe}(${classe} $vo){
+		this.${vo}=$vo;
+	}
+#if(!$daoFactory)
+
+	public void set$stringUtils.capitalise(${daoVar})(${dao.name} ${daoVar}){
+		this.${daoVar}=${daoVar};
+	}
+#end
+
+	/** Relationships **/
+#foreach($f in $model.fields)
+#if($f.bean)
+
+	/// --- ${f.bean.fullyName} --- //
+	public void set${f.bean.name}DAO(${f.bean.name}DAO ${f.bean.uncapName}DAO) {
+		this.${f.bean.uncapName}DAO = ${f.bean.uncapName}DAO;
+	}
+	public Collection get${f.bean.name}s() {
+		return ${f.bean.uncapName}s;
+	}
+	public void set${f.bean.name}s(Collection ${f.bean.uncapName}s) {
+		this.${f.bean.uncapName}s = ${f.bean.uncapName}s;
+	}
+	public Long get${f.bean.name}Id() {
+		return ${f.bean.uncapName}Id;
+	}
+	public void set${f.bean.name}Id(Long ${f.bean.uncapName}Id) {
+		this.${f.bean.uncapName}Id = ${f.bean.uncapName}Id;
+	}
+#end 
+#end
+}

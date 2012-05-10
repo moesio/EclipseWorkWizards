@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<EclipseWork>
+    <wizard>
+        <title>Action-validation.xml</title>
+
+        <component-page required="true">
+            <description>Create a simple Action-validation.xml</description>
+
+			<group label="Action to create the (Action-validation.xml)">
+				<type name="action" label="Action:" required="true" value="" />
+			</group>
+
+			<group label="Add the 'requiredstring' to all String´s properties">
+				<type name="pojo" label="POJO:" value="" />
+			</group>
+			
+			<textfield name="alias" label="Alias:" />
+
+        </component-page>
+
+		<!-- Output Files -->
+        <output>
+
+			<template component="action" expression="${action.name}#if($alias)-${alias}#end-validation.xml" velocity="Action-validation.xml.vm" extension="xml" container="${action.package}"/>
+
+        </output>
+    </wizard>
+</EclipseWork>

@@ -1,0 +1,27 @@
+<include>
+	<description>XWork Page. Configure how the Action will be created in xwork.xml</description>
+	<!--<file name="xwork.xml" label="XWork File" required="true" type="folder" value="/WWPlugin/src/xwork.xml" extensions="xml" />-->
+	<!--<textfield name="xwork.package.extends" label="Extends Package:" required="true" value="webwork-default" use-pattern="text" />-->
+	<group checkbox="checkUpdateXwork">
+		<checkbox name="checkUpdateXwork" label="Update xwork.xml ?" value="true" />
+
+		<combo name="xwork_package_extends" label="Extends Package:" value="default">
+			<elements file="xwork.xml" path="/xwork" filter="package">
+				<option>default</option>
+				<option>webwork-default</option>
+			</elements>
+		</combo>
+
+		<combo name="xwork_package_name" label="XWork Package:" required="true" value="default" edit="true" >
+			<elements file="xwork.xml,webwork-default.xml" path="/xwork" filter="package">
+				<!-- Blank Field -->
+				<!--<option></option>-->
+				<!--			<option>default</option>-->
+			</elements>
+		</combo>
+
+		<!-- TODO default-value="/${model.uncapName}" -->
+		<textfield name="xwork_package_namespace" label="Namespace:" required="false" />
+	</group>
+
+</include>

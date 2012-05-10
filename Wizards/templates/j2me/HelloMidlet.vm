@@ -1,0 +1,62 @@
+#if($package)
+package $package;
+#end
+
+import javax.microedition.lcdui.Command;
+import javax.microedition.lcdui.CommandListener;
+import javax.microedition.lcdui.Display;
+import javax.microedition.lcdui.Displayable;
+import javax.microedition.lcdui.Form;
+import javax.microedition.midlet.MIDlet;
+
+/**
+* @author $author
+*/
+public class $class extends MIDlet implements CommandListener {
+
+	private Display display;
+
+	private Form form;
+
+	private Command exit;
+
+	public $class() {
+
+		this.exit = new Command("Sair", Command.EXIT, 0);
+		this.form = new Form("");
+		this.form.append("$!msg");
+
+		this.form.addCommand(this.exit);
+		this.form.setCommandListener(this);
+	}
+
+	/**
+	 * @see javax.microedition.midlet.MIDlet#startApp()
+	 */
+	public void startApp() {
+		this.display = Display.getDisplay(this);
+		this.display.setCurrent(this.form);
+	}
+
+	/**
+	 * @see javax.microedition.midlet.MIDlet#pauseApp()
+	 */
+	public void pauseApp() {
+	}
+
+	/**
+	 * @see javax.microedition.midlet.MIDlet#destroyApp(boolean)
+	 */
+	public void destroyApp(boolean pode) {
+	}
+
+	/**
+	 * @see javax.microedition.lcdui.CommandListener#commandAction(javax.microedition.lcdui.Command, javax.microedition.lcdui.Displayable)
+	 */
+	public void commandAction(Command c, Displayable d) {
+		if(c == this.exit) {
+			this.destroyApp(true);
+			this.notifyDestroyed();
+		}
+	}
+}

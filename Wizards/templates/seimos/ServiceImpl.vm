@@ -1,0 +1,29 @@
+#if($package)
+package $package;
+#end
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import ${baseServiceImpl.fullyName};
+
+import ${daoInterface.fullyName};
+import ${serviceInterface.fullyName};
+import $model.fullyName;
+
+/**
+ * @author $author
+ * @date $date
+ */
+@Service("${stringUtils.uncapitalise($model.name)}")
+public class $class extends $baseServiceImpl.name<$model.name, $daoInterface.name> implements $serviceInterface.name {
+
+	@Autowired
+	private $daoInterface.name $stringUtils.uncapitalise($daoInterface.name);
+
+	@Override
+	public $daoInterface.name getDao() {
+		return $stringUtils.uncapitalise($daoInterface.name);
+	}
+
+}

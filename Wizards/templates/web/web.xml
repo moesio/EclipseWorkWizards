@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<EclipseWork>
+    <wizard>
+        <title>Basic web.xml for WebWork</title>
+
+		<component-page required="true">
+			<description>web.xml</description>
+			
+			<container name="webinf" label="WEB-INF:" required="true" type="folder" value="#webroot/WEB-INF"/>
+			
+			<textfield label="display-name" name="display-name" value="WebWork Application"/>
+			
+			<group>
+				<checkbox label="Add XWork IOC?" name="xworkIOCSupport" value=""/>
+				<checkbox label="Add Spring Support?" name="springSupport" value=""/>
+			</group>
+			
+			<group>
+				<checkbox label="Add Sitemesh Support?" name="sitemeshSupport" value=""/>
+				<checkbox label="Add CeWolf Support?" name="cewolfSupport" value=""/>
+			</group>
+			
+		</component-page>
+
+		<!-- Output Files -->
+        <output>
+            <template component="web.xml" velocity="web.xml.vm" container="webinf"/>
+        </output>
+    </wizard>
+</EclipseWork>

@@ -1,0 +1,40 @@
+#set($classe = ${model.elementName})
+#set($vo = $stringUtils.uncapitalise(${model.elementName}))
+#if($package)
+package $package;
+#end
+
+import java.util.Date;
+import $model.fullyName;
+
+/**
+ * @author $author
+ *
+ * Saves a user in the Prevalent System 
+ */
+public class $class extends $transaction {
+
+	private $classe $vo;
+
+	public $class($classe $vo) {
+		this.$vo = $vo;
+	}
+
+	protected Object executeAndQuery(
+		${system} prevalentSystem,
+		Date executionTime)
+		throws Exception {
+
+		$classe prevalent$classe = prevalentSystem.get$classe(${vo}.getId());
+
+		if (prevalent$classe == null) {
+			prevalent$classe = prevalentSystem.add$classe(${vo});
+		} else {
+			org.apache.commons.beanutils.BeanUtils.copyProperties(
+				prevalent$classe,
+				${vo});
+		}
+
+		return ${vo};
+	}
+}

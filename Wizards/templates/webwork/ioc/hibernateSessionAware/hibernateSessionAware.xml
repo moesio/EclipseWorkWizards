@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<EclipseWork>
+    <wizard>
+        <title>Useful to set the Hibernate Session in the Actions!</title>
+
+        <component-page required="false">
+            <description>Hibernate Session Component! Like the AdminApp sample application.</description>
+
+			<container name="xwork.ioc.package" label="Package:" required="true" type="package" />
+
+			<group label="SessionFactory" >
+				<textfield name="hibernateSessionFactoryEnabler" label="IOC Enabler (*Aware):" required="true" value="HibernateSessionFactoryAware" />
+				<textfield name="hibernateSessionFactory" label="HibernateSessionFactory:" required="true" value="HibernateSessionFactory" />
+			</group>
+
+			<group label="Session" >
+				<textfield name="hibernateSessionEnabler" label="IOC Enabler (*Aware):" required="true" value="HibernateSessionAware" />
+				<textfield name="hibernateSession" label="HibernateSession:" required="true" value="HibernateSession" />
+			</group>
+
+			<group label="Superclass for Hibernate-aware actions" checkbox="hibActionCheck">
+				<checkbox name="hibActionCheck" label="Create Hibernate Action" value="true"/>
+				<textfield name="hibAction" label="Action:" required="false" value="HibernateAction" />
+				<container name="hibActionPackage" label="Package:" type="package" required="false" value="#webwork.action.package" />
+			</group>
+
+			<!--<type name="extends" label="Extends: " value="com.opensymphony.xwork.Action"/>-->
+
+			<!-- scope -->
+<!--			<combo name="xwork.ioc.escope" label="Scope:" value="application">
+                <elements>
+                    <option>application</option>
+                    <option>request</option>
+                    <option>session</option>
+                </elements>
+            </combo>-->
+        </component-page>
+
+        <output>
+
+			<!-- SessionFactory -->
+			<template component="hibernateSessionFactory" velocity="HibernateSessionFactory.vm" extension="java" container="xwork.ioc.package"/>
+            <template component="hibernateSessionFactoryEnabler" velocity="HibernateSessionFactoryAware.vm" extension="java" container="xwork.ioc.package"/>
+
+			<!-- Session -->
+            <template component="hibernateSessionEnabler" velocity="HibernateSessionAware.vm" extension="java" container="xwork.ioc.package"/>
+			<template component="hibernateSession" velocity="HibernateSession.vm" extension="java" container="xwork.ioc.package"/>
+
+			<!-- Hibernate Action -->
+			<template component="hibAction" velocity="HibernateAction.vm" extension="java" container="hibActionPackage">
+				<condition variable="hibActionCheck" value="true" />
+			</template>
+
+			<!-- SessionFactory -->
+			<xml-update file="components.xml" >
+				<component>
+					<scope>application</scope>
+					<class>${hibernateSessionFactory}</class>
+					<enabler>${hibernateSessionFactoryEnabler}</enabler>
+				</component>
+			</xml-update>
+
+			<!-- Session -->
+			<xml-update file="components.xml" >
+				<component>
+					<scope>request</scope>
+					<class>${hibernateSession}</class>
+					<enabler>${hibernateSessionEnabler}</enabler>
+				</component>
+			</xml-update>
+
+        </output>
+    </wizard>
+</EclipseWork>

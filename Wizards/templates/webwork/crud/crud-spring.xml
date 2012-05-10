@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<EclipseWork>
+    <wizard>
+        <title>CRUD Application with Spring/Hibernate</title>
+
+		<component-page required="true">
+			<description>Spring!</description>
+
+			<group>
+				<type name="model" label="POJO" required="true"/>
+			</group>
+
+			<group>
+				<textfield name="actionClass" label="Action Name:" required="true" default-value="${model.name}Action" />
+				<container name="actionPackage" label="Package:" required="true" type="package" value="#webwork.action.package"/>
+			</group>
+
+			<group>
+				<textfield name="listPageName" label="List Page:" required="true" extensions="vm,jsp,ftl,xstl" default-value="${model.uncapName}s" />
+				<textfield name="editPageName" label="Edit Page:" required="true" extensions="vm,jsp,ftl,xslt" default-value="edit${model.name}" />
+				<container name="resultName_folder" label="WebRoot:" required="true" type="folder" value="#webroot"/>
+			</group>
+
+			<!-- DAO: Hibernate, Prevayler, etc -->
+			<group>
+				<type name="dao" label="ModelDAO Interface" />
+				<type name="hibernateDAO" label="HibernateModelDAO" />
+			</group>
+
+			<group>
+				<combo name="viewType" label="View Layer:" value="FreeMarker">
+					<elements>
+						<option value="freemarker">FreeMarker</option>
+						<option value="velocity">Velocity</option>
+						<option value="dispatcher">JSP</option>
+						<option value="xslt">XSLT</option>
+					</elements>
+				</combo>
+			</group>
+
+		</component-page>
+
+		<component-page required="true">
+			<include file="includes/xwork_package.xml" />
+		</component-page>
+
+		<component-page required="true">
+			<group checkbox="createSpringFiles" label="Configure the spring-beans (WW Action and DAO)">
+				<checkbox name="createSpringFiles" label="Update Spring Files?"/>
+				<group>
+					<file name="applicationContext.xml" label="applicationContext.xml: " extensions="xml" required="true" value="#applicationContext.xml"/>
+					
+					<file name="spring-actions.xml" label="spring-actions.xml" extensions="xml" required="true" value="#spring-actions.xml"/>
+					<file name="spring-daos.xml" label="spring-daos.xml" extensions="xml" required="true" value="#spring-daos.xml"/>
+				</group>
+				
+				<group>
+					<textfield name="bean_dao" label="spring bean DAO: " required="true" default-value="${model.uncapName}DAO"/>
+					<textfield name="bean_action" label="spring bean Action: " required="true" default-value="${model.uncapName}Action"/>
+				</group>
+			</group>
+		</component-page>
+
+		<variables>
+			<var name="namespace" value="xwork_package_namespace" />
+			<var name="crud_spring" value="true" />
+		</variables>
+
+		<!-- Output Files -->
+        <output>
+			<!-- Action -->
+			<template component="actionClass" velocity="CRUDAction.vm" extension="java" container="actionPackage" organize-imports="false"/>
+
+			<!-- Velocity -->
+            <template component="listPageName" velocity="list.vm" extension="vm" container="resultName_folder">
+				<condition variable="viewType" value="Velocity" />
+			</template>
+			<template component="editPageName" velocity="edit.vm" extension="vm" container="resultName_folder">
+				<condition variable="viewType" value="Velocity" />
+			</template>
+
+			<!-- JSP -->
+            <template component="listPageName" velocity="list.jsp.vm" extension="jsp" container="resultName_folder">
+				<condition variable="viewType" value="dispatcher" />
+			</template>
+			<template component="editPageName" velocity="edit.jsp.vm" extension="jsp" container="resultName_folder">
+				<condition variable="viewType" value="dispatcher" />
+			</template>
+
+			<!-- FreeMarker -->
+			<template component="listPageName" velocity="list.ftl.vm" extension="ftl" container="resultName_folder">
+				<condition variable="viewType" value="FreeMarker" />
+			</template>
+			<template component="editPageName" velocity="edit.ftl.vm" extension="ftl" container="resultName_folder">
+				<condition variable="viewType" value="FreeMarker" />
+			</template>
+
+			<!-- XSLT -->
+			<template component="listPageName" velocity="list.xslt.vm" extension="xslt" container="resultName_folder">
+				<condition variable="viewType" value="XSLT" />
+			</template>
+			<template component="editPageName" velocity="edit.xslt.vm" extension="xslt" container="resultName_folder">
+				<condition variable="viewType" value="XSLT" />
+			</template>
+
+			<!--
+				xwork.xml
+			-->
+			<xml-update file="xwork.xml">
+				<condition variable="checkUpdateXwork" value="true" />
+				<package name="${xwork_package_name}" extends="${xwork_package_extends}" namespace="$!namespace" check-before-create="true">
+					<action name="list" class="${bean_action}" method="list">
+						<result name="success" type="${viewType}">${listPageName}</result>
+					</action>
+					<action name="save" class="${bean_action}" method="save">
+						<result name="success" type="redirect">list.action</result>
+						<result name="input" type="${viewType}">${editPageName}</result>
+					</action>
+					<action name="load" class="${bean_action}" method="load">
+						<result name="success" type="${viewType}">${editPageName}</result>
+					</action>
+					<action name="delete" class="${bean_action}" method="delete">
+						<result name="success" type="redirect">list.action</result>
+					</action>
+				</package>
+			</xml-update>
+
+			<!--
+				Spring beans
+			-->
+			<xml-update file="spring-actions.xml">
+					<condition variable="createSpringFiles" value="true" />
+					<bean id="${bean_action}" class="${actionClass}" singleton="false">
+						<property name="${bean_dao}"><ref bean="${bean_dao}"/></property>
+					</bean>
+			</xml-update>
+
+			<xml-update file="spring-daos.xml">
+				<condition variable="createSpringFiles" value="true" />
+				<bean id="${bean_dao}" class="${hibernateDAO}" singleton="false">
+					<property name="sessionFactory"><ref bean="sessionFactory"/></property>
+				</bean>
+			</xml-update>
+
+			<!-- applicationContext.xml -->
+			<xml-update file="applicationContext.xml" >
+				<condition variable="createSpringFiles" value="true" />
+				<bean id="autoProxyCreator" check-before-create="true">
+					<property name="beanNames" check-before-create="true">
+						<list check-before-create="true">
+							<value>${bean_action}</value>
+						</list>
+					</property>
+				</bean>
+			</xml-update>
+        </output>
+    </wizard>
+</EclipseWork>

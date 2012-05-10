@@ -1,0 +1,126 @@
+#set($classe = ${model.elementName})
+#set($vo = $stringUtils.uncapitalise(${model.elementName}))
+#set($daoVar = $stringUtils.uncapitalise(${dao.name}))
+#if($package)
+package $package;
+#end
+
+import java.util.Collection;
+import java.util.Map;
+import java.util.HashMap;
+import com.opensymphony.xwork.ActionContext;
+import com.opensymphony.xwork.Action;
+#if($extends)import $extends.fullyName;#end
+import com.opensymphony.xwork.ActionSupport;
+import com.opensymphony.xwork.ModelDriven;
+#if($model)
+import $model.fullyName;
+#end
+
+/**
+* author $author
+*/
+public class $class extends ActionSupport implements ModelDriven
+{
+	private static final String MAP_SESSION_KEY = "SESSION_${classe}_KEY";
+
+	/**
+	 * A simple HashMap  :-) It will be put in the user Session to simulate a database
+	 */
+	private Map ${vo}Manager = null;
+
+	//To simulare a database increment column
+	private static int nexId = 1;
+
+	private Collection ${vo}s = null;
+
+#if($model)
+	private $model.name $vo;
+#end
+
+	/**
+	 * @see com.opensymphony.xwork.Action#execute()
+	 */
+	public String execute() throws Exception {
+		return Action.SUCCESS;
+	}
+
+	public String list() throws Exception {
+		${vo}s = get${classe}Manager().values();
+
+		return Action.SUCCESS;
+	}
+
+	public String load() throws Exception {
+		$classe local${classe} = ($classe) get${classe}Manager().get(${vo}.getId());
+
+		//Before the action executes, The model was put on the top of value stack by the ModelDrivenInterceptor
+		//So we should copy the properties to this object: getModel()
+		org.apache.commons.beanutils.BeanUtils.copyProperties(getModel(),local${classe});
+
+		//TODO Need some help here. What´s the best aproach to handle this?
+
+		return Action.SUCCESS;
+	}
+
+	public String save() throws Exception {
+
+		//Auto-Increment: nexId++. Just to simulate the database
+		if(${vo}.getId()==null) {
+			Long id = new Long(nexId++);
+			${vo}.setId(id);
+		}
+		get${classe}Manager().put(${vo}.getId(),${vo});
+
+		return Action.SUCCESS;
+	}
+
+	public String delete() throws Exception {
+
+		get${classe}Manager().remove(${vo}.getId());
+
+		return Action.SUCCESS;
+	}
+
+	/**
+	 * @return
+	 */
+	public Collection get${classe}s() {
+		return ${vo}s;
+	}
+
+	/**
+	 * Implement the ModelDriven interface. 
+	 * The ModelDrivenInterceptor will
+	 * push the model in the top of the ValueStack.
+	 * Note that you don´t need to implement the get/set to the ${classe}. 
+	 * Just implement the getModel()
+	 * 
+	 * @see com.opensymphony.xwork.ModelDriven#getModel()
+	 */
+	public Object getModel(){
+		if(${vo} == null){
+			${vo} = new ${classe}();
+		}
+		return ${vo};
+	}
+
+	/**
+	 * To persist the objects in the Session. 
+	 * In a real example, probably you use a database
+	 * 
+	 * @return Returns the Map
+	 */
+	public Map get${classe}Manager() {
+		//Get the session
+		Map session =ActionContext.getContext().getSession();
+		//Get the Map
+		${vo}Manager = (Map) session.get(MAP_SESSION_KEY);
+		if(${vo}Manager==null){
+			//If the map doesn´t exist in the Session, create it
+			${vo}Manager=new HashMap();
+			session.put(MAP_SESSION_KEY,${vo}Manager);
+		}
+		return ${vo}Manager;
+	}
+}

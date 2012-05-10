@@ -1,0 +1,59 @@
+#if($package)
+package $package;
+#end
+
+import net.sf.hibernate.HibernateException;
+import net.sf.hibernate.Session;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import com.opensymphony.xwork.ActionContext;
+import com.opensymphony.xwork.ActionSupport;
+
+import $hibernateSession;
+import $hibernateSessionEnabler;
+
+/**
+ * Superclass for Hibernate-aware actions. Demonstrates
+ * the use of an XWork IoC component in an Action.
+
+ * @author $author
+ */
+public abstract class $class extends ActionSupport implements ${hibernateSessionEnabler.name} {
+
+	private static final Log LOG = LogFactory.getLog(${class}.class);
+
+	private ${hibernateSession.name} session;
+
+	public void set${hibernateSession.name}(${hibernateSession.name} session) {
+		this.session = session;
+	}
+	
+	public ${hibernateSession.name} get${hibernateSession.name}() {
+		return session;
+	}
+	
+	/**
+	 * Get the Hibernate Session instance
+	 */
+	protected Session getSession() throws HibernateException {
+		return session.getSession();
+	}
+	
+	protected void setRollbackOnly() {
+		session.setRollBackOnly(true);
+	}
+	
+	/**
+	 * Get an object from the WebWork user session
+	 */
+	protected Object get(String name) {
+		return ActionContext.getContext().getSession().get(name);
+	}
+
+	/**
+	 * Put an object in the WebWork user session
+	 */
+	protected void set(String name, Object value) {
+		ActionContext.getContext().getSession().put(name, value);
+	}
+}

@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<EclipseWork>
+    <wizard>
+        <title>DAO Pattern for Prevayler</title>
+
+		<model-page type="java" required="true">
+            <description>Choose a POJO for your DAO</description>
+        </model-page>
+
+        <component-page required="true">
+            <description>Create a PrevaylerDAO for a POJO.</description>
+
+			<container name="daoPackage" label="Package:" required="true" type="package" />
+            <textfield name="daoClass" label="Class:" required="true" extension="java" />
+
+			<group name="transaction" label="Prevayler Transaction" checkbox="checkTransaction">
+				<checkbox name="checkTransaction" label="Create Model Transactions:" value="true"/>
+
+				<container name="transactionPackage" label="Transaction Package:" required="true" type="package" />
+				
+				<group name="g2" label="Save Transaction" checkbox="saveCheckTransaction">
+					<checkbox name="saveCheckTransaction" label="Save Transaction:" value="true"/>
+					<textfield name="saveClass" label="Class Name:" extension="java" />
+				</group>
+				
+				<group name="g2" label="Delete Transaction" checkbox="deleteCheckTransaction">
+					<checkbox name="deleteCheckTransaction" label="Save Transaction:" value="true"/>
+					<textfield name="deleteClass" label="Class Name:" extension="java" />
+				</group>
+					
+			</group>
+
+        </component-page>
+
+		<!-- Output Files -->
+        <output>
+            <template component="daoClass" velocity="PrevaylerVODAO.vm" extension="java" container="daoPackage"/>
+
+			<template component="saveClass" velocity="PrevaylerSaveTransaction.vm" extension="java" container="transactionPackage">
+				<condition variable="saveCheckTransaction" value="true" />
+			</template>
+			<template component="deleteClass" velocity="PrevaylerDeleteTransaction.vm" extension="java" container="transactionPackage">
+				<condition variable="deleteCheckTransaction" value="true" />
+			</template>
+        </output>
+    </wizard>
+</EclipseWork>

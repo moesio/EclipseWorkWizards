@@ -1,0 +1,37 @@
+#if($package)
+package $package;
+#end
+
+/**
+ * @author $author
+ */
+public class $class extends Exception {
+	/**
+	 *  
+	 */
+	public $class() {
+		super();
+	}
+
+	/**
+	 * @param message
+	 */
+	public $class(String message) {
+		super(message);
+	}
+
+	/**
+	 * @param message
+	 * @param cause
+	 */
+	public $class(String message, Throwable cause) {
+		super(message, cause);
+	}
+
+	/**
+	 * @param cause
+	 */
+	public $class(Throwable cause) {
+		super(cause);
+	}
+}

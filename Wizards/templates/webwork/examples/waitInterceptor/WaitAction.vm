@@ -1,0 +1,23 @@
+#if($package)
+package $package;
+#end
+
+import com.opensymphony.xwork.Action;
+import com.opensymphony.xwork.ActionSupport;
+
+/**
+* author $author
+*/
+public class $class extends ActionSupport
+{
+	/**
+	 * @see com.opensymphony.xwork.Action#execute()
+	 */
+	public String execute() throws Exception
+	{
+		//just ot simulate
+		Thread.sleep($sleepSeconds * 1000);
+
+		return Action.SUCCESS;
+	}
+}

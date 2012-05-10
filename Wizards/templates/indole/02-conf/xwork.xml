@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<EclipseWork>
+    <wizard>
+        <title>XWork/WebWork</title>
+
+		<component-page>
+			<description>xwork.xml</description>
+
+			<container name="src" label="Source Folder:" required="true" type="source" value=""/>
+
+		</component-page>
+
+		<!-- create the xwork.xml file -->
+        <output>
+			<template component="xwork.xml" velocity="xwork.xml.vm" container="src" />
+        </output>
+    </wizard>
+</EclipseWork>

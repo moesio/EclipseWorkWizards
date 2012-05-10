@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-configuration PUBLIC "-//Hibernate/Hibernate Configuration DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-configuration-3.0.dtd">
+
+<hibernate-configuration>
+  <session-factory>
+	
+	<property name="hibernate.connection.url">$hibernate_url</property>
+    <property name="hibernate.connection.driver_class">$hibernate_driver</property>
+    <property name="hibernate.connection.username">$username</property>
+    <property name="hibernate.connection.password">$!password</property>
+    <property name="hibernate.dialect">$hibernate_dialect</property>
+    
+    <property name="hibernate.cglib.use_reflection_optimizer">true</property>
+    <property name="hibernate.hbm2ddl.auto">update</property>
+    <property name="hibernate.show_sql">true</property>
+    <property name="hibernate.format_sql">true</property>
+    <!-- MAPPINGS -->
+    <!-- Exemplo -->
+    <!--
+    <mapping class="br.com.indole.projeto.model.Usuario" />
+     -->
+  </session-factory>
+</hibernate-configuration>

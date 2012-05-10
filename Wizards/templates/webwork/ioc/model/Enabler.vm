@@ -1,0 +1,27 @@
+#set($classe = ${model.elementName})
+#set($vo = $stringUtils.uncapitalise(${model.elementName}))
+#if($package)
+package $package;
+#end
+
+#if($model)
+import $model.fullyQualifiedName;
+#end
+
+/**
+ * Enabler for the XWork IOC
+
+<interceptors>
+	<interceptor-stack name="defaultStack">
+		<interceptor-ref name="component" />
+	</interceptor-stack>
+</interceptors>
+<default-interceptor-ref name="defaultStack" />
+
+* @author $author
+*/
+public interface $class {
+#if($model)
+	public void set${classe}($classe $vo);
+#end
+}

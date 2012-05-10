@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<EclipseWork>
+    <wizard>
+        <title>JasperReports</title>
+
+        <component-page required="false">
+            <description>
+			</description>
+
+			<!-- Jasper file -->
+			<group label="create the *.xml (jasper file) to your POJO" checkbox="checkJasper">
+				<checkbox name="checkJasper" label="Create:" value="false"/>
+				<type name="bean" label="POJO:" required="true" value="" />
+				<container name="webroot" label="WebRoot:" required="true" type="folder" value="" />
+				<textfield name="jasper" label="*.jasper:"  value="" />
+				<textfield name="textReport" label="Title of the report:"  value="" />
+			</group>
+
+			<!-- Action-Japser -->
+			<group checkbox="checkAction" label="Choose an Action that already exists (fill the method name and the datasource)">
+				<checkbox name="checkAction" label="Create:"  />
+				<type name="actionClass" label="Action Name:" required="true" value="" />
+				<file name="jasperFile" label="Jasper File:" required="true"  extensions="*.jasper" fullpath="false"/>
+				<textfield name="methodName" label="Method: "   />
+				<textfield name="dataSource" label="DataSource (Collectin of beans):"  />
+			</group>	
+
+        </component-page>
+
+		<component-page required="false">
+			<include file="includes/xwork_package.xml" />
+			<textfield name="xwork_action_name" label="Action Name:" required="true" value="" />
+
+			<combo name="reportType" label="Type:" required="true" value="PDF" >
+				<elements>
+					<option>PDF</option>
+					<option>HTML</option>
+					<option>CSV</option>
+					<option>XLS</option>
+					<option>XML</option>
+				</elements>
+			</combo>
+		</component-page>
+
+		<!-- I couldn´t parser it in velocity, them create the text here and set in some variables :-) -->
+		<variables>
+			<var name="jasperTitle" value="$P{title}" />
+			<var name="pageNumber" value="$V{PAGE_NUMBER}" />
+			<var name="jasperField" value="$F{" />
+		</variables>
+
+        <output>
+
+			<!-- Get an Action that already exists -->
+			<template component="ant-jasper" velocity="jasper-ant.vm" extension="xml" >
+				<condition variable="checkAnt" value="true"/>
+			</template>
+			<template component="jasper" velocity="jasper.vm" extension="xml" container="webroot" >
+				<condition variable="checkJasper" value="true"/>
+			</template>
+
+			<!-- Create a Jasper demo using a Bean -->
+			<xml-update file="xwork.xml">
+
+				<condition variable="checkAction" value="true"/>
+
+				<package name="${xwork_package_name}" extends="${xwork_package_extends}" namespace="$!xwork_package_namespace" check-before-create="true">
+					<action name="${xwork_action_name}" class="${actionClass}" method="$!methodName">
+						<result name="success" type="jasper">
+							<param name="location">${jasperFile}</param>
+							<param name="dataSource">${dataSource}</param>
+							<param name="format">${reportType}</param>
+						</result>
+					</action>
+				</package>
+
+			</xml-update>
+
+		</output>
+    </wizard>
+</EclipseWork>

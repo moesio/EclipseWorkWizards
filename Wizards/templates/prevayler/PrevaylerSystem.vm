@@ -1,0 +1,17 @@
+#if($package)
+package $package;
+#end
+
+import java.io.Serializable;
+
+/**
+ * @author $author
+ * 
+ * Prevalent System
+ */
+public class $class implements Serializable 
+{
+    private static final long serialVersionUID = 1L;
+
+	//Put all the model objects here
+}

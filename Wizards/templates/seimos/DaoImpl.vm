@@ -1,0 +1,18 @@
+#if($package)
+package $package;
+#end
+
+import org.springframework.stereotype.Repository;
+
+import ${baseDaoImpl.fullyName};
+
+import ${daoInterface.fullyName};
+import $model.fullyName;
+
+/**
+ * @author $author
+ * @date $date
+ */
+@Repository("${stringUtils.uncapitalise($model.name)}")
+public class $class extends $baseDaoImpl.name<$model.name> implements $daoInterface.name {
+}

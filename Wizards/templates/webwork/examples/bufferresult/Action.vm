@@ -1,0 +1,48 @@
+#set($classe = ${model.elementName})
+#set($vo = $stringUtils.uncapitalise(${model.elementName}))
+#if($package)
+package $package;
+#end
+
+import com.opensymphony.xwork.Action;
+#if($extends)
+import $extends.fullyName;
+#end
+#if($model)
+import $model.fullyQualifiedName;
+#end
+
+/**
+* author $author
+*/
+public class $class #if($extends)#if($extends.isClass())extends#elseif($extends.isInterface())implements#end $extends.name#else implements Action#end
+{
+	private StringBuffer buffer = new StringBuffer();
+
+	/**
+	 * @see com.opensymphony.xwork.Action#execute()
+	 */
+	public String execute() throws Exception {
+		buffer.append("$!msg");
+		return Action.SUCCESS;
+	}
+
+#if($methodName)
+	/**
+	 * @return
+	 * @throws Exception
+	 */
+	public String $methodName() throws Exception
+	{
+		return Action.SUCCESS;
+	}
+#end
+
+	public StringBuffer getBuffer() {
+		return buffer;
+	}
+
+	public void setBuffer(StringBuffer buffer) {
+		this.buffer = buffer;
+	}
+}

@@ -1,0 +1,22 @@
+<#assign ww=JspTaglibs["/WEB-INF/tlds/webwork.tld"] />
+<#assign display=JspTaglibs["/WEB-INF/tlds/displaytag.tld"] />
+<html>
+	<head>
+		<#include "head.ftl" />
+	</head>
+<body bgcolor="#ffffff" onLoad="if (document.forms[0] != undefined) document.forms[0].elements[0].focus(); ">
+<table width="100%">
+<tr>
+<td valign="top" width="150px" style="white-space: nowrap;">
+<#include "menu.ftl"/>
+<hr />
+</td>
+<td>
+<h3>${title}</h3>
+<hr/>
+${body}
+</td>
+</tr>
+</table>
+</body>
+</html>

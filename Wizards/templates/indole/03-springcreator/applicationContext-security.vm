@@ -1,0 +1,209 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN"
+	"http://www.springframework.org/dtd/spring-beans.dtd">
+
+<beans>
+	<!-- ========================= Start of ACEGI ========================= -->
+	
+	<bean id="memoryAuthenticationDao"
+		class="org.acegisecurity.userdetails.memory.InMemoryDaoImpl">
+		<property name="userMap">
+			<value>$username=$password,ROLE_USER </value>
+		</property>
+	</bean>
+	
+	<bean id="authenticationProvider"
+		class="org.acegisecurity.providers.dao.DaoAuthenticationProvider">
+		<property name="userDetailsService">
+			<ref local="memoryAuthenticationDao"/>
+		</property>
+	</bean>
+	
+	<bean id="authenticationManager"
+		class="org.acegisecurity.providers.ProviderManager">
+		<property name="providers">
+			<list>
+				<ref bean="authenticationProvider"/>
+				<ref local="anonymousAuthenticationProvider"/>
+			</list>
+		</property>
+		<property name="sessionController">
+			<ref bean="concurrentSessionController"/>
+		</property>
+	</bean>
+	
+	<bean id="objectDefinitionSource"
+		class="org.acegisecurity.intercept.method.MethodDefinitionAttributes">
+		<property name="attributes">
+			<bean
+				class="org.acegisecurity.annotation.SecurityAnnotationAttributes"/>
+			<!-- 
+			<bean class="security.UseCaseAnnotationAttributes" />
+			-->
+		</property>
+	</bean>
+	
+	<bean id="securityInterceptor"
+		class="org.acegisecurity.intercept.method.aopalliance.MethodSecurityInterceptor">
+		<property name="validateConfigAttributes">
+			<value>true</value>
+		</property>
+		<property name="authenticationManager">
+			<ref bean="authenticationManager"/>
+		</property>
+		<property name="accessDecisionManager">
+			<ref bean="accessDecisionManager"/>
+		</property>
+		<property name="objectDefinitionSource">
+			<ref bean="objectDefinitionSource"/>
+		</property>
+	</bean>
+	
+	<!-- 
+	<bean id="useCaseVoter" class="security.UseCaseVoter" />
+	-->
+	
+	<bean id="roleVoter" class="org.acegisecurity.vote.RoleVoter"/>
+	
+	<!-- 
+	<bean id="accessDecisionManager" class="org.acegisecurity.vote.UnanimousBased">
+	-->
+	<bean id="accessDecisionManager"
+		class="org.acegisecurity.vote.AffirmativeBased">
+		<property name="allowIfAllAbstainDecisions">
+			<value>false</value>
+		</property>
+		<property name="decisionVoters">
+			<list>
+				<ref local="roleVoter"/>
+				<!--
+				<ref local="useCaseVoter" />
+				-->
+			</list>
+		</property>
+	</bean>
+	
+	<bean id="filterChainProxy" class="org.acegisecurity.util.FilterChainProxy">
+		<property name="filterInvocationDefinitionSource">
+			<value> CONVERT_URL_TO_LOWERCASE_BEFORE_COMPARISON
+				PATTERN_TYPE_APACHE_ANT
+				/**=httpSessionContextIntegrationFilter,concurrentSessionFilter,authenticationProcessingFilter,anonymousProcessingFilter,securityEnforcementFilter
+				</value>
+		</property>
+	</bean>
+	
+	<bean id="concurrentSessionController"
+		class="org.acegisecurity.concurrent.ConcurrentSessionControllerImpl">
+		<property name="maximumSessions">
+			<value>1</value>
+		</property>
+		<property name="sessionRegistry">
+			<ref local="sessionRegistry"/>
+		</property>
+	</bean>
+	
+	<bean id="sessionRegistry"
+		class="org.acegisecurity.concurrent.SessionRegistryImpl"/>
+	
+	<bean id="concurrentSessionFilter"
+		class="org.acegisecurity.concurrent.ConcurrentSessionFilter">
+		<property name="sessionRegistry">
+			<ref local="sessionRegistry"/>
+		</property>
+		<property name="expiredUrl">
+			<value>/concurrentSessionError.action</value>
+		</property>
+	</bean>
+	
+	<bean id="httpSessionContextIntegrationFilter"
+		class="org.acegisecurity.context.HttpSessionContextIntegrationFilter">
+		</bean>
+	
+	<bean id="authenticationProcessingFilter"
+		class="org.acegisecurity.ui.webapp.AuthenticationProcessingFilter">
+		<property name="authenticationManager">
+			<ref bean="authenticationManager"/>
+		</property>
+		<property name="authenticationFailureUrl">
+			<value>/login.action?login_error=1</value>
+		</property>
+		<property name="defaultTargetUrl">
+			<value>/</value>
+		</property>
+		<property name="filterProcessesUrl">
+			<value>/j_acegi_security_check</value>
+		</property>
+	</bean>
+	
+	<bean id="anonymousAuthenticationProvider"
+		class="org.acegisecurity.providers.anonymous.AnonymousAuthenticationProvider">
+		<property name="key">
+			<value>foobar</value>
+		</property>
+	</bean>
+	
+	<bean id="anonymousProcessingFilter"
+		class="org.acegisecurity.providers.anonymous.AnonymousProcessingFilter">
+		<property name="key">
+			<value>foobar</value>
+		</property>
+		<property name="userAttribute">
+			<value>anonymousUser,ROLE_ANONYMOUS</value>
+		</property>
+	</bean>
+	
+	<bean id="securityEnforcementFilter"
+		class="org.acegisecurity.intercept.web.SecurityEnforcementFilter">
+		<property name="filterSecurityInterceptor">
+			<ref local="filterInvocationInterceptor"/>
+		</property>
+		<property name="authenticationEntryPoint">
+			<ref local="authenticationProcessingFilterEntryPoint"/>
+		</property>
+	</bean>
+	
+	<bean id="authenticationProcessingFilterEntryPoint"
+		class="org.acegisecurity.ui.webapp.AuthenticationProcessingFilterEntryPoint">
+		<property name="loginFormUrl">
+			<value>/login.action</value>
+		</property>
+		<property name="forceHttps">
+			<value>false</value>
+		</property>
+	</bean>
+	
+	<bean id="filterInvocationInterceptor"
+		class="org.acegisecurity.intercept.web.FilterSecurityInterceptor">
+		<property name="authenticationManager">
+			<ref bean="authenticationManager"/>
+		</property>
+		<property name="accessDecisionManager">
+			<ref local="httpRequestAccessDecisionManager"/>
+		</property>
+		<property name="objectDefinitionSource">
+			<value> PATTERN_TYPE_APACHE_ANT /imgs/**=ROLE_ANONYMOUS,ROLE_USER
+				/css/**=ROLE_ANONYMOUS,ROLE_USER
+				/webwork/**=ROLE_ANONYMOUS,ROLE_USER
+				/login.action*=ROLE_ANONYMOUS,ROLE_USER
+				/accessDenied.do*=ROLE_ANONYMOUS,ROLE_USER
+				/concurrentSessionError.jsp*=ROLE_ANONYMOUS,ROLE_USER
+				/controle/**=ROLE_USER 
+                /**=ROLE_ANONYMOUS,ROLE_USER 
+			</value>
+		</property>
+	</bean>
+	
+	<bean id="httpRequestAccessDecisionManager"
+		class="org.acegisecurity.vote.AffirmativeBased">
+		<property name="allowIfAllAbstainDecisions">
+			<value>false</value>
+		</property>
+		<property name="decisionVoters">
+			<list>
+				<ref bean="roleVoter"/>
+			</list>
+		</property>
+	</bean>
+	
+	<!-- ========================= End of ACEGI ========================= -->
+</beans>

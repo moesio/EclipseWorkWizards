@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE dwr PUBLIC 
+	"-//GetAhead Limited//DTD Direct Web Remoting 1.0//EN" 
+	"http://www.getahead.ltd.uk/dwr/dwr10.dtd">
+
+<dwr>
+	<allow>
+		<create creator="new" javascript="validator">
+			<param name="class" value="com.opensymphony.webwork.validators.DWRValidator"/>
+		</create>
+		<!-- //TODO 
+		Criar uma classe DWRSearch a ser convertida para javascript
+		cujos atributos serão managers inicializados pelo spring e 
+		cujos métodos serão convertidos para métodos javascript
+		vide @see http://localhost:8080/esteContexto/DWR/ 
+		<create creator="new" javascript="DWRSearch">
+			<param name="class" value="$utilPackage.DWRSearch" />
+		</create>
+		-->
+		<convert converter="bean" match="com.opensymphony.xwork.ValidationAwareSupport"/>
+		
+		<!-- //TODO 
+		Todos os modelos manipulados pela classe DWRSearch deverão ser convertidas 
+		seguindo o seguinte formato
+		<convert converter="bean" match="br.com.indole.model.Usuario"/>
+		-->
+	</allow>
+    <signatures>
+        <![CDATA[
+        import java.util.Map;
+        import com.opensymphony.webwork.validators.DWRValidator;
+
+        DWRValidator.doPost(String, String, Map<String, String>);
+        ]]>
+    </signatures>	
+</dwr>

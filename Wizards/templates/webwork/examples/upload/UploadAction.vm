@@ -1,0 +1,54 @@
+#if($package)
+package $package;
+#end
+
+import java.io.File;
+import com.opensymphony.xwork.Action;
+#if($extends)
+import $extends.fullyName;
+#end
+#if($model)
+import $model.fullyQualifiedName;
+#end
+
+/**
+* Configure the webwork.properties(webwork.multipart.saveDir)
+*
+* And the FileUploadInterceptor (optional)
+* <interceptor-ref name="fileUploadStack"/>
+*
+* http://wiki.opensymphony.com/display/WW/File+Upload+Interceptor
+* 
+* author $author
+*/
+public class $class #if($extends)#if($extends.isClass())extends#elseif($extends.isInterface())implements#end $extends.name#else implements Action#end
+{
+	//set automatically if configure the FileUploadInterceptor
+	File file = null;
+
+	/**
+	 * @see com.opensymphony.xwork.Action#execute()
+	 */
+	public String execute() throws Exception
+	{
+		//the FileUploadInterceptor will clean up the uploaded file, so just move it to the target folder before this happens
+		//final File target = new File("...");
+        //file.renameTo(target);
+
+		return Action.SUCCESS;
+	}
+
+	/**
+	 * @return Returns the fileFile.
+	 */
+	public File getFile() {
+		return file;
+	}
+
+	/**
+	 * @param fileFile The fileFile to set.
+	 */
+	public void setFile(File fileFile) {
+		this.file = fileFile;
+	}
+}

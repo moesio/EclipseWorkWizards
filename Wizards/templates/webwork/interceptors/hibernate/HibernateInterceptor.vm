@@ -1,0 +1,127 @@
+#if($package)
+package $package;
+#end
+
+import $threadLocal.fullyQualifiedName;
+import org.hibernate.HibernateException;
+import org.hibernate.Session;
+import org.hibernate.Transaction;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import com.opensymphony.xwork.Action;
+import com.opensymphony.xwork.ActionSupport;
+import com.opensymphony.xwork.ActionInvocation;
+import com.opensymphony.xwork.interceptor.Interceptor;
+
+/**
+ * This Interceptors will get the Hibernate Session from the ThreadLocal
+ * and open/close the transaction.
+ * 
+ * TODO: Please, help EclipseWork to configure this interceptor in the webwork-default.xml :-)
+ * <interceptor name="hibernate" class="${package}.${class}" />
+ * 
+ * 
+ * 	<interceptors>
+ * 		<interceptor-stack name="hibernateStack">
+ * 			<interceptor-ref name="validationWorkflowStack"/>
+ * 			<interceptor-ref name="hibernate"/>
+ * 		</interceptor-stack>
+ * 	</interceptors>
+ * 
+ *
+ * @author $author
+ * 
+ */
+public class $class implements Interceptor
+{
+	private static final Log LOG = LogFactory.getLog(${class}.class);
+
+	public void destroy()
+	{
+	}
+
+	public void init()
+	{
+	}
+
+	/**
+	 * @see com.opensymphony.xwork.interceptor.Interceptor#intercept(com.opensymphony.xwork.ActionInvocation)
+	 */
+	public String intercept(ActionInvocation invocation) throws Exception
+	{
+		ActionSupport action = (ActionSupport)invocation.getAction();
+
+		if (action == null)
+		{
+			return invocation.invoke();
+		}
+
+		Session session = ${threadLocal.name}.getSession();
+		Transaction transaction = session.beginTransaction();
+
+		try
+		{
+			LOG.info("open transaction");
+			return invocation.invoke();
+		}
+		// Note that all the cleanup is done
+		// after the view is rendered, so we
+		// have an open session in the view
+		catch (Exception e)
+		{
+			e.printStackTrace();
+			if (transaction != null)
+			{
+				LOG.info("rollback", e);
+				System.out.println("rollback transaction");
+				transaction.rollback();
+			}
+
+			if (e instanceof HibernateException)
+			{
+				LOG.error("HibernateException in execute()", e);
+				return Action.ERROR;
+			}
+			else
+			{
+				LOG.error("Exception in execute()", e);
+				throw e;
+			}
+		}
+		finally
+		{
+			try
+			{
+				LOG.info("commit transaction");
+
+				if(!action.hasErrors())
+				{
+					transaction.commit();
+				}else{
+					LOG.warn("Action hasErrors, rollback transaction: ActionErrors: " + action.getActionErrors() + ", FieldErrors:" + action.getFieldErrors());
+					transaction.rollback();
+				}
+			}
+			catch (Exception e)
+			{
+				e.printStackTrace();
+				LOG.error("HibernateException in commit()", e);
+				throw e;
+			}
+			finally
+			{
+				try
+				{
+					LOG.info("close session");
+					${threadLocal.name}.closeSession();
+				}
+				catch (HibernateException e)
+				{
+					e.printStackTrace();
+					LOG.error("HibernateException in dispose()", e);
+					throw e;
+				}
+			}
+		}
+	}
+}

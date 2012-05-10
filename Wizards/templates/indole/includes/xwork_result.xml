@@ -1,0 +1,17 @@
+<include>
+
+	<!-- read from webwork-default.xml -->
+	<combo name="resultType" label="XWork Result:" value="dispatcher">
+		<elements file="webwork-default.xml" path="/xwork/package/result-types/">
+		<!--<elements>
+			<option>dispatcher</option>
+			<option>redirect</option>
+			<option>velocity</option>
+			<option>chain</option>
+			<option>xslt</option>
+			<option>jasper</option>
+			<option>freemarker</option>
+			<option>httpheader</option>-->
+		</elements>
+	</combo>
+</include>

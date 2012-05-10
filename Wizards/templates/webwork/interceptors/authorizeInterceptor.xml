@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<EclipseWork>
+    <wizard>
+        <title>Authorize Interceptor - Like the WebWork Article on TheServerSide</title>
+
+        <component-page required="false">
+            <description>This interceptor looks for a "user" in the HttpSession. 
+If the user not exist, it will redirect to the login page.</description>
+
+			<container name="package" label="Package:" required="true" type="package" value=""/>
+            <textfield name="class" label="Class Name:" required="true" extension="java" value="AuthorizeInterceptor"/>
+
+        </component-page>
+
+		<!-- Output Files -->
+        <output>
+            <template component="class" velocity="AuthorizeInterceptor.vm" extension="java" container="package" />
+
+        </output>
+    </wizard>
+</EclipseWork>

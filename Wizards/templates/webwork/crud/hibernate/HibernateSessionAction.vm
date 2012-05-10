@@ -1,0 +1,83 @@
+#set($classe = ${model.elementName})
+#set($vo = $stringUtils.uncapitalise(${model.elementName}))
+#if($package)
+package $package;
+#end
+
+import java.util.List;
+import com.opensymphony.xwork.Action;
+#if($model)
+import $model.fullyQualifiedName;
+#end
+
+/**
+* author $author
+*/
+public class $class extends $hibernateAction
+{
+	private List ${vo}s = null;
+
+	/** Current $model.name * */
+#if($model)
+	private $model.name $vo;
+#end
+
+	/**
+	 * @see com.opensymphony.xwork.Action#execute()
+	 */
+	public String execute() throws Exception {
+		return Action.SUCCESS;
+	}
+
+	public String list() throws Exception {
+		${vo}s = getSession().createCriteria(${classe}.class).list();
+
+		return Action.SUCCESS;
+	}
+
+	public String load() throws Exception {
+
+		$vo = (${classe}) getSession().load(${classe}.class, get${classe}().getId());
+
+		return Action.SUCCESS;
+	}
+
+	public String save() throws Exception {
+
+		getSession().saveOrUpdate($vo);
+
+		return Action.SUCCESS;
+	}
+
+	public String delete() throws Exception {
+
+		getSession().delete(get${classe}());
+
+		return Action.SUCCESS;
+	}
+
+	/**
+	 * @return
+	 */
+	public List get${classe}s() {
+		return ${vo}s;
+	}
+
+#if($validate)
+	public void validate(){
+		// validate your objects here!
+	}	
+#end
+
+#if($classe)
+	public $classe get${classe}(){
+		if($vo == null){
+			$vo = new ${classe}();
+		}
+		return $vo;
+	}
+	public void set${classe}(${classe} $vo){
+		this.${vo}=$vo;
+	}
+#end
+}

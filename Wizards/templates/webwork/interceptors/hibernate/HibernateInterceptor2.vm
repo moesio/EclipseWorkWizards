@@ -1,0 +1,65 @@
+package $package;
+
+import net.sf.hibernate.HibernateException;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import com.opensymphony.xwork.Action;
+import com.opensymphony.xwork.ActionInvocation;
+import com.opensymphony.xwork.interceptor.Interceptor;
+
+import $hibernateAction.fullyName;
+import $hibernateSession.fullyName;
+
+/**
+ * Interceptor used in the Hibernate AdminApp sample. 
+ *
+ * Please, help EclipseWork to configure this interceptor in the webwork-default.xml :-)
+ * <interceptor name="hibernate" class="${package}.${class}" />
+ *
+ * @author Gavin King
+ * @author $author
+ */
+public class $class implements Interceptor {
+
+	private static final Log LOG = LogFactory.getLog(${class}.class);
+
+	public void destroy() {}
+
+	public void init() {}
+
+	public String intercept(ActionInvocation invocation) throws Exception {
+		Action action = invocation.getAction();
+		if ( !(action instanceof $hibernateAction.name) ) return invocation.invoke();
+
+		$hibernateSession.name hs = ( ($hibernateAction.name) action ).get${hibernateSession.name}();
+		try {
+			return invocation.invoke();
+		}
+
+		// Note that all the cleanup is done
+		// after the view is rendered, so we
+		// have an open session in the view
+		
+		catch (Exception e) {	
+			hs.setRollBackOnly(true);
+			if (e instanceof HibernateException) {
+				LOG.error("HibernateException in execute()", e);
+				return Action.ERROR;
+			}
+			else {
+				LOG.error("Exception in execute()", e);
+				throw e;
+			}
+		}
+		
+		finally {
+			try {
+				hs.disposeSession();
+			}
+			catch (HibernateException e) {
+				LOG.error("HibernateException in dispose()", e);
+				return Action.ERROR;
+			}
+		}
+	}
+}

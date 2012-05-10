@@ -1,0 +1,56 @@
+<#assign display=JspTaglibs["/WEB-INF/tlds/displaytag.tld"] />
+<html>
+<head>
+<@ww.head/>
+<style type="text/css">
+	@import url('<@ww.url value="/css/displaytag.css"/>');
+</style>
+<title>Cadastro de $stringUtils.capitalise(${model.name})s</title>
+</head>
+#set($obj = $stringUtils.uncapitalise(${model.name}))
+<body>
+<div id="filtro">
+<span id="filtroExpandBar" onclick="showFilter()"><img src="<@ww.url params='none' value='/imgs/pesquisar.gif'/>" align="bottom"> Dados para pesquisa</span>
+<div id="filtroInner">
+<@ww.form name="form" method="POST">
+<\#include "${model.uncapName}-Form.ftl"/>
+	<@ww.submit value="Pesquisar"/>
+</@ww.form>
+</div>
+</div>
+<@display.table name="${obj}s" id="${obj}" pagesize=10 class="dados" defaultsort=1 export=true>
+	<@display.setProperty name="export.csv.filename" value="${obj}.csv" />
+	<@display.setProperty name="export.excel.filename" value="${obj}.xls" />
+	<@display.setProperty name="export.rtf.filename" value="${obj}.rtf" />
+	<@display.setProperty name="export.pdf.filename" value="${obj}.pdf" />
+#foreach($f in $model.fields)
+#if(${f.name} != "id" )
+#if($f.type=="Date")
+	<@display.column property="$f" title="$stringUtils.capitalise($f.name)" format="{0,date,dd/MM/yyyy}" sortable=true/>
+#elseif ($f.bean)
+	<@display.column property="${f.bean.uncapName}.id" title="$stringUtils.capitalise($f.name)" sortable=true/>
+#elseif (($f.type!="File") && (!$f.type.startsWith("Collection")))
+	<@display.column property="$f" title="$stringUtils.capitalise($f.name)" sortable=true/>
+#end
+#end
+#end
+	<@display.column title="Ações" media="html" style="text-align:center; width: 80px;">
+		<a href="prepareUpdate.action?${obj}.id=${${obj}.id}"><img border="0" alt="Edit" title="Editar" src="<@ww.url value="/imgs/edit.gif"/>"></a>
+		<a href="#" onclick="if (confirm('Confirma exclusão?')) window.location='delete.action?${obj}.id=${${obj}.id}'"><img border="0" alt="Delete" title="Apagar" src="<@ww.url value="/imgs/delete.gif"/>"></a>
+	</@display.column>
+	<@display.footer>
+		<td colspan="$countFields" align="center" valign="middle" style="border: thin dotted #000; font-family: Arial; font-size: 12px;">
+			<img border="0" valign="middle" src="<@ww.url value="/imgs/edit.gif"/>" > - Editar
+			<img border="0" valign="middle" src="<@ww.url value="/imgs/delete.gif"/>"> - Excluir
+		</td>
+	</@display.footer>
+</@display.table>
+
+<hr class="divider">
+<div class="buttonGroup">
+<button class="button" onclick="window.location='prepareInsert.action'" accesskey="N">
+<u>N</u>ovo $stringUtils.capitalise(${model.name})
+</button>
+</div>
+</body>
+</html>

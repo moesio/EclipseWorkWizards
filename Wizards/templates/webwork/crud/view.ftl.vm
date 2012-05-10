@@ -1,0 +1,5 @@
+<%@ taglib uri="webwork" prefix="ww" %>
+<b>$stringUtils.capitalise(${model.name}):</b><br>
+#foreach($f in $model.fields)
+<br><b>$stringUtils.uncapitalise(${f.name})</b>: \{$!$stringUtils.uncapitalise(${model.name}).${f.name}}
+#end

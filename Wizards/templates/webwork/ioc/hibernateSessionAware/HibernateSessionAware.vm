@@ -1,0 +1,10 @@
+#if($package)
+package $package;
+#end
+
+/**
+ * Enabler for the XWork IOC
+ */
+public interface $class {
+	public void set$hibernateSession($hibernateSession session);
+}

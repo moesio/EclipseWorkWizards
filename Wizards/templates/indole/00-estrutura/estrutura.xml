@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<EclipseWork>
+    <wizard>
+        <title>Estrutura de pastas</title>
+
+		<component-page required="true">
+			<description>Criação da estrutura de pastas para um projeto
+			</description>
+			
+			<container name="modelPackage" label="Pacote dos modelos:" required="true" type="package" value="#modelPackage"/>
+			<container name="daoPackage" label="Pacote DAO:" required="true" type="package" value="#daoInterfacePackage"/>
+			<container name="hibernatePackage" label="Pacote DAO:" required="true" type="package" value="#daoHibernatePackage"/>
+			<container name="businessPackage" label="Pacote de negócios:" required="true" type="package" value="#managerPackage"/>
+			<container name="configPackage" label="Pacote de configuração:" required="true" type="package" value="#confPackage"/>
+			
+			<container name="decoratorsFolder" label="Pasta decorators:" required="true" type="package" value="copiarParaWebRoot.decorators"/>
+			<container name="cssFolder" label="Pasta css:" required="true" type="package" value="copiarParaWebRoot.css"/>
+			<container name="imagesFolder" label="Pasta images:" required="true" type="package" value="copiarParaWebRoot.imgs"/>
+			<container name="jsFolder" label="Pasta js:" required="true" type="package" value="copiarParaWebRoot.js"/>
+			<container name="templateFolder" label="Pasta template:" required="true" type="package" value="copiarParaWebRoot.template"/>
+			<container name="tldsFolder" label="Pasta tlds:" required="true" type="package" value="copiarParaWebRoot.WEB-INF.tlds"/>
+		</component-page>
+
+		<!-- Output Files -->
+        <output>
+            <template component="readme" velocity="readme.vm" extension="txt" container="modelPackage"/>
+            <template component="readme" velocity="readme.vm" extension="txt" container="daoPackage"/>
+            <template component="readme" velocity="readme.vm" extension="txt" container="hibernatePackage"/>
+            <template component="readme" velocity="readme.vm" extension="txt" container="businessPackage"/>
+            <template component="readme" velocity="readme.vm" extension="txt" container="configPackage"/>
+			
+            <template component="readme" velocity="readme.vm" extension="txt" container="decoratorsFolder"/>
+            <template component="csshover2" velocity="css/csshover2.htc.vm" extension="htc" container="cssFolder"/>
+            <template component="displaytag" velocity="css/displaytag.css.vm" extension="css" container="cssFolder"/>
+            <template component="arrow_down" velocity="imgs/arrow_down.png" extension="png" container="imagesFolder"/>
+            <template component="arrow_off" velocity="imgs/arrow_off.png" extension="png" container="imagesFolder"/>
+            <template component="arrow_up" velocity="imgs/arrow_up.png" extension="png" container="imagesFolder"/>
+            <template component="delete" velocity="imgs/delete.gif" extension="gif" container="imagesFolder"/>
+            <template component="edit" velocity="imgs/edit.gif" extension="gif" container="imagesFolder"/>
+            <template component="pesquisar" velocity="imgs/pesquisar.gif" extension="gif" container="imagesFolder"/>
+            <template component="window" velocity="imgs/window.jpg" extension="jpg" container="imagesFolder"/>
+            <template component="ico_file_csv" velocity="imgs/ico_file_csv.png" extension="png" container="imagesFolder"/>
+            <template component="ico_file_excel" velocity="imgs/ico_file_excel.png" extension="png" container="imagesFolder"/>
+            <template component="ico_file_pdf" velocity="imgs/ico_file_pdf.png" extension="png" container="imagesFolder"/>
+            <template component="ico_file_xml" velocity="imgs/ico_file_xml.png" extension="png" container="imagesFolder"/>
+			
+            <template component="readme" velocity="readme.vm" extension="txt" container="jsFolder"/>
+            <template component="readme" velocity="readme.vm" extension="txt" container="templateFolder"/>
+            <template component="readme" velocity="readme.vm" extension="txt" container="tldsFolder"/>
+        </output>
+    </wizard>
+</EclipseWork>

@@ -1,0 +1,34 @@
+#set($classe = ${model.elementName})
+#set($vo = $stringUtils.uncapitalise(${model.elementName}))
+#if($package)
+package $package;
+#end
+
+import $model;
+
+/**
+* Look at the /templates/demo/Demo_POJO_JDBC.xml
+* Use the toolbar in the TemplatesView, to selected the mode.
+* Note that to use the JDBC mode, you must open a connectin with the EasySQL plugin.
+*
+* author $author
+*/
+public class $class
+{
+#if($model)
+	//FullyQualifiedName :-)
+	private $model.name $vo;
+#end
+
+/** ------------------------------------------- **/
+//$classe
+//$vo
+/** ------------------------------------------- **/
+
+/** -- Fields/Columns: POJO or Table ---------- **/
+#foreach($f in $model.fields)
+//	$f.name - $f.type - [$f.sqlType]
+#end
+/** ------------------------------------------- **/
+
+}

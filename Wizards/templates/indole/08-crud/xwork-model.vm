@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE xwork PUBLIC "-//OpenSymphony Group//XWork 1.0//EN" "http://www.opensymphony.com/xwork/xwork-1.0.dtd">
+#set( $nextLevelFolder = $resultName_folder.substring($resultName_folder.indexOf('/', 1)) )
+#set( $actualFolder = $nextLevelFolder.substring($nextLevelFolder.indexOf('/', 1)) )
+
+<xwork>
+	<package name="${model.uncapName}" extends="${xwork_package_extends}" namespace="/${model.uncapName}">
+		<action name="list" class="${listActionClass}" method="list">
+			<result name="success" type="${viewType}">$actualFolder/${listPageName.name}.${listPageName.extension}</result>
+		</action>
+		<action name="delete" class="${listActionClass}" method="delete">
+			<result name="success" type="redirect">list.action</result>
+			<result name="error" type="redirect">list.action</result>
+		</action>
+		<action name="prepareInsert" class="${editActionClass}" method="prepareInsert">
+			<result name="success" type="${viewType}">$actualFolder/${editPageName.name}.${editPageName.extension}</result>
+		</action>
+		<action name="prepareInnerInsert" class="${editActionClass}" method="prepareInsert">
+			<result name="success" type="${viewType}">$actualFolder/${editPageName.name}.${editPageName.extension}</result>
+		</action>
+		<action name="prepareUpdate" class="${editActionClass}" method="prepareUpdate">
+			<result name="success" type="${viewType}">$actualFolder/${editPageName.name}.${editPageName.extension}</result>
+		</action>
+		<action name="insert" class="${editActionClass}" method="insert">
+			<result name="success" type="redirect">prepareInsert.action</result>
+			<result name="stop" type="redirect">list.action</result>
+			<result name="input" type="${viewType}">$actualFolder/${editPageName.name}.${editPageName.extension}</result>
+		</action>
+		<action name="innerInsert" class="${editActionClass}" method="innerInsert">
+			<result name="success" type="freemarker">/WEB-INF/pages/innerConfirmation.ftl</result>
+			<result name="input" type="${viewType}">$actualFolder/${editPageName.name}.${editPageName.extension}</result>
+		</action>
+		<action name="update" class="${editActionClass}" method="update">
+			<result name="success" type="redirect">list.action</result>
+			<result name="input" type="${viewType}">$actualFolder/${editPageName.name}.${editPageName.extension}</result>
+		</action>
+#foreach($f in $model.fields)
+#if($f.type=="File")
+		<action name="showFile" class="br.com.indole.ShowFileAction">
+		<!--
+		<interceptor-ref name="showFileStack" />
+		-->
+			<result name="success" type="redirect">showFile!show${model.uncapName}.action?galeria.id=${galeria.id}</result>
+		</action>
+#end
+#end
+	</package>
+</xwork>

@@ -1,0 +1,188 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE web-app PUBLIC "-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN" "http://java.sun.com/dtd/web-app_2_3.dtd">
+<web-app>
+
+#if($display-name)
+    <display-name>$display-name</display-name>
+#end
+#if($springSupport)
+	<context-param>
+		<param-name>contextConfigLocation</param-name>
+		<param-value>
+			/WEB-INF/classes/br/com/indole/conf/applicationContext.xml,
+			/WEB-INF/classes/br/com/indole/conf/applicationContext-security.xml,
+			/WEB-INF/classes/br/com/indole/conf/applicationContext-datasource.xml,
+			/WEB-INF/classes/br/com/indole/conf/applicationContext-dao.xml,
+			/WEB-INF/classes/br/com/indole/conf/applicationContext-dao-hibernate.xml,
+			/WEB-INF/classes/br/com/indole/conf/applicationContext-business.xml
+		</param-value>
+	</context-param>
+#end	   
+
+	<filter>
+		<filter-name>encodingFilter</filter-name>
+		<filter-class>org.springframework.web.filter.CharacterEncodingFilter</filter-class>
+		<init-param>
+			<param-name>encoding</param-name>
+			<param-value>ISO-8859-1</param-value>
+		</init-param>
+		<init-param>
+			<param-name>forceEncoding</param-name>
+			<param-value>true</param-value>
+		</init-param>
+	</filter>	
+
+	<filter>
+		<filter-name>Acegi Authentication Processing Filter</filter-name>
+		<filter-class>
+			org.acegisecurity.util.FilterToBeanProxy
+		</filter-class>
+		<init-param>
+			<param-name>targetClass</param-name>
+			<param-value>
+				org.acegisecurity.util.FilterChainProxy
+			</param-value>
+		</init-param>
+	</filter>
+
+	<filter>
+		<filter-name>ResponseOverrideFilter</filter-name> 
+		<filter-class>org.displaytag.filter.ResponseOverrideFilter</filter-class> 
+	</filter>	
+
+    <filter>
+        <filter-name>webwork-cleanup</filter-name>
+        <filter-class>com.opensymphony.webwork.dispatcher.ActionContextCleanUp</filter-class>
+    </filter>
+
+#if($sitemeshSupport)
+    <filter>
+        <filter-name>sitemesh</filter-name>
+        <filter-class>com.opensymphony.webwork.sitemesh.FreeMarkerPageFilter</filter-class>
+    </filter>
+#end
+
+	<filter>
+        <filter-name>webwork</filter-name>
+        <filter-class>com.opensymphony.webwork.dispatcher.FilterDispatcher</filter-class>
+    </filter>
+	 
+    <filter-mapping>
+        <filter-name>encodingFilter</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>    
+	 
+	<filter-mapping>
+		<filter-name>Acegi Authentication Processing Filter</filter-name>
+		<url-pattern>/controle/*</url-pattern>
+	</filter-mapping>    
+
+	<filter-mapping>
+		<filter-name>ResponseOverrideFilter</filter-name> 
+		<url-pattern>*.action</url-pattern>
+	</filter-mapping>
+
+	<filter-mapping> 
+		<filter-name>ResponseOverrideFilter</filter-name> 
+		<url-pattern>*.ftl</url-pattern>
+	</filter-mapping>	
+		
+    <filter-mapping>
+        <filter-name>webwork-cleanup</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
+
+#if($sitemeshSupport)
+    <filter-mapping>
+        <filter-name>sitemesh</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
+#end
+
+    <filter-mapping>
+        <filter-name>webwork</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>    
+
+#if($springSupport)
+	<listener>
+		<listener-class>
+			org.springframework.web.context.ContextLoaderListener
+		</listener-class>
+	</listener>
+#end
+	<listener>
+		<listener-class>
+			com.atlassian.xwork.ext.ResolverSetupServletContextListener
+		</listener-class>
+	</listener>
+
+	<listener>
+		<listener-class>
+			org.acegisecurity.ui.session.HttpSessionEventPublisher
+		</listener-class>
+	</listener>
+
+#if($dwrSupport)
+	<servlet>
+	    <servlet-name>dwr</servlet-name>
+    	<servlet-class>uk.ltd.getahead.dwr.DWRServlet</servlet-class>
+	  <init-param>
+	     <param-name>debug</param-name>
+	     <param-value>true</param-value>
+	  </init-param>
+	</servlet>
+#end
+	
+#if($sitemeshSupport)
+    <servlet>
+        <servlet-name>sitemesh-freemarker</servlet-name>
+        <servlet-class>com.opensymphony.module.sitemesh.freemarker.FreemarkerDecoratorServlet</servlet-class>
+        <init-param>
+            <param-name>TemplatePath</param-name>
+            <param-value>/</param-value>
+        </init-param>
+        <init-param>
+            <param-name>default_encoding</param-name>
+            <param-value>ISO-8859-1</param-value>
+        </init-param>
+        <load-on-startup>1</load-on-startup>
+    </servlet>
+#end
+
+    <servlet>  
+        <servlet-name>JspSupportServlet</servlet-name>  
+        <servlet-class>com.opensymphony.webwork.views.JspSupportServlet</servlet-class>  
+        <load-on-startup>1</load-on-startup>  
+    </servlet>  
+	
+#if($dwrSupport)
+	<servlet-mapping>
+	    <servlet-name>dwr</servlet-name>
+	    <url-pattern>/dwr/*</url-pattern>
+	</servlet-mapping>
+#end
+
+#if($sitemeshSupport)
+    <servlet-mapping>
+        <servlet-name>sitemesh-freemarker</servlet-name>
+        <url-pattern>*.ftl</url-pattern>
+    </servlet-mapping>
+#end
+
+	<taglib>
+		<taglib-uri>webwork</taglib-uri>
+		<taglib-location>/WEB-INF/lib/webwork-2.2.4.jar</taglib-location>
+	</taglib>
+
+	<taglib>
+		<taglib-uri>http://acegisecurity.org/authz</taglib-uri>
+		<taglib-location>/WEB-INF/tlds/authz.tld</taglib-location>
+	</taglib>	
+
+    <taglib>
+        <taglib-uri>http://displaytag.sourceforge.net/</taglib-uri>
+        <taglib-location>/WEB-INF/tlds/displaytag-11.tld</taglib-location>
+    </taglib>
+    
+</web-app>

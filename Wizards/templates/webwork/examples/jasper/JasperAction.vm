@@ -1,0 +1,63 @@
+#if($package)
+	package $package;
+#end
+
+import java.util.ArrayList;
+import java.util.Collection;
+
+import com.opensymphony.xwork.Action;
+
+/**
+ * author $author
+ */
+public class $class implements Action {
+
+	private Collection users = null;
+
+	/**
+	 * @see com.opensymphony.xwork.Action#execute()
+	 */
+	public String execute() throws Exception {
+		users = new ArrayList();
+
+		users.add(new User("User A","a@a.com"));
+		users.add(new User("User B","b@b.com"));
+		users.add(new User("User C","c@c.com"));
+
+		return Action.SUCCESS;
+	}
+
+	class User {
+		private String name;
+		private String email;
+
+		public User(String name, String email) {
+			super();
+			this.name = name;
+			this.email = email;
+		}
+
+		public String getEmail() {
+			return email;
+		}
+
+		public void setEmail(String email) {
+			this.email = email;
+		}
+
+		public String getName() {
+			return name;
+		}
+
+		public void setName(String name) {
+			this.name = name;
+		}
+	}
+
+	/**
+	 * @return Returns the users.
+	 */
+	public Collection getUsers() {
+		return users;
+	}
+}

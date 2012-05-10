@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<EclipseWork>
+    <wizard>
+        <title>Criação do POJO</title>
+
+        <component-page required="true">
+            <description>Criação do POJO e mapeamento no hibernate.cfg.xml</description>
+
+			<container name="modelPackage" label="Pacote dos modelos:" required="true" type="package" value="#modelPackage"/>
+            <textfield name="pojo" label="Entidade" required="true" extension="java" value=""/>
+			<group checkbox="cfg">
+				<!-- 
+				The '#' sintax find the value in the window->preferences->eclipsework->static variables.
+				Create the variable hibernate.cfg.xml.location to set the default value...
+				-->
+				<checkbox label="Atualiza hibernate.cfg.xml?" name="cfg" value="true"/>
+				<file name="hibernate.cfg.xml" label="hibernate.cfg.xml" type="folder" extensions="xml" value="#hibernate.cfg.xml"/>
+			</group>
+
+        </component-page>
+
+		<!-- Output Files -->
+        <output>
+            <template component="pojo" velocity="pojo.vm" extension="java" container="modelPackage"/>
+
+			<!-- update hibernate.cfg.xml -->
+			<xml-update file="hibernate.cfg.xml">
+				<condition variable="cfg" value="true"/>
+				<session-factory check-before-create="true">
+					<mapping class="$pojo"/>
+				</session-factory>
+			</xml-update>
+			
+        </output>
+    </wizard>
+</EclipseWork>

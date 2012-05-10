@@ -1,0 +1,9 @@
+#set($obj = $stringUtils.uncapitalise(${model.name}))
+<b>$stringUtils.capitalise(${model.name})s ModelDriven example:</b><br>
+<#assign ww=JspTaglibs["/WEB-INF/webwork.tld"] />
+
+<@ww.iterator value="${obj}s">
+<br><@ww.property /> - <a href="load.action?id=<@ww.property value='id'/>">Edit</a> &nbsp;&nbsp;<a href="delete.action?id=<@ww.property value='id'/>">Remove</a>
+</@ww.iterator>
+
+<hr><a href="load!default.action">Create</a>

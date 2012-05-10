@@ -1,0 +1,3 @@
+<include>
+	<textfield name="xwork_action_name" label="Action Name:" required="true" value="" />
+</include>

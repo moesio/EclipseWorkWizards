@@ -1,0 +1,13 @@
+#if($package)
+package $package;
+#end
+
+import $baseServiceInterface.fullyName;
+import $model.fullyName;
+
+/**
+ * @author $author
+ * @date $date
+ */
+public interface $class extends $baseServiceInterface.name<$model.name> {
+}

@@ -1,0 +1,19 @@
+#if($package)
+package $package;
+#end
+
+import $baseDaoInterface.fullyName;
+
+import $model.fullyName;
+
+/**
+ * @author $author
+ * @date $date
+ */
+public interface $class extends $baseDaoInterface.name<$model.name> {
+#foreach($f in $model.fields)
+#if($f.type=="File")
+	public File find${stringUtils.capitalise($f.name)}(Long id);
+#end
+#end
+}

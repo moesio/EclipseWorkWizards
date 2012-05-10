@@ -1,0 +1,20 @@
+<center>CeWolf && Velocity</center><hr>
+
+<p align="center">
+
+$comment Use the cewolf taglib in Velocity :-)
+#bodytag( SimpleChart "id=chartId" "title=What´s the best MVC Framework ?" "type=pie" "xaxislabel=XXX" "yaxislabel=YYY" )
+  #bodytag( Data )
+    #tag( Producer "id=dataSet" )
+  \#end
+\#end
+#tag( ChartImg "chartid=chartId" "renderer=cewolf" "width=400" "height=300" )
+</p>
+
+<p>
+<a href="${xwork_action_name}.action?view=jsp">JSP</a>
+  -
+<a href="${xwork_action_name}.action?view=vm">Velocity</a>
+  -
+<a href="${xwork_action_name}.action?view=ftl">Freemarker</a>
+</p>

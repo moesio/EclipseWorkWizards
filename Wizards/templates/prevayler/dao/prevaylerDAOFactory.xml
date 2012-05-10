@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<EclipseWork>
+    <wizard>
+        <title>DAO Factory for Prevayler</title>
+
+        <component-page required="true">
+            <description>Create a PrevaylerDAOFactory.</description>
+
+			<container name="package" label="Package:" required="true" type="package" />
+	        <textfield name="prevaylerDAOFactory" label="Class:" required="true" extension="java" value="PrevaylerDAOFactory" />
+
+			<container name="prevaylerBaseDir" label="Prevayler Base Dir: " type="folder" external="true" required="true" />
+			
+			<type name="daoFactory" label="Abstract DAOFactory: " required="true"/>
+
+			<group label="Required Classes" required="true">
+				<type name="prevaylerSystem" label="Prevayler System: " required="true"/>
+				<type name="prevaylerSnapshot" label="Snapshot Timer " required="true"/>
+			</group>
+
+        </component-page>
+
+		<!-- Output Files -->
+        <output>
+            <template component="prevaylerDAOFactory" velocity="PrevaylerDAOFactory.vm" extension="java" container="package"/>
+			
+			<!-- Update DAOFactory -->
+			<template component="daoFactory" method="DAOFactory-method-update.vm" extension="java" container="package"/>
+        </output>
+    </wizard>
+</EclipseWork>

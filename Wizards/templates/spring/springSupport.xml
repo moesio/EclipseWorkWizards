@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<EclipseWork>
+    <wizard>
+        <title>Add Spring/IoC + Hibernate support!</title>
+
+		<component-page required="true">
+			<description>Spring</description>
+
+			<container name="webinf_container" label="WEB-INF:" required="true" type="folder" value="#webinf"/>
+
+			<group label="Connection">
+				
+				<textfield name="username"  label="Username:" required="true" />
+				<textfield name="password"  label="Password:"  />
+				
+				<combo name="hibernate_dialect" label="Hibernate dialect:" value="" edit="true">
+					<elements>
+						<option>org.hibernate.dialect.HSQLDialect</option>
+						<option>org.hibernate.dialect.MySQLDialect</option>
+						<option>org.hibernate.dialect.MySQLInnoDBDialect</option>
+						<option>org.hibernate.dialect.MySQLMyISAMDialect</option>
+						<option>org.hibernate.dialect.OracleDialect</option>
+						<option>org.hibernate.dialect.Oracle9Dialect</option>
+						<option>org.hibernate.dialect.PostgreSQLDialect</option>
+						<option>org.hibernate.dialect.DB2Dialect</option>
+						<option>org.hibernate.dialect.SybaseDialect</option>
+						<option>org.hibernate.dialect.PointbaseDialect</option>
+					</elements>
+				</combo>
+				
+				<combo name="hibernate_driver" label="JSBC Driver:" value="" edit="true">
+					<elements>
+						<option>org.hsqldb.jdbcDriver</option>
+						<option>com.mysql.jdbc.Driver</option>
+						<option>oracle.jdbc.driver.OracleDriver</option>
+						<option>org.postgresql.Driver</option>
+						<option>COM.ibm.db2.jdbc.app.DB2Driver</option>
+						<option>com.sybase.jdbc2.jdbc.SybDriver</option>
+						<option>com.pointbase.jdbc.jdbcUniversalDriver</option>
+					</elements>
+				</combo>
+
+				<combo name="hibernate_url" label="JDBC URL:" value="" edit="true">
+					<elements>
+						<option>jdbc:hsqldb:hsql://localhost</option>
+						<option>jdbc:hsqldb:</option>
+						<option>jdbc:hsqldb:.</option>
+						<option>jdbc:mysql:///db</option>
+						<option>jdbc:oracle:thin:@localhost:1521:db</option>
+						<option>jdbc:postgresql:db</option>
+						<option>jdbc:db2:db</option>
+						<option>jdbc:sybase:Tds:co3061835-a:5000/tempdb</option>
+						<option>jdbc:pointbase:embedded:db</option>
+					</elements>
+				</combo>
+			</group>
+
+		</component-page>
+
+		<!-- Output Files -->
+        <output>
+            <template component="applicationContext.xml" velocity="applicationContext.vm" extension="xml" container="webinf_container"/>
+			<template component="spring-daos.xml" velocity="spring-beans.vm" extension="xml" container="webinf_container"/>
+			<template component="spring-actions.xml" velocity="spring-beans.vm" extension="xml" container="webinf_container"/>
+        </output>
+    </wizard>
+</EclipseWork>

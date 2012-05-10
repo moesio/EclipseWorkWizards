@@ -1,0 +1,89 @@
+#set($classe = ${model.elementName})
+#set($vo = $stringUtils.uncapitalise(${model.elementName}))
+#set($daoVar = $stringUtils.uncapitalise(${dao.name}))
+#if($package)
+package $package;
+#end
+
+import java.util.List;
+import com.opensymphony.xwork.Action;
+#if($extends)import $extends.fullyName;#end
+import com.opensymphony.xwork.ActionSupport;
+#if($model)
+import $model.fullyName;
+import $daoFactory.fullyName;
+import $dao.fullyName;
+#end
+
+/**
+* author $author
+*/
+public class $class #if($extends)#if($extends.isClass())extends#elseif($extends.isInterface())implements#end $extends.name#else extends ActionSupport#end
+{
+	private ${dao.name} ${daoVar} = ${daoFactory.name}.getHibernateDAOFactory().get${dao.name}();
+
+	private List ${vo}s = null;
+
+#if($model)
+	private $model.name $vo;
+#end
+
+	/**
+	 * @see com.opensymphony.xwork.Action#execute()
+	 */
+	public String execute() throws Exception {
+		return Action.SUCCESS;
+	}
+
+	public String list() throws Exception {
+		${vo}s = ${daoVar}.list();
+
+		return Action.SUCCESS;
+	}
+
+	public String load() throws Exception {
+		$vo = ($classe) ${daoVar}.load(get${classe}().getId());
+
+		return Action.SUCCESS;
+	}
+
+	public String save() throws Exception {
+
+		//${daoVar}.save($vo);
+		${daoVar}.saveOrUpdate($vo, ${vo}.getId());
+
+		return Action.SUCCESS;
+	}
+
+	public String delete() throws Exception {
+
+		${daoVar}.delete(get${classe}());
+
+		return Action.SUCCESS;
+	}
+
+	/**
+	 * @return
+	 */
+	public List get${classe}s() {
+		return ${vo}s;
+	}
+
+#if($validate)
+	public void validate(){
+		// validate your objects here!
+	}	
+#end
+
+#if($classe)
+	public $classe get${classe}(){
+		if($vo == null){
+			$vo = new ${classe}();
+		}
+		return $vo;
+	}
+	public void set${classe}(${classe} $vo){
+		this.${vo}=$vo;
+	}
+#end
+}

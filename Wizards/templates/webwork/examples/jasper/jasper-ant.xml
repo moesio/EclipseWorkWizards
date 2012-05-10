@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<EclipseWork>
+    <wizard>
+        <title>Create an ANT Build file</title>
+
+        <component-page required="false">
+
+			<!-- ANT build file -->
+			<group label="ANT - WebWork utility to compile the *.jasper files" checkbox="checkAnt">
+				<textfield name="ant-jasper" label="ANT build file Name:"  value="build-jasper.xml" />
+				<textfield name="basedir" label="ANT Project BaseDir:"  value="WebRoot" />
+			</group>		
+
+        </component-page>
+
+        <output>
+
+			<!-- Get an Action that already exists -->
+			<template component="ant-jasper" velocity="jasper-ant.vm" extension="xml" >
+				
+			</template>
+
+		</output>
+    </wizard>
+</EclipseWork>

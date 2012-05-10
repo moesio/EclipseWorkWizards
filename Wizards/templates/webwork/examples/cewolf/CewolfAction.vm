@@ -1,0 +1,66 @@
+#if($package)
+package $package;
+#end
+
+import $cewolfClass.fullyName;
+import com.opensymphony.webwork.ServletActionContext;
+import com.opensymphony.xwork.Action;
+import de.laures.cewolf.DatasetProducer;
+
+/**
+* CeWolf Example
+* 
+* Velocity(default)	: cewolf.action?type=vm
+* JSP				: cewolf.action?type=jsp
+* FreeMarker		: cewolf.action?type=ftl
+* 
+* <br>To configure cewolf add the following lines to webwork.properties:
+* <br>webwork.velocity.tag.path = com.opensymphony.webwork.views.velocity.ui,de.laures.cewolf.taglib.tags
+**/
+public class $class implements Action{
+
+	private DatasetProducer dataSet= new ${cewolfClass.name}();
+
+	private String view=null;
+
+	/**
+	 * @see com.opensymphony.xwork.Action#execute()
+	 */
+	public String execute() throws Exception {
+
+		//put the cewolf DatasetProducer in the HttpServletRequest
+		ServletActionContext.getRequest().setAttribute("dataSet",dataSet);
+
+		if(view!=null && view.equals("jsp")){
+			return "successJSP";
+		}
+		else{
+			if(view!=null && view.equals("vm")){
+				return "successVM";
+			}
+		}
+
+		return Action.SUCCESS;
+	}
+
+	/**
+	 * @return
+	 */
+	public DatasetProducer getDataSet() {
+		return dataSet;
+	}
+
+	/**
+	 * @return
+	 */
+	public String getView() {
+		return view;
+	}
+
+	/**
+	 * @param string
+	 */
+	public void setView(String view) {
+		this.view = view;
+	}
+}

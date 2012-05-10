@@ -1,0 +1,12 @@
+<b>$stringUtils.capitalise(${model.name})s ModelDriven example:</b><br>
+<#assign ww=JspTaglibs["/WEB-INF/webwork.tld"] />
+
+<@ww.form name="form" #if($namespace)namespace="${namespace}"#end action="save" >
+#foreach($f in $model.fields)
+#if(${f.name} == "id" )
+	<@ww.hidden label="$stringUtils.capitalise($f.name)" name="${f.name}" />
+#else
+	<@ww.textfield label="$stringUtils.capitalise($f.name)" name="${f.name}" />
+#end
+	<@ww.submit value="Save $stringUtils.capitalise(${model.name})" />
+</@ww.form>

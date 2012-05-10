@@ -1,0 +1,30 @@
+#set($pojo = ${model.uncapName})
+<?xml version="1.0"?>
+<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.0">
+    <xsl:output method="html" media-type="text/html"/>
+
+    <xsl:template match="result">
+        <html>
+            <head>
+                <title>${model.capName}s:</title>
+            </head>
+            <body>
+                <xsl:apply-templates select="${pojo}s"/>
+				
+				<hr/><a href="load!default.action">Create</a>
+            </body>
+        </html>
+    </xsl:template>
+
+    <xsl:template match="${pojo}s">
+        <h2>${model.capName}s</h2>
+        <ul>
+            <xsl:for-each select="*">
+                <li>
+				<xsl:value-of select="id"/> - <a href="load.action?${pojo}.id={id}">Edit</a> | <a href="delete.action?${pojo}.id={id}">Remove</a>
+				</li>
+            </xsl:for-each>
+        </ul>
+    </xsl:template>
+
+</xsl:stylesheet>

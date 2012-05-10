@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<EclipseWork>
+    <wizard>
+        <title>Hibernate ThreadLocal Session</title>
+
+        <component-page required="true">
+            <description>ThreadLocal Pattern to Hibernate</description>
+
+			<container name="package" label="Package:" required="true" type="package" value=""/>
+            <textfield name="class" label="Class Name:" required="true" extension="java" value="HibernateUtil"/>
+        </component-page>
+
+		<!-- Output Files -->
+        <output>
+            <template component="class" velocity="ThreadLocalSession.vm" extension="java" container="package"/>
+        </output>
+    </wizard>
+</EclipseWork>

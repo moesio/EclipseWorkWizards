@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<EclipseWork>
+    <wizard>
+        <title>Action.properties</title>
+
+		<component-page required="true">
+			<description>Create the Action.properties file</description>
+			
+			<type name="action" label="Action:" required="true" value=""/>
+			
+		</component-page>
+
+		<!-- Output Files -->
+        <output>
+
+			<template component="${action.name}.properties" velocity="i18n.properties" container="${action.package}"/>
+
+        </output>
+    </wizard>
+</EclipseWork>

@@ -1,0 +1,28 @@
+#if($package)
+package $package;
+#end
+
+#set ($hasFileField=false)
+#foreach($f in $model.fields)
+#if($f.type=="File")
+#set ($hasFileField=true)
+#end
+#end
+#if($hasFileField)
+import br.com.seimos.model.type.File;
+#end
+import $baseDaoInterface.fullyName;
+import $model.fullyName;
+
+/**
+ * @author $author
+ * @date $date
+ */
+public interface $class extends $baseDaoInterface.name<$model.name> {
+#foreach($f in $model.fields)
+#if($f.type=="File")
+	public File find${stringUtils.capitalise($f.name)}(Long id);
+#end
+#end
+##	/** se necessário adicione métodos específicos para esta entidade **/
+}

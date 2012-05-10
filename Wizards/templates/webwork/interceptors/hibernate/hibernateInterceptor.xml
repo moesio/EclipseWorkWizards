@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<EclipseWork>
+    <wizard>
+        <title>Hibernate Interceptor</title>
+
+        <component-page required="false">
+            <description>Create a Hibernate Interceptor for WebWork.</description>
+
+			<container name="package" label="Package:" required="true" type="package" value=""/>
+            <textfield name="class" label="Class Name:" required="true" extension="java" value="HibernateInterceptor"/>
+
+			<!-- Using the Thread Local -->
+			<group name="group1" label="Using ThreadLocal" checkbox="checkThreadLocal" >
+				<checkbox name="checkThreadLocal" label="ThreadLocal" value=""/>
+				<type name="threadLocal" label="HibernateUtil: " />
+			</group>
+
+			<!-- Using the HibernateSession (XWork IoC) like the Hibernate AdminApp -->
+			<group name="group2" label="Using HibenateSession (AdminApp)" checkbox="checkAdminApp" >
+				<checkbox name="checkAdminApp" label="AdminApp" />
+
+				<type name="hibernateAction" label="Hibernate Action (superclass): " tooltip="Superclass for Hibernate-aware actions" />
+				<type name="hibernateSession" label="Hibernate Session : " tooltip="HibernateSession (HibernateAdminApp)" />
+
+			</group>
+			
+        </component-page>
+
+		<!-- Output Files -->
+        <output>
+            <template component="class" velocity="HibernateInterceptor.vm" extension="java" container="package">
+				<condition variable="checkThreadLocal" value="true" />
+			</template>
+
+            <template component="class" velocity="HibernateInterceptor2.vm" extension="java" container="package">
+				<condition variable="checkAdminApp" value="true" />
+			</template>
+<!--		
+			TODO: next version the wizards will update any xwork/webwork xml	
+			<xml-update file="webwork-default.xml" class="org.eclipse.eclipsework.jdom.element.xwork.interceptor.XWorkInterceptorUpdate">
+				<param name="xwork.interceptor.name" variable="name"/>
+				<param name="xwork.interceptor.class" variable="class"/>
+			</xml-update>
+-->
+        </output>
+    </wizard>
+</EclipseWork>

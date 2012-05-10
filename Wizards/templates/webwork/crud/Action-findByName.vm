@@ -1,0 +1,9 @@
+#set($vo = $stringUtils.uncapitalise(${model.elementName}))
+#set($daoVar = $stringUtils.uncapitalise(${dao.name}))
+#set($prop = $stringUtils.capitalise(${property}))
+
+	public String find${model.name}By${prop}() throws Exception{
+		this.${vo}s = ${daoVar}.find${model.name}By${prop}(get${model.name}().get${prop}());
+
+		return Action.SUCCESS;
+	}

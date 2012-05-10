@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<EclipseWork>
+    <wizard>
+        <title>Configure the Hibernate Stack</title>
+
+		<component-page>
+			<description>Create the hibernateStack.</description>
+
+			<group label="Choose the xwork.xml file to update">
+				<file name="xwork.xml" label="xwork.xml" type="folder" extensions="xml" value="#xwork.xml"/>
+			</group>
+
+			<group label="Choose the package to add the HibernateStack">
+				<include file="includes/xwork_package.xml" />
+			</group>
+
+			<checkbox name="componentStack" label="add XWork IoC Components Interceptor ? " />
+		</component-page>
+
+		<variables>
+			<var name="namespace" value="xwork_package_namespace" />
+		</variables>
+
+		<!-- Output Files -->
+        <output>
+
+			<!--
+				HIBERNATE stack
+			-->
+			<xml-update file="xwork.xml">
+
+				<package name="${xwork_package_name}" extends="${xwork_package_extends}" check-before-create="true">
+
+					<comment> Hibernate Stack </comment>
+					<interceptors>
+							<interceptor-stack name="hibernateStack">
+								<if>
+								<condition variable="componentStack" value="true" />
+									<interceptor-ref name="component" />
+								</if>
+								<interceptor-ref name="validationWorkflowStack"/>
+								<comment> Hibernate Interceptor to Open/Commit/Rollback Transactions </comment>
+								<interceptor-ref name="hibernate"/>
+							</interceptor-stack>
+					</interceptors>
+
+					<comment> default interceptor for all Actions in this package</comment>
+					<default-interceptor-ref name="hibernateStack" />
+
+				</package>
+			</xml-update>
+
+        </output>
+    </wizard>
+</EclipseWork>

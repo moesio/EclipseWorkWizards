@@ -1,0 +1,22 @@
+#if($package)
+package $package;
+#end
+
+import java.io.Serializable;
+import java.util.Collection;
+
+/**
+ * @author $author
+ */
+public interface $class extends Serializable {
+
+	public void save(Object object)#if($checkThrows) throws DAOException#end;
+
+	public void saveOrUpdate(Object object,Serializable id)#if($checkThrows) throws DAOException#end;
+
+	public void delete(Object object)#if($checkThrows) throws DAOException#end;
+
+	public Object load(Serializable id)#if($checkThrows) throws DAOException#end;
+
+	public Collection list()#if($checkThrows) throws DAOException#end;
+}

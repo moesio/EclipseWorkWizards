@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<EclipseWork>
+    <wizard>
+        <title>DAO Pattern</title>
+
+        <component-page required="true">
+            <description>Create a HibernateDAO for a POJO.</description>
+
+			<group>
+				<type name="model" label="POJO:" required="true" />
+			</group>
+
+			<container name="package" label="Package:" required="true" type="package" />
+            <textfield name="daoClass" label="Class:" required="true" extension="java" default-value="Hibernate${model.name}DAO"/>
+
+			<type name="hibernateDAO" label="Hibernate DAO (superclass): " required="true"/>
+			<type name="daoInterface" label="DAO Model Interface: " required="true" />
+
+			<group checkbox="updateDAOFactory" label="don´t need to use DAOFactory with Spring...">
+				<checkbox name="updateDAOFactory" label="Update? " />
+				<type name="daoFactoryClass" label="Hibernate DAOFactory " required="true"/>
+			</group>
+
+        </component-page>
+
+		<!-- Output Files -->
+        <output>
+            <template component="daoClass" velocity="HibernateModelDAO.vm" extension="java" container="package"/>
+
+			<!-- Update HibernateDAOFactory -->
+			<template component="daoFactoryClass" method="HibernateDAOFactory-method.vm" extension="java" container="package">
+				<condition variable="updateDAOFactory" value="true"/>
+			</template>
+        </output>
+    </wizard>
+</EclipseWork>

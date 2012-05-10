@@ -1,0 +1,6 @@
+#foreach($t in $tables)
+-> $t.name
+#foreach($c in $t.columns)
+	-> $c.name
+#end
+#end

@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE xwork PUBLIC "-//OpenSymphony Group//XWork 1.1.1//EN" "http://www.opensymphony.com/xwork/xwork-1.1.1.dtd">
+<xwork>
+	<include file="webwork-default.xml" />
+	<include file="config-browser.xml" />
+	<package name="default" extends="webwork-default">
+    <result-types>
+      <result-type name="jasper" class="com.opensymphony.webwork.views.jasperreports.JasperReportsResult" />
+    </result-types>
+    <interceptors>
+      <interceptor name="reference-resolver" class="com.opensymphony.xwork.interceptor.ExternalReferencesInterceptor" />
+      <interceptor name="fileUploadToProperty" class="br.com.indole.commons.web.webwork.interceptor.FileUploadToPropertyInterceptor" />
+      <!--
+      <interceptor name="validationException" class="br.com.indole.webwork.interceptor.ValidationExceptionInterceptor" />
+			-->
+	  <interceptor name="paramspersistent" class="br.com.indole.commons.web.interceptor.ParametersPersistentInterceptor"/>
+      <interceptor-stack name="showFileStack">
+        <interceptor-ref name="reference-resolver" />
+        <interceptor-ref name="servlet-config" />
+        <interceptor-ref name="static-params" />
+        <interceptor-ref name="params" />
+      </interceptor-stack>
+      <interceptor-stack name="myDefaultWebStack">
+        <interceptor-ref name="exception" />
+		  <!--
+         <interceptor-ref name="validationException" />
+			  -->
+        <interceptor-ref name="reference-resolver" />
+        <interceptor-ref name="alias" />
+        <interceptor-ref name="servlet-config" />
+        <interceptor-ref name="params" />
+        <interceptor-ref name="prepare" />
+        <interceptor-ref name="i18n" />
+        <interceptor-ref name="chain" />
+        <interceptor-ref name="model-driven" />
+        <interceptor-ref name="fileUploadToProperty" />
+        <interceptor-ref name="static-params" />
+        <!--
+        <interceptor-ref name="params" />
+        -->
+		<interceptor-ref name="paramspersistent"/>
+        <interceptor-ref name="conversionError" />
+        <interceptor-ref name="validation">
+          <param name="excludeMethods">prepareUpdate,prepareInsert,input,back,cancel,listFiltro</param>
+        </interceptor-ref>
+        <interceptor-ref name="workflow">
+          <param name="excludeMethods">input,back,cancel</param>
+        </interceptor-ref>
+      </interceptor-stack>
+    </interceptors>
+    <default-interceptor-ref name="myDefaultWebStack" />
+    <action name="login" class="com.opensymphony.xwork.ActionSupport">
+      <result name="success">/WEB-INF/login.jsp</result>
+    </action>
+    <action name="logout" class="com.opensymphony.xwork.ActionSupport">
+      <result name="success">/WEB-INF/logout.jsp</result>
+    </action>
+    <!--
+    <global-results>
+	  <result name="error">/WEB-INF/pages/error.jsp</result>
+    </global-results>
+    <action name="concurrentSessionError" class="com.opensymphony.xwork.ActionSupport">
+      <result name="success">/WEB-INF/pages/concurrentSessionError.jsp</result>
+    </action>
+		  -->
+    <action name="index" class="com.opensymphony.xwork.ActionSupport">
+      <result name="success">/WEB-INF/index.ftl</result>
+    </action>
+	</package>
+</xwork>

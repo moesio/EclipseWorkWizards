@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<EclipseWork>
+    <wizard>
+        <title>Configure the Hibernate Stack</title>
+
+		<component-page>
+			<description><![CDATA[<include file="xwork-file.xml" />]]></description>
+
+			<container name="src" label="Source Folder:" required="true" type="source" value=""/>
+			<textfield name="xwork-include" label="Name (xwork-include.xml)" extensions="xml" required="true" value=""/>
+
+		</component-page>
+
+		<variables>
+			<var name="namespace" value="xwork_package_namespace" />
+		</variables>
+
+		<!-- Output Files -->
+        <output>
+
+			<template component="xwork-include" velocity="xwork-include.xml.vm" container="src" />
+
+			<!--
+				HIBERNATE stack
+			-->
+			<xml-update file="xwork.xml">
+
+				<include file="${xwork-include.name}" check-before-create="true" />
+
+			</xml-update>
+
+        </output>
+    </wizard>
+</EclipseWork>

@@ -1,0 +1,390 @@
+#set($classe = ${model.elementName})
+#set($vo = $stringUtils.uncapitalise(${model.elementName}))
+#if($package)
+package $package;
+#end
+
+import java.io.DataInputStream;
+import java.io.EOFException;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+
+import javax.microedition.io.Connector;
+import javax.microedition.io.HttpConnection;
+import javax.microedition.lcdui.ChoiceGroup;
+import javax.microedition.lcdui.Command;
+import javax.microedition.lcdui.CommandListener;
+import javax.microedition.lcdui.Display;
+import javax.microedition.lcdui.Displayable;
+import javax.microedition.lcdui.Form;
+import javax.microedition.lcdui.List;
+import javax.microedition.lcdui.TextField;
+import javax.microedition.midlet.MIDlet;
+
+/**
+* @author $author
+*/
+public class $class extends MIDlet implements CommandListener {
+
+	private Display mDisplay;
+
+	private static final int INDEX_MENU_LIST = 0;
+
+	private static final int INDEX_MENU_CREATE = 1;
+
+	private static final String[] elements = { "List", "Create" };
+
+	private Command commandGo = null;
+
+	private Command commandExit = null;
+
+	private Command commandBack = null;
+
+	private List listMenu = null;
+
+	private static final String urlList = "$urlList";
+
+	private static final String urlSave = "$urlSave";
+
+	private static final String urlLoad = "$urlLoad?${vo}.id=";
+
+	private static final String urlDelete = "$urlDelete?${vo}.id=";
+
+	public $class() {
+		listMenu = new List("Menu", List.IMPLICIT, elements, null);
+
+		commandGo = new Command("Ok", Command.OK, 1);
+		commandExit = new Command("Exit", Command.EXIT, 1);
+		commandBack = new Command("Back", Command.BACK, 1);
+
+		listMenu.addCommand(commandGo);
+		listMenu.addCommand(commandExit);
+		listMenu.setCommandListener(this);
+	}
+
+	/**
+	 * @see javax.microedition.midlet.MIDlet#startApp()
+	 */
+	public void startApp() {
+		mDisplay = Display.getDisplay(this);
+		mDisplay.setCurrent(listMenu);
+	}
+
+	/**
+	 * @see javax.microedition.midlet.MIDlet#pauseApp()
+	 */
+	public void pauseApp() {
+	}
+
+	/**
+	 * @see javax.microedition.midlet.MIDlet#destroyApp(boolean)
+	 */
+	public void destroyApp(boolean unconditional) {
+	}
+
+	public void commandAction(Command c, Displayable s) {
+		if(c == commandGo) {
+			switch (listMenu.getSelectedIndex()) {
+				case INDEX_MENU_LIST:
+					doList();
+					break;
+				case INDEX_MENU_CREATE:
+					create();
+					break;
+				default:
+					break;
+			}
+		}
+		else if(c == this.commandBack) {
+			mDisplay.setCurrent(listMenu);
+		}
+		else if(c == this.commandExit) {
+			this.destroyApp(true);
+			this.notifyDestroyed();
+		}
+	}
+
+	/**
+	 * Open the form to create a new ${classe}.
+	 */
+	private void create() {
+		create(null#foreach($f in $model.fields)#if($f.name!="id"), null#end#end);
+	}
+
+	/**
+	 * Create a new ${classe}
+	 * 
+#foreach($f in $model.fields)
+	 * @param ${f.name}
+#end
+	 */
+	private void create(final String id#foreach($f in $model.fields)#if($f.name!="id"),String $f.name#end #end) {
+
+		Form form = new Form("Create/Update " + "${classe}");
+
+#foreach($f in $model.fields)
+#if($f.name!="id")
+		final TextField t${f.name} = new TextField("${f.capName}", ${f.name}, 30, TextField.ANY);
+		form.append(t${f.name});
+
+#end
+#end
+		final Command commSave = new Command("Save", Command.OK, 2);
+		form.addCommand(this.commandBack);
+		form.addCommand(commSave);
+		form.setCommandListener(new CommandListener() {
+			public void commandAction(Command c, Displayable d) {
+				if(c == commandBack) {
+					mDisplay.setCurrent(listMenu);
+				}
+				if(c == commSave) {
+					Thread t = new Thread() {
+						public void run() {
+
+							doSave( (id != null ? "${vo}.id=" + id +"&" : "")
+#set($varX = 0)
+#foreach($f in $model.fields)
+#if($f.name!="id")
+									+ "#if($varX > 0)&#end${vo}.${f.name}="+ t${f.name}.getString()
+#set($varX = 1)
+#end
+#end
+									);
+						}
+					};
+					t.start();
+				}
+			}
+		});
+		mDisplay.setCurrent(form);
+	}
+
+	/**
+	 * List all ${classe}s
+	 * 
+	 * @param id
+	 * @param nome
+	 */
+	private void doList() {
+
+		Form waitForm = new Form("Waiting...");
+		Command cancel = new Command("Cancel", Command.ITEM, 1);
+		waitForm.addCommand(cancel);
+		waitForm.setCommandListener(new CommandListener() {
+			public void commandAction(Command c, Displayable d) {
+				mDisplay.setCurrent(listMenu);
+			}
+		});
+		mDisplay.setCurrent(waitForm);
+		Thread t = new Thread() {
+			public void run() {
+				connectList();
+			}
+		};
+		t.start();
+	}
+
+	private void connectList() {
+		HttpConnection hc = null;
+
+		try {
+			hc = (HttpConnection) Connector.open(urlList);
+
+			fillList(hc);
+		}
+		catch (IOException ioe) {
+			System.err.println(ioe.getMessage());
+		}
+	}
+
+	/**
+	 * @param hc
+	 * @throws IOException
+	 */
+	private void fillList(HttpConnection hc) throws IOException {
+		InputStream in;
+
+		in = hc.openInputStream();
+
+		Form form = new Form("Teste");
+
+		final Command commEdit = new Command("Editar", Command.OK, 1);
+		final Command commDelete = new Command("Deletar", Command.OK, 2);
+
+		final ChoiceGroup choice = new ChoiceGroup("Selecione",
+				ChoiceGroup.EXCLUSIVE);
+		DataInputStream datain = new DataInputStream(in);
+
+		while (true) {
+			try {
+				choice.append(datain.readUTF() + ":" + datain.readUTF(), null);
+			}
+			catch (EOFException e) {
+				break;
+			}
+		}
+
+		form.append(choice);
+
+		form.addCommand(commandBack);
+		form.addCommand(commEdit);
+		form.addCommand(commDelete);
+
+		form.setCommandListener(new CommandListener() {
+			public void commandAction(Command c, Displayable d) {
+				if(c == commandBack) {
+					mDisplay.setCurrent(listMenu);
+				}
+				if(c == commEdit) {
+					final String id = getId(choice);
+					Thread t = new Thread() {
+						public void run() {
+							doLoad(urlLoad, id);
+						}
+					};
+					t.start();
+				}
+				else if(c == commDelete) {
+					final String id = getId(choice);
+					Thread t = new Thread() {
+						public void run() {
+							doDelete(urlDelete, id);
+						}
+					};
+					t.start();
+				}
+			}
+
+			/**
+			 * @param choice
+			 * @return
+			 */
+			private String getId(final ChoiceGroup choice) {
+				String text = choice.getString(choice.getSelectedIndex());
+				String id = text.substring(text.indexOf(":") + 1);
+				return id;
+			}
+		});
+		mDisplay.setCurrent(form);
+
+		datain.close();
+		in.close();
+		hc.close();
+	}
+
+	/**
+	 * Save ${classe}
+	 * 
+	 * @param urlParams
+	 */
+	private void doSave(String urlParams) {
+		try {
+			System.out.println("save: " + urlParams);
+
+			HttpConnection conn = (HttpConnection) Connector.open(urlSave);
+
+			//POST parameters
+			byte[] data = urlParams.getBytes();
+
+			conn.setRequestMethod(HttpConnection.POST);
+			conn.setRequestProperty("User-Agent","Profile/MIDP-1.0 Configuration/CLDC-1.0");
+			conn.setRequestProperty("Content-Language", "en-US");
+			conn.setRequestProperty("Content-Type","application/x-www-form-urlencoded");
+
+			//Get OutputStream
+			OutputStream os = conn.openOutputStream();
+			os.write(data);
+			os.close();
+
+			int rc = conn.getResponseCode();
+			String text = null;
+			if(rc == HttpConnection.HTTP_OK) {
+				try {
+					DataInputStream dis = new DataInputStream(conn
+							.openInputStream());
+					text = dis.readUTF();
+					dis.close();
+				}
+				catch (Exception e) {
+					e.printStackTrace();
+					text="Erro ao salvar o $vo";
+				}
+
+				Form form = new Form("");
+				form.append(text);
+
+				form.addCommand(commandBack);
+				form.setCommandListener(this);
+				mDisplay.setCurrent(form);
+			}
+
+			System.out.println("Save!");
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
+	/**
+	 * Delete ${classe}
+	 * 
+	 * @param url
+	 * @param id
+	 */
+	private void doDelete(String url, String id) {
+		try {
+			HttpConnection hc = null;
+			InputStream in = null;
+
+			System.out.println("open url: " + url);
+			hc = (HttpConnection) Connector.open(url + id);
+
+			in = hc.openInputStream();
+
+			in.close();
+			hc.close();
+			
+			System.out.println("Delete!");
+
+			connectList();
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
+	/**
+	 * Update ${classe}
+	 * 
+	 * @param url
+	 * @param id
+	 */
+	private void doLoad(String url, String id) {
+		try {
+			HttpConnection hc = null;
+			InputStream in = null;
+
+			System.out.println("open url: " + url);
+			hc = (HttpConnection) Connector.open(url + id);
+
+			in = hc.openInputStream();
+			DataInputStream dis = new DataInputStream(in);
+
+#foreach($f in $model.fields)
+#if($f.name!="id")
+			String ${f.name} = dis.readUTF();
+#end
+#end
+
+			create(id#foreach($f in $model.fields)#if($f.name!="id"), ${f.name}#end#end);
+
+			dis.close();
+			in.close();
+			hc.close();
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+}

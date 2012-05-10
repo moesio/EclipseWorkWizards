@@ -1,0 +1,53 @@
+#if($package)
+package $package;
+#end
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Map;
+
+import ognl.DefaultTypeConverter;
+
+import com.opensymphony.xwork.util.TypeConversionException;
+
+/**
+ * @author $author
+ *
+ * $format
+ */
+public class DateConverter extends DefaultTypeConverter
+{
+	private static SimpleDateFormat sf = new SimpleDateFormat("$format");
+
+	public Object convertValue(Map ognlContext, Object value, Class toType)
+	{
+		if (toType == Date.class)
+		{
+			try
+			{
+				if (value instanceof String[])
+				{
+					String[] array = (String[]) value;
+					return sf.parse(array[0]);
+				}
+				else
+				{
+					return value;
+				}
+			}
+			catch (ParseException e)
+			{
+				throw new TypeConversionException(e.getMessage() + value + " - class: " + toType);
+			}
+		}
+		else if (toType == String.class)
+		{
+			return sf.format(value);
+		}
+		else
+		{
+			return value;
+		}
+	}
+}

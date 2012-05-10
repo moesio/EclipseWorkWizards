@@ -1,0 +1,28 @@
+#if($package)
+package $package;
+#end
+
+import java.util.Date;
+import org.prevayler.TransactionWithQuery;
+
+/**
+ * @author $author
+ */
+public abstract class $class implements TransactionWithQuery 
+{
+    /**
+     * @see org.prevayler.TransactionWithQuery#executeAndQuery(java.lang.Object, java.util.Date)
+     */
+    public Object executeAndQuery(Object prevalentSystem, Date executionTime) throws Exception 
+    {
+        return executeAndQuery(($prevaylerSystemClass)prevalentSystem, executionTime);
+    }
+
+    /**
+	 * @param prevalentSystem
+	 * @param executionTime
+	 * @return
+	 * @throws Exception
+	 */
+	protected abstract Object executeAndQuery($prevaylerSystemClass prevalentSystem, Date executionTime) throws Exception;  
+}

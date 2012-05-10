@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<EclipseWork>
+    <wizard>
+        <title>Demo JasperReports</title>
+
+        <component-page required="false">
+            <description>Demo: Create a Jasper Reports Action to show a Collectin of beans
+			</description>
+
+			<!-- Demo -->
+			<group label="Jasper Demo" checkbox="checkDemoAction">
+
+				<textfield name="actionClass" label="Action Name:" required="true" value=""/>
+				<container name="jasperPackage" label="Package:" required="true" type="package" value=""/>
+
+				<container name="webroot" label="jasper'files folder:" required="true" type="folder" value="" />
+				<textfield name="jasperFile" label="jasper file name (to create the *.jasper):"  extensions="xml" value="" required="true"/>
+			</group>			
+
+        </component-page>
+
+		<component-page required="false">
+			<include file="includes/xwork_package.xml" />
+		</component-page>
+
+		<!-- I couldn´t parser it in velocity, them create the text here and set in some variables :-) -->
+		<variables>
+			<var name="jasperTitle" value="$P{title}" />
+			<var name="pageNumber" value="$V{PAGE_NUMBER}" />
+			<var name="jasperField" value="$F{" />
+		</variables>
+
+        <output>
+
+			<!-- Demo -->
+			<template component="actionClass" velocity="JasperAction.vm" extension="java" container="jasperPackage" >
+
+			</template>
+			<template component="jasperFile" velocity="usersJasper.xml.vm" extension="xml" container="webroot" >
+
+			</template>
+
+			<!-- Demo without a bean -->
+			<xml-update file="xwork.xml">
+
+				<package name="${xwork_package_name}" extends="${xwork_package_extends}" namespace="$!xwork_package_namespace" check-before-create="true">
+					<action name="reportPDF" class="${actionClass}" method="$!methodName">
+						<result name="success" type="jasper">
+							<param name="location">${jasperFile.path}${jasperFile.name}.jasper</param>
+							<param name="dataSource">users</param>
+							<param name="format">PDF</param>
+						</result>
+					</action>
+				</package>
+
+			</xml-update>
+
+		</output>
+    </wizard>
+</EclipseWork>

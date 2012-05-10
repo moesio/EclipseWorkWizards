@@ -1,0 +1,52 @@
+<#assign ww=JspTaglibs["/WEB-INF/tlds/webwork.tld"] />
+<#assign display=JspTaglibs["/WEB-INF/tlds/displaytag.tld"] />
+<html>
+<head>
+<\#include \"head.ftl\" />
+<style>
+	body 
+	{
+		background-image: url(../imgs/window.jpg);
+		background-attachment: fixed;
+	}
+	.title 
+	{
+		color: #fff;
+		font-weight: bold;
+		font-size: 10px;
+		margin-top: -8px;
+		position: absolute;
+	}
+</style>
+<script>
+	function showHideInner()
+	{
+		try
+		{
+			if (window.parent.window.document.getElementById('div_' + window.name).style.display == 'block')
+			{
+				window.parent.window.document.getElementById('div_' + window.name).style.display = 'none';
+				eval('window.parent.function_' + window.name.replace(/\./g, '_') + '(\'\$\{option.label\?if_exists\}\', \'\$\{option.value\?if_exists\}\')');
+			}
+			else
+			{
+				window.parent.window.document.getElementById('div_' + window.name).style.display = 'block';
+			}
+		}
+		catch (e)
+		{}
+	}
+</script>
+</head>
+<body bgcolor="#ffffff" onLoad="/*if (document.forms[0] != undefined) document.forms[0].elements[0].focus(); */showHideInner()">
+<table width="100%">
+<tr>
+<td>
+<h3>${title}</h3>
+<hr/>
+${body}
+</td>
+</tr>
+</table>
+</body>
+</html>

@@ -1,0 +1,35 @@
+#set($classe = ${model.elementName})
+#set($vo = $stringUtils.uncapitalise(${model.elementName}))
+#if($package)
+package $package;
+#end
+
+import java.util.Date;
+
+/**
+ * @author $author
+ * 
+ * Deletes an article object from prevalent system
+ */
+public class $class extends $transaction
+{
+    private long id;
+    
+    public $class(Long id) throws IllegalArgumentException
+    {
+    	if (id == null)
+    		throw new IllegalArgumentException("Parameter id cannot be null");
+		
+    	this.id = id.longValue();
+    }
+
+	protected Object executeAndQuery(
+		${system} prevalentSystem,
+		Date executionTime)
+		throws Exception {
+
+        prevalentSystem.delete${model.name}(this.id);
+
+        return null;
+    }
+}

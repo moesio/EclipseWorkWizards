@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<EclipseWork>
+    <wizard>
+        <title>DAOFactory Pattern</title>
+
+        <component-page required="true">
+            <description>If you will use some IoC container like (XWork IoC or Spring) 
+you probably don´t need to create this Factory</description>
+
+			<container name="packageDAOFactory" label="Package:" required="true" type="package" value=""/>
+            <textfield name="DAOFactory" label="DAOFactory" required="true" extension="java" value="DAOFactory"/>
+
+        </component-page>
+
+		<!-- Output Files -->
+        <output>
+            <template component="DAOFactory" velocity="DAOFactory.vm" extension="java" container="packageDAOFactory"/>
+        </output>
+    </wizard>
+</EclipseWork>

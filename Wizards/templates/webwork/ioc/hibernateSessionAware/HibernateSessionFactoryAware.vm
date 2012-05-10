@@ -1,0 +1,10 @@
+#if($package)
+package $package;
+#end
+
+/**
+ * @author $author
+ */
+public interface ${hibernateSessionFactoryEnabler.name} {
+	public void set${hibernateSessionFactory.name}(${hibernateSessionFactory.name} factory);
+}

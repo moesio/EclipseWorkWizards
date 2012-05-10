@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<EclipseWork>
+	<wizard>
+		<title>Actions</title>
+		
+		<component-page required="true">
+			<description>Criaçaão e mapeamento de Actions</description>
+			
+			<group>
+				<type name="model" label="POJO" required="true" value=""/>
+			</group>
+			
+			<group>
+				<textfield name="listActionClass" label="Nome da Action de List:" required="true" default-value="${model.name}ListAction"/>
+				<textfield name="editActionClass" label="Nome da Action de Edit:" required="true" default-value="${model.name}EditAction"/>
+				<textfield name="xwork-file" label="Arquivo Xwork:" required="true" default-value="xwork-${model.name}"/>
+				<container name="actionPackage" label="Pacote das Actions:" required="true" type="package" value="#actionPackage"/>
+				<container name="confPackage" label="Pacote do xwork desse modelo:" required="true" type="package" value="#confPackage"/>
+				<file name="xwork.xml" label="xwork.xml" type="folder" extensions="xml" value="#xwork.xml"/>
+				<!--
+				<container name="xworkFolder" label="Pasta do xwork.xml:" required="true" type="folder" value="/estoque/src"/>
+				-->
+			</group>
+			
+			<group>
+				<textfield name="formPageName" label="Form:" required="true" extensions="vm,jsp,ftl,xstl" default-value="${model.uncapName}-Form"/>
+				<textfield name="listPageName" label="PÃ¡gina do List:" required="true" extensions="vm,jsp,ftl,xstl" default-value="${model.uncapName}List"/>
+				<textfield name="editPageName" label="PÃ¡gina do Edit:" required="true" extensions="vm,jsp,ftl,xslt" default-value="${model.uncapName}Edit"/>
+				<container name="resultName_folder" label="Pasta para os formulÃ¡rios:" required="true" type="folder" value="#formFolder"/>
+			</group>
+			
+			<group>
+				<type name="dao" label="Manager Interface" value=""/>
+			</group>
+			
+			<group>
+				<combo name="viewType" label="Camada de visão:" value="FreeMarker">
+					<elements>
+						<option value="freemarker">FreeMarker</option>
+					</elements>
+				</combo>
+			</group>
+			
+		</component-page>
+		
+		<component-page required="true">
+			<include file="/indole/includes/xwork_package.xml"/>
+		</component-page>
+		
+		<variables>
+			<var name="namespace" value="xwork_package_namespace"/>
+			<var name="crud_spring" value="true"/>
+		</variables>
+		
+		<!-- Output Files -->
+		<output>
+			<!-- Actions -->
+			<template component="listActionClass" velocity="ListAction.vm" extension="java" container="actionPackage" organize-imports="false"/>
+			<template component="editActionClass" velocity="EditAction.vm" extension="java" container="actionPackage" organize-imports="false"/>
+			
+			<!-- Validations 
+				Dividido para fazer em outro template
+				TODO Verificar como transferir a geraÃÂ§ÃÂ£o para este template pondendo dispensar o outro
+			<template component="editActionClass" expression="${editActionClass.name}-validation.xml" velocity="Action-validation.xml.vm" extension="xml"
+				container="${editActionClass.package}"/>
+				-->
+			
+			<!-- FreeMarker -->
+			<template component="formPageName" velocity="form.ftl.vm" extension="ftl" container="resultName_folder">
+				<condition variable="viewType" value="FreeMarker"/>
+			</template>
+			<template component="listPageName" velocity="list.ftl.vm" extension="ftl" container="resultName_folder">
+				<condition variable="viewType" value="FreeMarker"/>
+			</template>
+			<template component="editPageName" velocity="edit.ftl.vm" extension="ftl" container="resultName_folder">
+				<condition variable="viewType" value="FreeMarker"/>
+			</template>
+			<!--
+			xwork.xml
+			-->
+			<template component="xwork-file" velocity="xwork-model.vm" extension="xml" container="confPackage" organize-imports="false">
+				<condition variable="checkUpdateXwork" value="true"/>
+			</template>
+			<xml-update file="xwork.xml">
+				<condition variable="checkUpdateXwork" value="true"/>
+				<include file="/${stringUtils.replace($confPackage,'.','/')}/${xwork-file.name}.${xwork-file.extension}" check-before-create="true"/>
+			</xml-update>
+			<!--
+				-->
+		</output>
+	</wizard>
+</EclipseWork>

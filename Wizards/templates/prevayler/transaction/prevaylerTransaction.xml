@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<EclipseWork>
+    <wizard>
+        <title>Prevayler Transactions</title>
+
+		<model-page type="java" required="true">
+            <description>Choose a POJO for your Transactions</description>
+        </model-page>
+
+        <component-page required="true">
+            <description>Create a Prevayler Transactions for a POJO.</description>
+
+			<container name="package" label="Package:" required="true" type="package"/>
+
+			<type name="system" label="Prevayler System: "  required="true" value=""/>
+			<type name="transaction" label="Prevayler Transaction: "  required="true" />
+
+			<group name="g2" label="Save Transaction" checkbox="saveCheckTransaction">
+				<checkbox name="saveCheckTransaction" label="Save Transaction:" value="true"/>
+				<textfield name="saveClass" label="Class Name:" extension="java" />
+			</group>
+			
+			<group name="g2" label="Delete Transaction" checkbox="deleteCheckTransaction">
+				<checkbox name="deleteCheckTransaction" label="Delete Transaction:" value="true"/>
+				<textfield name="deleteClass" label="Class Name:" extension="java" />
+			</group>
+
+        </component-page>
+
+		<!-- Output Files -->
+        <output>
+            <template component="system" method="PrevaylerSystem-method.vm" field="PrevaylerSystem-field.vm" extension="java" container="package"/>
+
+			<template component="saveClass" velocity="PrevaylerSaveTransaction.vm" extension="java" container="package">
+				<condition variable="saveCheckTransaction" value="true" />
+			</template>
+			<template component="deleteClass" velocity="PrevaylerDeleteTransaction.vm" extension="java" container="package">
+				<condition variable="deleteCheckTransaction" value="true" />
+			</template>
+        </output>
+    </wizard>
+</EclipseWork>

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<EclipseWork>
+    <wizard>
+        <title>Add Sitemesh support!</title>
+
+		<component-page required="true">
+			<description>Configure the Sitemesh decorators</description>
+
+			<container name="decorators" label="Decorators folder:" required="true" type="folder" value=""/>
+			<container name="webinf" label="WEB-INF:" required="true" type="folder" value=""/>
+
+			
+		</component-page>
+
+		<!-- Output Files -->
+        <output>
+            <template component="main.css" velocity="main.css.vm" container="decorators"/>
+						<template component="main.jsp" velocity="main.jsp.vm" container="decorators"/>
+						<template component="decorators.xml" velocity="decorators.vm" container="webinf"/>
+						<template component="sitemesh.xml" velocity="sitemesh.vm" container="webinf"/>
+        </output>
+    </wizard>
+</EclipseWork>

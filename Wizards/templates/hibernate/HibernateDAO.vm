@@ -1,0 +1,80 @@
+#set($dao = $daoInterface)
+#if($package)package $package;#end
+
+import java.io.Serializable;
+import java.util.Collection;
+
+import org.apache.commons.beanutils.BeanUtils;
+import org.apache.log4j.Logger;
+import org.hibernate.Session;
+
+import ${dao.fullyName};
+
+/**
+ * @author $author
+ */
+public class $class implements DAO
+{
+	private static Logger log = Logger.getLogger(${class}.class);
+
+	private Class clazz;
+
+	public $class(Class clazz) {
+		this.clazz = clazz;
+	}
+
+	/**
+	 * @see ${dao.fullyName}#save(java.io.Serializable)
+	 */
+	public void saveOrUpdate(Object newObject, Serializable id) {
+		if(id != null && !getSession().contains(id)) {
+			Object dbObject = (Object) this.load(id);
+
+			try {
+				BeanUtils.copyProperties(dbObject, newObject);
+			}
+			catch (Exception e) {
+				log.error(e,e);
+			}
+
+			newObject = dbObject;
+		}
+
+		getSession().saveOrUpdate(newObject);
+	}
+
+	/**
+	 * @see ${dao.fullyName}#save(java.io.Serializable)
+	 */
+	public void save(Object object) {
+		getSession().save(object);
+	}
+
+	/**
+	 * @see ${dao.fullyName}#delete(java.io.Serializable)
+	 */
+	public void delete(Object object) {
+		getSession().delete(object);
+	}
+
+	/**
+	 * @see ${dao.fullyName}#get(java.io.Serializable)
+	 */
+	public Object load(Serializable id) {
+		return getSession().get(this.clazz, id);
+	}
+
+	/**
+	 * @see ${dao.fullyName}#list()
+	 */
+	public Collection list() {
+		return getSession().createCriteria(this.clazz).list();
+	}
+
+	/**
+	 * @return
+	 */
+	private Session getSession() {
+		return HibernateUtil.getSession();
+	}
+}

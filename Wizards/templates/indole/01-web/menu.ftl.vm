@@ -1,0 +1,5 @@
+<ul>
+	<li><a href="<@ww.url value='/logout.action' />">Sair</a></li>
+	<hr>
+	<li><a href="<@ww.url value='/.../list.action' />">...</a></li>
+</ul>

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<EclipseWork>
+    <wizard>
+        <title>Date Converter for java.util.Date!</title>
+
+        <component-page required="true">
+            <description>XWork Type Conversion</description>
+
+				<textfield name="class" label="Name:" required="true" radio="" />
+				<container name="package" label="Package:" required="true" type="package" value="" />
+
+				<textfield name="format" label="Date Format: " value="dd/MM/yyyy" />
+
+				<checkbox name="check" label="Create xwork-conversion.properties ? " value="true" />
+        </component-page>
+
+		<output>
+			<!-- Create -->
+			<template component="class" velocity="DateConverter.vm" extension="java" container="package" />
+
+			<template component="xwork-conversion.properties" velocity="xwork-conversion.properties.vm" extension="properties" container="" />
+		</output>
+
+    </wizard>
+</EclipseWork>

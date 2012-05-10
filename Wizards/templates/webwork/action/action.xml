@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<EclipseWork>
+    <wizard>
+        <title>WebWork Action!</title>
+
+        <component-page required="true">
+            <description>Create a WebWork Action!</description>
+
+			<!-- to choose another file to update instead of xwork.xml file -->
+			<!--<file name="xwork.xml" label="xwork.xml" extensions="xml" />-->
+
+			<group label="Action">
+				<radio name="createOrUpdate" label="Create or Update ?" value="Create new Action" listener="true">
+					<elements>
+<!--					<option key="key">Create new Action</option>-->
+						<option>Create new Action</option>
+						<option>Update an Action</option>
+					</elements>
+				</radio>
+				
+				<textfield name="action" label="Action Name:" required="true" radio="Create new Action" />
+				<container name="actionPackage" label="Package:" required="true" type="package" value="#webwork.action.package" radio="Create new Action"/>
+				<type name="extends" label="Extends: " value="#webwork.action.extends" radio="Create new Action"/>
+
+				<!-- The name is equal to use the same templates -->
+				<type name="action" label="Action Name:" required="true" value="" radio="Update an Action"/>
+
+			</group>
+
+			<group label="View" >
+				<textfield name="resultName" label="Result Page Name:" required="true" value="" extensions="jsp,vm,ftl" />
+				<container name="resultName_folder" label="WebRoot:" required="true" type="folder" value="#webroot" />
+				
+				<textfield name="someText" label="HelloWorld Message:" tooltip="This text will be available in the result page!"/>
+
+				<combo name="radio" label="View:" value="FreeMarker">
+					<elements>
+						<option value="freemarker">FreeMarker</option>
+						<option value="velocity">Velocity</option>
+						<option value="dispatcher">JSP</option>
+						<option value="xslt">XSLT</option>
+					</elements>
+				</combo>
+			</group>
+
+        </component-page>
+
+		<component-page required="true">
+			<group label="XWork" >
+				<include file="includes/xwork_package.xml" />
+				<include file="includes/xwork_action.xml" />
+			</group>
+
+			<!-- To create a method different from execute() -->
+			<group name="methodGroup" label="(Optional) If you would like to create a method different from execute()" >
+				<textfield name="methodName" label="Method name:" />
+			</group>
+		</component-page>
+
+		<component-page required="false">
+			<group label="Optional" >
+				<checkbox name="createProperties" label="Create the Action.properties ?" value="false" />
+				<checkbox name="createValidation" label="Create the Action-validation.xml ?" value="false" />
+			</group>
+		</component-page>
+
+		<output>
+			<!-- Create -->
+			<template component="action" expression="${action.name}" velocity="Action.vm" extension="java" container="actionPackage">
+				<condition variable="createOrUpdate" value="Create new Action"/>
+			</template>
+			
+			<!-- Update: create a new method in the action -->
+			<template component="action" method="Action-method.vm" extension="java" container="actionPackage">
+				<condition variable="createOrUpdate" value="Update an Action"/>
+			</template>
+			
+			<template component="action" expression="${action.name}.properties" velocity="Action-properties.vm" extension="properties"
+				container="actionPackage">
+				<condition variable="createProperties" value="true"/>
+			</template>
+			
+			<template component="action" expression="${action.name}-validation" velocity="Action-validation.xml.vm" extension="xml"
+				container="actionPackage">
+				<condition variable="createValidation" value="true"/>
+			</template>
+			
+			<!-- Result Page -->
+			<template component="resultName" extension="jsp" velocity="ok.vm" container="resultName_folder">
+				<condition variable="radio" value="dispatcher"/>
+			</template>
+			<template component="resultName" extension="vm" velocity="ok.vm" container="resultName_folder">
+				<condition variable="radio" value="Velocity"/>
+			</template>
+			<template component="resultName" extension="ftl" velocity="ok.vm" container="resultName_folder">
+				<condition variable="radio" value="FreeMarker"/>
+			</template>
+			<template component="resultName" extension="xslt" velocity="ok.xslt.vm" container="resultName_folder">
+				<condition variable="radio" value="XSLT"/>
+			</template>
+
+			<!-- update xwork.xml -->
+			<xml-update file="xwork.xml">
+				<condition variable="checkUpdateXwork" value="true" />
+				<package name="${xwork_package_name}" extends="${xwork_package_extends}" namespace="$!xwork_package_namespace" check-before-create="true">
+					<action name="${xwork_action_name}" class="${action}" method="$!methodName">
+						<result name="success" type="${radio}">${resultName}</result>
+					</action>
+				</package>
+			</xml-update>
+		</output>
+    </wizard>
+</EclipseWork>

@@ -1,0 +1,15 @@
+#if($package)
+package $package;
+#end
+
+/**
+ * http://authors.phptr.com/corej2eepatterns/codeChap9.html
+ * 
+ * Abstract class DAO Factory
+ * 
+ * @author $author
+ */
+public abstract class $class {
+
+
+}

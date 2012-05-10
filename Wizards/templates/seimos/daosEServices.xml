@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<EclipseWork>
+	<wizard>
+		<title>Criação de DAOs, Services e Controllers</title>
+
+		<model-page required="true">
+			<description>Adicione POJOs para criar DAOs e Services</description>
+		</model-page>
+		
+        <component-page required="true">
+            <description>Criação dos DAOs e Services</description>
+
+<!-- 		<group checkbox="daoCheckbox"> -->
+		<group>
+<!-- 			<checkbox label="Criar DAOs?" name="daoCheckbox" value="true"/> -->
+			<group>
+				<type name="baseDaoInterface" label="Extends:" required="true" value="br.com.seimos.commons.dao.GenericDao" />
+				<container name="dao.packageInterface" label="DAOs interface Package:" required="true" type="package" value=""/>
+			</group>
+
+			<group>
+				<type name="baseDaoImpl" label="Extends:" required="true" value="br.com.seimos.commons.dao.GenericDaoImpl" />
+				<container name="dao.packageImpl" label="DAOs implementation Package:" required="true" type="package" value=""/>
+			</group>				
+		</group>
+
+<!-- 		<group checkbox="serviceCheckbox"> -->
+		<group>
+<!-- 			<checkbox label="Criar Services?" name="serviceCheckbox" value="true"/> -->
+			<group>
+				<type name="baseServiceInterface" label="GenericService: " required="true" value="br.com.seimos.commons.service.GenericService" />
+				<container name="service.packageInterface" label="Services interface Package:" required="true" type="package" value=""/>
+			</group>
+				
+			<group>
+				<type name="baseServiceImpl" label="GenericServiceImpl: " required="true" value="br.com.seimos.commons.service.GenericServiceImpl" />
+				<container name="service.packageImpl" label="Services implementation Package:" required="true" type="package" value=""/>
+			</group>
+		</group>
+				
+		<group>
+			<group>
+				<type name="baseController" label="GenericController: " required="true" value="br.com.seimos.commons.controller.GenericCrudController" />
+				<container name="controller.package" label="Controller Package:" required="true" type="package" value=""/>
+			</group>
+		</group>
+				
+        </component-page>
+
+		<output>
+
+			<template component="daoInterface"     expression="${model.name}Dao"         velocity="DaoInterface.vm"     extension="java" container="dao.packageInterface" />
+			<template component="daoImpl"          expression="${model.name}DaoImpl"     velocity="DaoImpl.vm"          extension="java" container="dao.packageImpl" />
+
+<!-- 			<condition variable="serviceCheckbox" value="true"> -->
+			<template component="serviceInterface" expression="${model.name}Service"     velocity="ServiceInterface.vm" extension="java" container="service.packageInterface" />
+			<template component="serviceImpl"      expression="${model.name}ServiceImpl" velocity="ServiceImpl.vm"      extension="java" container="service.packageImpl" />
+<!-- 			</condition> -->
+
+			<template component="controllerImpl"   expression="${model.name}Controller"  velocity="Controller.vm"       extension="java" container="controller.package" />
+
+		</output>
+		
+	</wizard>
+</EclipseWork>

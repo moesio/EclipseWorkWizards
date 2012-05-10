@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<EclipseWork>
+    <wizard>
+        <title>Demo FileUpload!</title>
+
+        <component-page required="true">
+            <description>FileUpload with WebWork</description>
+
+			<!-- to chose another xwork.xml file to update  -->
+			<!--<file name="xwork.xml" label="xwork.xml" extensions="xml" />-->
+
+            <textfield name="actionClass" label="Action Name:" required="true" value="FileUploadAction"/>
+            <container name="actionPackage" label="Package:" required="true" type="package" value="#webwork.action.package"/>
+
+			<type name="extends" label="Extends: " value="#webwork.action.extends"/>
+
+			<group label="Result Pages">
+				<container name="resultName_folder" label="Result Folder:" required="true" type="folder" value="#webroot" />
+				<textfield name="upload" label="Upload Form:" required="true" value="upload"/>
+				<textfield name="upload-ok" label="Upload OK:" required="true" value="upload-ok"/>
+			</group>
+
+        </component-page>
+
+		<component-page required="true">
+			<include file="includes/xwork_package.xml" />
+			<include file="includes/xwork_action.xml" />
+		</component-page>
+
+        <output>
+            <template component="actionClass" velocity="UploadAction.vm" extension="java" container="actionPackage"/>
+
+			<!-- Wait Page -->
+            <template component="upload" extension="jsp" velocity="upload.vm" container="resultName_folder" />
+			<template component="upload-ok" extension="jsp" velocity="upload-ok.vm" container="resultName_folder" />
+
+			<!-- update xwork.xml -->
+			<xml-update file="xwork.xml" >
+				<package name="${xwork_package_name}" extends="${xwork_package_extends}" check-before-create="true"> 
+					<action name="${xwork_action_name}" class="${actionClass}" method="$!methodName">
+						<!--<interceptor-ref name="fileUploadStack" />-->
+						<result name="input" type="dispatcher">${upload}</result>
+						<result name="success" type="dispatcher">${upload-ok}</result>
+					</action>
+				</package>
+			</xml-update>
+
+        </output>
+
+    </wizard>
+</EclipseWork>

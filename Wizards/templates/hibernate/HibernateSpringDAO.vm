@@ -1,0 +1,70 @@
+#set($dao = $daoInterface)
+#if($package)package $package;#end
+
+import java.io.Serializable;
+import java.util.Collection;
+
+import org.apache.commons.beanutils.BeanUtils;
+import org.springframework.orm.hibernate3.support.HibernateDaoSupport;
+
+import $daoInterface.fullyName;
+
+/**
+ * @author $author
+ */
+public class $class extends HibernateDaoSupport implements $dao.name
+{
+	private Class clazz;
+
+	public HibernateDAO(Class clazz) {
+		this.clazz = clazz;
+	}
+
+	/**
+	 * @see ${dao.fullyName}#save(java.io.Serializable)
+	 */
+	public void saveOrUpdate(Object newObject, Serializable id) {
+		if(id != null && !getHibernateTemplate().contains(id)) {
+			Object dbObject = this.load(id);
+
+			try {
+				BeanUtils.copyProperties(dbObject, newObject);
+			}
+			catch (Exception e) {
+				logger.error(e,e);
+			}
+
+			newObject = dbObject;
+		}
+
+		getHibernateTemplate().saveOrUpdate(newObject);
+	}
+
+	/**
+	 * @see ${dao.fullyName}#save(java.io.Serializable)
+	 */
+	public void save(Object object) {
+		getHibernateTemplate().save(object);
+	}
+
+	/**
+	 * @see ${dao.fullyName}#delete(java.io.Serializable)
+	 */
+	public void delete(Object object) {
+		getHibernateTemplate().delete(object);
+	}
+
+	/**
+	 * @see ${dao.fullyName}#get(java.io.Serializable)
+	 */
+	public Object load(Serializable id) {
+		return getHibernateTemplate().get(this.clazz, id);
+	}
+
+	/**
+	 * @see ${dao.fullyName}#list()
+	 */
+	public Collection list() {
+		return getHibernateTemplate().find("from " + this.clazz.getName());
+	}
+}

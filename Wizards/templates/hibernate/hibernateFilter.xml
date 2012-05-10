@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<EclipseWork>
+    <wizard>
+        <title>Hibernate: Open Session in View Pattern</title>
+
+        <component-page required="true">
+            <description>Create the HibernateFilter to open a Hibernate transaction</description>
+
+			<container name="package" label="Package:" required="true" type="package" />
+            	<textfield name="filter" label="Class:" required="true" extension="java" value="HibernateFilter"/>
+
+        </component-page>
+
+		<!-- Output Files -->
+        <output>
+            <template component="filter" velocity="HibernateFilter.vm" extension="java" container="package"/>
+        </output>
+    </wizard>
+</EclipseWork>

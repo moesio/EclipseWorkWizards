@@ -1,0 +1,26 @@
+#set($id = '')
+#foreach($f in $model.fields)
+#if(${f.name} == "id" )
+	#set($id = ${f.name})
+#elseif($f.bean)
+
+<\#if ${f.bean.uncapName}s?exists>
+	<@ww.select label="${f.bean.name}" id="${model.uncapName}.${f.bean.uncapName}.id" name="${model.uncapName}.${f.bean.uncapName}.id" list="${f.bean.uncapName}s" listKey="id" listValue="id" headerValue="Escolha" headerKey="" required="true" after="<a target='iframe_${model.uncapName.replace('.','_')}_${f.bean.uncapName}' style='text-decoration: none;' title='Cadastrar' href='../${f.bean.uncapName}/prepareInnerInsert.action?hideMenu'><button onclick='resize(\"div_iframe_${model.uncapName.replace('.','_')}_${f.bean.uncapName}\"); this.parentNode.click()'> ... </button></a>"/>
+	<div id="div_iframe_${model.uncapName.replace('.','_')}_${f.bean.uncapName}" class="div_innerInsert"><iframe id="iframe_${model.uncapName.replace('.','_')}_${f.bean.uncapName}" name="iframe_${model.uncapName.replace('.','_')}_${f.bean.uncapName}" class="iframe_innerInsert"></iframe></div>
+	<script>
+		function function_iframe_${model.uncapName.replace('.','_')}_${f.bean.uncapName}(label, value)
+		{
+			$('${model.uncapName}.${f.bean.uncapName}.id').options[$('${model.uncapName}.${f.bean.uncapName}.id').options.length] = new Option(label, value);
+		}
+	</script>
+</\#if>
+#elseif($f.type=="Date")
+	<@ww.datepicker label="$stringUtils.capitalise($f.name)" name="${model.uncapName}.${f.name}" required="true" size="10" />
+#elseif($f.type=="Boolean")
+	<@ww.checkbox label="$stringUtils.capitalise($f.name)" name="${model.uncapName}.${f.name}" />
+#elseif($f.type=="File")
+	<@ww.file label="$stringUtils.capitalise($f.name)" name="${model.uncapName}.${f.name}" />
+#elseif(!$f.type.startsWith("Collection")) 
+	<@ww.textfield label="$stringUtils.capitalise($f.name)" name="${model.uncapName}.${f.name}" required="true" size="35" />
+#end
+#end

@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<EclipseWork>
+    <wizard>
+        <title>Demo ExecuteAndWaitInterceptor!</title>
+
+        <component-page required="true">
+            <description>WebWork Action!</description>
+			
+			<!-- to chose another xwork.xml file to update  -->
+			<!--<file name="xwork.xml" label="xwork.xml" extensions="xml" />-->
+
+            <textfield name="actionClass" label="Action Name:" required="true" value="WaitDemoAction"/>
+            <container name="actionPackage" label="Package:" required="true" type="package" value="#webwork.action.package"/>
+
+			<container name="resultName_folder" label="Result Folder:" required="true" type="folder" value="#webroot" />
+
+			<textfield name="waitText" label="Wait message:" value="Please, wait..." />
+			<textfield name="waitOKText" label="OK message:" value="OK!"/>
+
+			<textfield name="sleepSeconds" label="Number of seconds to sleep (just to simulate):" required="true" value="15"/>
+        </component-page>
+
+		<component-page required="true">
+			<include file="includes/xwork_package.xml" />
+			<include file="includes/xwork_action.xml" />
+		</component-page>
+
+        <output>
+            <template component="actionClass" velocity="WaitAction.vm" extension="java" container="actionPackage"/>
+
+			<!-- Wait Page -->
+            <template component="wait" extension="jsp" velocity="wait.vm" container="resultName_folder" />
+
+			<!-- Wait OK Page -->
+            <template component="wait-ok" extension="jsp" velocity="wait-ok.vm" container="resultName_folder"/>
+
+			<!-- update xwork.xml -->
+			<xml-update file="xwork.xml" >
+				<package name="${xwork_package_name}" extends="${xwork_package_extends}" namespace="$!xwork_package_namespace" check-before-create="true"> 
+					<action name="${xwork_action_name}" class="${actionClass}" method="$!methodName">
+						<interceptor-ref name="executeAndWaitStack"/>
+						<result name="wait" type="dispatcher">${wait.path}wait.jsp</result>
+						<result name="success" type="dispatcher">${wait-ok.path}wait-ok.jsp</result>
+					</action>
+				</package>
+			</xml-update>
+
+        </output>
+    </wizard>
+</EclipseWork>

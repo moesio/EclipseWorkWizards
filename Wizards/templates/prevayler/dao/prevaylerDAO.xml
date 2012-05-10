@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<EclipseWork>
+    <wizard>
+        <title>DAO Pattern for Prevayler</title>
+
+		<model-page type="java" required="true">
+            <description>Choose a POJO for your DAO</description>
+        </model-page>
+
+        <component-page required="true">
+            <description>Create a PrevaylerDAO for a POJO.</description>
+
+			<group label="DAO">
+				<container name="daoPackage" label="Package:" required="true" type="package" />
+				<type name="daoInterface" label="DAO Interface *ModelDAO*: " required="true" />
+	            <textfield name="daoClass" label="Class *PrevaylerModelDAO*:" required="true" extension="java" />
+			</group>
+
+			<group name="g2" label="Prevayler Transaction" checkbox="deleteCheckTransaction">
+				<container name="transactionPackage" label="Transaction Package:" required="true" type="package" />
+				<textfield name="saveTransaction" label="Class Name *ModelSaveTransaction*:" extension="java" />
+				<textfield name="deleteTransaction" label="Class Name *ModelDeleteTransaction*:" extension="java"  />
+			</group>
+
+			<group name="g1" label="Prevayler (required classes)" required="true" >
+				<type name="daoFactoryClass" label="Prevayler DAOFactory " required="true" />
+
+				<type name="system" label="Prevayler System: " required="true" />
+				<type name="transaction" label="Prevayler Transaction: "  required="true" />
+			</group>
+
+			<!--<type name="saveTransaction" label="Save Transaction: " required="true" />
+			<type name="deleteTransaction" label="Delete Transaction: " required="true" />-->
+
+        </component-page>
+
+		<!-- Output Files -->
+        <output>
+			<template component="system" method="../transaction/PrevaylerSystem-method.vm" field="../transaction/PrevaylerSystem-field.vm" extension="java" container="package"/>
+
+			<template component="saveTransaction" velocity="../transaction/PrevaylerSaveTransaction.vm" extension="java" container="transactionPackage">
+				<!--<condition variable="saveCheckTransaction" value="true" />-->
+			</template>
+			<template component="deleteTransaction" velocity="../transaction/PrevaylerDeleteTransaction.vm" extension="java" container="transactionPackage">
+				<!--<condition variable="deleteCheckTransaction" value="true" />-->
+			</template>
+
+			<template component="daoClass" velocity="PrevaylerVODAO.vm" extension="java" container="daoPackage"/>		
+
+			<!-- Update PrevaylerDAOFactory -->
+			<template component="daoFactoryClass" method="PrevaylerDAOFactory-method.vm" extension="java" container="package"/>
+        </output>
+    </wizard>
+</EclipseWork>

@@ -1,0 +1,22 @@
+#if($package)
+package $package;
+#end
+
+import $model.fullyName;
+import $hibernateDAO.fullyName;
+import $daoInterface.fullyName;
+
+/**
+ * @author $author
+ *
+ * <mapping resource="$stringUtils.replace(${package},".","/")/${model.name}.hbm.xml"/>
+ */
+public class $class extends $hibernateDAO.name implements $daoInterface.name{
+
+	/**
+	 * @param java.lang.Class
+	 */
+	public $class() {
+		super(${model.name}.class);
+	}
+}

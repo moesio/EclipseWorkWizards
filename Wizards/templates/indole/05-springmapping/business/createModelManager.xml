@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<EclipseWork>
+	<wizard>
+		<title>Manager</title>
+
+		<component-page required="true">
+			<description>Cria Service</description>
+
+			<group>
+				<type name="model" label="POJO:" required="true" />
+			</group>
+
+			<group>
+				<textfield name="managerInterface" label="Nome:" required="true" extension="java" default-value="${model.name}Service" />
+				<type name="baseManagerInterface" label="GenericService: " required="true" value="br.com.seimos.commons.service.GenericService" />
+
+				<textfield name="managerImpl" label="Classe:" required="true" extension="java" default-value="${model.name}ServiceImpl" />
+				<type name="baseManagerImpl" label="GenericServiceImpl: " required="true" value="br.com.seimos.commons.service.GenericServiceImpl" />
+				
+				<type name="daoPropertyInterface" label="Interface DAO da entidade: " required="true" value="" />
+
+				<container name="package" label="Pacote do Service:" required="true" type="package" value="#managerPackage"/>
+			</group>
+		</component-page>
+		<!-- Output Files -->
+		<output>
+			<!-- Creates the Manager interface -->
+			<template component="managerInterface" velocity="ManagerInterface.vm" extension="java" container="package" />
+
+			<template component="managerImpl" velocity="ManagerImpl.vm" extension="java" container="package" />
+		</output>
+	</wizard>
+</EclipseWork>

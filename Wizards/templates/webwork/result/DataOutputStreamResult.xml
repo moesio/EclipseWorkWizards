@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<EclipseWork>
+    <wizard>
+        <title>DataOutputStreamResult Result (J2ME)</title>
+
+        <component-page required="true">
+            <description>Use this result to create J2ME HTTP clients</description>
+
+				<textfield name="name" label="Name:" required="true" value="J2MEResult" />
+				<container name="package" label="Package:" required="true" type="package" />
+
+        </component-page>
+
+		<!-- Output Files -->
+        <output>
+			<template component="name" velocity="DataOutputStreamResult.vm" extension="java" container="package"/>
+        </output>
+    </wizard>
+</EclipseWork>

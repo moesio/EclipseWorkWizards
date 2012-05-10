@@ -1,0 +1,13 @@
+<b>$stringUtils.capitalise(${model.name})s ModelDriven example:</b><br>
+<%@ taglib uri="webwork" prefix="ww" %>
+
+<ww:form name="form" #if($namespace)namespace="${namespace}"#end action="save">
+#foreach($f in $model.fields)
+#if(${f.name} == "id" )
+	<ww:hidden label="$stringUtils.capitalise($f.name)" name="${f.name}" />
+#else
+	<ww:textfield label="$stringUtils.capitalise($f.name)" name="${f.name}" />
+#end
+#end
+	<ww:submit value="Save $stringUtils.capitalise(${model.name})" />
+</ww:form>

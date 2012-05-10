@@ -1,0 +1,12 @@
+#if($package)
+package $package;
+#end
+
+/**
+ * DAOFactory for Hibernate
+ * 
+ * @author $author
+ */
+public class $class extends $daoFactory {
+
+}

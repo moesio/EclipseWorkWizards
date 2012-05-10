@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<EclipseWork>
+    <wizard>
+        <title>POJO or JDBC!</title>
+        
+        <model-page type="pojo" required="true">
+            <description>Try open this wizard with the POJO or JDBC mode. 
+The wizard will change, but the velocity templates are the same :-). 
+This wizard will create a simple file.</description>
+        </model-page>
+
+        <component-page >
+			<container name="package" label="Package:" type="package" value="test"/>
+        </component-page>
+
+		<!-- TODO: create in default package! -->
+
+		<!-- Output Files -->
+        <output>
+            <template component="DemoPOJOJDBC" velocity="pojo.vm" extension="java" update="true" container="package"/>
+        </output>
+    </wizard>
+</EclipseWork>

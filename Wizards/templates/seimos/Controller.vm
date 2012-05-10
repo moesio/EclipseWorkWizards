@@ -1,0 +1,29 @@
+#if($package)
+package $package;
+#end
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+
+import $model.fullyName;
+import $baseController.fullyName;
+
+/**
+ * This controller will response a call about module of equipment type. It's will
+ * controller operations by retrieve, create, update and remove.
+ * 
+ * @author $author
+ * @date $date
+ * 
+ */
+@Controller
+@RequestMapping(value = "/${stringUtils.uncapitalise($model.name)}s")
+public class ${model.name}Controller extends $baseController.name<$model.name> {
+
+	@Autowired
+	public ${model.name}Controller($class service) {
+		super(service);
+	}
+
+}

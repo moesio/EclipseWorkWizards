@@ -1,0 +1,34 @@
+#if($package)
+package $package;
+#end
+
+import org.springframework.stereotype.Repository;
+
+import $baseDaoImpl.fullyName;
+
+import $model.fullyName;
+##import $daoInterface.fullyName;
+#set ($hasFileField=false)
+#foreach($f in $model.fields)
+#if($f.type=="File")
+#set ($hasFileField=true)
+#end
+#end
+#if($hasFileField)
+import br.com.indole.model.type.File;
+#end
+
+/**
+ * @author $author
+ * @date $date
+ */
+@Repository("${stringUtils.uncapitalise($model.name)}Dao")
+public class $class extends $baseDaoImpl.name<$model.name> implements $daoInterface.name {
+#foreach($f in $model.fields)
+#if($f.type=="File")
+	public File find${stringUtils.capitalise($f.name)}(Long id) {
+		return getFile("${stringUtils.uncapitalise($f.name)}", id);
+	}
+#end
+#end
+}

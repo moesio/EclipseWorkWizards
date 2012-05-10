@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<EclipseWork>
+    <wizard>
+        <title>HTTP CRUD Midlet</title>
+
+		<component-page required="true">
+			<description>Create a HTTP Midlet</description>
+			
+			<group>
+				<container name="package" label="Package:" required="true" type="package" value=""/>
+				<textfield name="class" label="Midlet:" required="true" extension="java" value=""/>
+				
+				<type name="model" label="POJO: " required="true" value=""/>
+			</group>
+
+			<group>
+				<textfield name="urlList" label="URL List:" required="true" value="http://localhost/?/list.j2me.action" extension="j2me.action"/>
+				<textfield name="urlLoad" label="URL Load:" required="true" value="http://localhost/?/load.j2me.action" extension="j2me.action"/>
+				<textfield name="urlSave" label="URL Save:" required="true" value="http://localhost/?/save.j2me.action" extension="j2me.action"/>
+				<textfield name="urlDelete" label="URL Delete:" required="true" value="http://localhost/?/delete.action" extension="j2me.action"/>
+			</group>
+		</component-page>
+
+		<!-- Output Files -->
+        <output>
+            <template component="class" velocity="HTTPCRUDMidlet.vm" extension="java" container="package"/>
+        </output>
+    </wizard>
+</EclipseWork>

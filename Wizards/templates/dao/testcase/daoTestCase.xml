@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<EclipseWork>
+    <wizard>
+        <title>TestCase to the DAO´s</title>
+
+        <component-page required="true">
+            <description>Create a TestCase to the DAO .</description>
+
+			<group label="TestCase">
+				<container name="testPackage" label="Package :" required="true" type="" value=""/>
+	            <textfield name="testClass" label="Class:" required="true" extension="java" value=""/>
+			</group>
+
+			<group label="Choose the DAO Classes">
+
+				<type name="model" label="POJO: " required="true" value="" />
+
+				<type name="dao" label="DAO Interface: " required="true" value="" />
+
+				<type name="daoFactory" label="Abstract DAOFactory: " required="true"/>
+
+				<radio name="framework" label="Framework:" value="Prevayler" required="true">
+					<elements>
+						<option>Prevayler</option>
+						<option>Hibernate</option>
+					</elements>
+				</radio>
+
+			</group>
+
+        </component-page>
+
+        <output>
+            <template component="testClass" velocity="DAOTestCase.vm" extension="java" container="testPackage"/>
+        </output>
+    </wizard>
+</EclipseWork>

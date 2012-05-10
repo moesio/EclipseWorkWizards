@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<EclipseWork>
+    <wizard>
+        <title>XWork IOC Component</title>
+
+		<model-page type="java" required="true">
+            <description>Choose the object to be injected by the IOC Container</description>
+        </model-page>
+
+        <component-page required="false">
+            <description>This wizard will update the components.xml to create the XWork IoC Enabler interface.</description>
+
+			<container name="xwork.ioc.enabler.package" label="Package:" required="true" type="package" value=""/>
+
+			<textfield name="xwork_ioc_enabler" label="IOC Enabler (*Aware):" required="true" value="" />
+
+			<!-- scope -->
+			<combo name="xwork_ioc_escope" label="Scope:" value="application">
+                <elements>
+                    <option>application</option>
+                    <option>request</option>
+                    <option>session</option>
+                </elements>
+            </combo>
+        </component-page>
+
+        <output>
+            <template component="xwork_ioc_enabler" velocity="Enabler.vm" extension="java" container="xwork.ioc.enabler.package"/>
+			<xml-update file="components.xml" >
+
+			<component>
+				<scope>${xwork_ioc_escope}</scope>
+				<class>${model.fullyName}</class>
+				<enabler>${xwork_ioc_enabler.fullyName}</enabler>
+			</component>
+
+			</xml-update>
+        </output>
+    </wizard>
+</EclipseWork>

@@ -1,0 +1,5 @@
+webwork.tag.altSyntax=true
+webwork.objectFactory=spring
+webwork.custom.i18n.resources=application 
+webwork.i18n.encoding=ISO-8859-1
+webwork.devMode=true

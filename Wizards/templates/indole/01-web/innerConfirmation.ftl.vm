@@ -1,0 +1,16 @@
+<html>
+<head>
+<@ww.head/>
+<#assign hideFrame="window.parent.window.document.getElementById('div_' + window.name).style.display = 'none'"/>
+<#assign updateSelect="eval('window.parent.window.document.function_' + window.name)"/>
+	<title>Inclusão efetuada com sucesso</title>
+</head>
+<body>
+<div style="display: nonee">
+<div class="buttonGroup">
+<button onclick="${hideFrame}; ${updateSelect?replace('.','_')};" class="button" accesskey="V">
+<u>F</u>echar
+</button>
+</div>
+</body>
+</html>

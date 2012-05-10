@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<EclipseWork>
+    <wizard>
+        <title>Hello World J2ME</title>
+
+        <component-page required="true">
+            <description>Create a Midlet</description>
+
+			<container name="package" label="Package:" required="true" type="package" value=""/>
+            <textfield name="class" label="Midlet:" required="true" extension="java" value="HelloMidlet"/>
+			
+            <textfield name="msg" label="Message:" required="true" value="Hello World J2ME!"/>
+
+        </component-page>
+
+		<!-- Output Files -->
+        <output>
+            <template component="class" velocity="HelloMidlet.vm" extension="java" container="package"/>
+        </output>
+    </wizard>
+</EclipseWork>

@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<EclipseWork>
+    <wizard>
+        <title>WebWork + J2ME</title>
+
+		<component-page>
+			<description>CRUD Application - J2ME HTTP Client</description>
+
+			<group>
+				<type name="model" label="POJO" required="true"/>
+			</group>
+
+			<type name="actionClass" label="Action:" required="true" value=""/>
+
+			<type name="dao" label="DAO Interface" required="true"/>
+
+		</component-page>
+
+		<component-page required="true">
+			<include file="includes/xwork_package.xml" />
+		</component-page>
+
+		<variables>
+			<var name="namespace" value="xwork_package_namespace" />
+		</variables>
+
+		<!-- Output Files -->
+        <output>
+
+			<!-- Action -->
+			<template component="actionClass" field="CRUDJ2MEAction-field.vm" method="CRUDJ2MEAction-methods.vm" />
+
+			<xml-update file="xwork.xml">
+				<package name="${xwork_package_name}" extends="${xwork_package_extends}" namespace="$!namespace" check-before-create="true">
+					<condition variable="j2meClient" value="true" />
+					<action name="list.j2me" class="${actionClass}" method="listJ2ME">
+						<result name="success" type="j2me" />
+					</action>
+					<action name="save.j2me" class="${actionClass}" method="saveJ2ME">
+						<result name="success" type="j2me" />
+						<result name="input" type="chain"><param name="actionName">input.j2me</param><param name="namespace">$!namespace</param></result>
+					</action>
+					<action name="load.j2me" class="${actionClass}" method="loadJ2ME">
+						<result name="success" type="j2me" />
+					</action>
+				    <action name="input.j2me" class="${actionClass}" method="inputJ2ME">
+						<interceptor-ref name="chainStack"/>
+						<result name="success" type="j2me" />
+				    </action>
+				</package>
+			</xml-update>
+
+        </output>
+    </wizard>
+</EclipseWork>

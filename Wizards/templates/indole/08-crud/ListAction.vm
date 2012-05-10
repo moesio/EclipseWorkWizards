@@ -1,0 +1,134 @@
+#set($classe = ${model.elementName})
+#set($vo = $stringUtils.uncapitalise(${model.elementName}))
+#set($daoVar = $stringUtils.uncapitalise(${dao.name}))
+#if($crud_spring)
+#set($daoVar = $bean_dao)
+#end
+#set($daoType = $stringUtils.capitalise(${type}))
+#if($package)
+package $package;
+#end
+
+import java.util.Collection;
+
+import org.springframework.dao.DataIntegrityViolationException;
+
+import br.com.indole.commons.web.Persistable;
+import com.opensymphony.xwork.Action;
+#if($extends)import $extends.fullyName;#end
+import com.opensymphony.xwork.ActionSupport;
+#if($model)
+import $model.fullyName;
+#if($daoFactory)
+import $daoFactory.fullyName;
+#end
+import $dao.fullyName;
+#end
+#foreach($f in $model.fields)
+#if($f.bean)
+import ${dao.package}.${f.bean.name}Manager;
+import ${f.bean.package}.${f.bean.name};
+#end
+#end
+
+/**
+ * @author $author
+ * @date $date.time
+ */
+@SuppressWarnings("serial")
+public class $class extends ActionSupport implements Persistable
+{
+#if($daoFactory)
+	private ${dao.name} ${daoVar} =#if($ioc) null#else ${daoFactory.name}.get${daoType}Factory().get${dao.name}()#end;
+#else
+	private ${dao.name} ${daoVar};
+#end
+	private Collection ${vo}s;
+#if($model)
+	private $model.name $vo;
+#end
+#foreach($f in $model.fields)
+#if($f.bean)
+	private ${f.bean.name}Manager ${f.bean.uncapName}Manager;
+	private Collection<${f.bean.name}> ${f.bean.uncapName}s;
+#end
+#end
+
+	/**
+	 * @see com.opensymphony.xwork.Action#execute()
+	 */
+	public String execute() throws Exception {
+		return Action.SUCCESS;
+	}
+
+	public String list() throws Exception {
+		// se estiver sido executado uma exclusão
+		if (${vo} != null && ${vo}.getId() != null)
+			${vo}s = ${daoVar}.filter($vo);
+		else
+			${vo}s = ${daoVar}.get();
+		
+#foreach($f in $model.fields)
+#if($f.bean)
+		${f.bean.uncapName}s = ${f.bean.uncapName}Manager.get();
+#end
+#end
+
+		return Action.SUCCESS;
+	}
+
+	public String delete() throws Exception {		
+        try
+        {
+			${daoVar}.delete(new Long[]{${vo}.getId()});
+        } catch (DataIntegrityViolationException e)
+        {
+            // TODO Mostrar error no ftl
+            return Action.ERROR;
+        } catch (Exception e)
+        {
+            return Action.ERROR;
+        }
+
+		return Action.SUCCESS;
+	}
+
+	public Collection get${classe}s() {
+		return ${vo}s;
+	}
+
+#if($validate)
+	public void validate(){
+		// validate your objects here!
+	}	
+#end
+
+	public $classe get${classe}(){
+		if($vo == null){
+			$vo = new ${classe}();
+		}
+		return $vo;
+	}
+
+	public void set${classe}(${classe} $vo){
+		this.${vo}=$vo;
+	}
+#if(!$daoFactory)
+
+	public void set$stringUtils.capitalise(${daoVar})(${dao.name} ${daoVar}){
+		this.${daoVar}=${daoVar};
+	}
+#end
+#foreach($f in $model.fields)
+#if($f.bean)
+
+	public void set${f.bean.name}Manager(${f.bean.name}Manager ${f.bean.uncapName}Manager) {
+		this.${f.bean.uncapName}Manager = ${f.bean.uncapName}Manager;
+	}
+
+	public Collection<${f.bean.name}> get${f.bean.name}s() {
+		return ${f.bean.uncapName}s;
+	}
+#end 
+#end
+}

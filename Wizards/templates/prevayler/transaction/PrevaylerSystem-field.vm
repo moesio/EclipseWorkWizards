@@ -1,0 +1,4 @@
+
+	private long next${model.name}Id = 1;
+	private Map $stringUtils.uncapitalise(${model.elementName})s = new HashMap();
+

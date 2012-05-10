@@ -1,0 +1,41 @@
+#if($cewolfClass_package)
+package $cewolfClass_package;
+#end
+
+import java.io.Serializable;
+import java.util.Date;
+import java.util.Map;
+
+import org.jfree.data.DefaultPieDataset;
+import de.laures.cewolf.DatasetProducer;
+
+/**
+ * @author $author
+ *
+ */
+public class $class implements DatasetProducer, Serializable
+{
+	private static final long serialVersionUID = 1L;
+
+	public Object produceDataset(Map params)
+	{
+		final String[] categories = { "WebWork", "Struts", "Spring MVC" ,"VRaptor","Mentawai"};
+		DefaultPieDataset ds = new DefaultPieDataset();
+		ds.setValue(categories[0], 60);
+		ds.setValue(categories[1], 8);
+		ds.setValue(categories[2], 10);
+		ds.setValue(categories[3], 10);
+		ds.setValue(categories[4], 12);
+		return ds;
+	}
+
+	public String getProducerId()
+	{
+		return "PieDataProducer";
+	}
+
+	public boolean hasExpired(Map params, Date since)
+	{
+		return false;
+	}
+}

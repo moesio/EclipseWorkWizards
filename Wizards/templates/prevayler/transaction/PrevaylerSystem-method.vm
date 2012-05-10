@@ -1,0 +1,46 @@
+#set($classe = ${model.elementName})
+#set($vo = $stringUtils.uncapitalise(${model.elementName}))
+	/**-------------- $classe -------------- **/
+
+    /**
+     * Gets the User object from the Prevalent System
+     * @param id
+     * @return
+     */
+    public $classe get$classe(Serializable id)
+    {
+    	return ($classe)this.${vo}s.get(id);
+    }
+
+    /**
+     * Gets the $classe collection from the Prevalent System
+     * @return
+     */
+    public Map get${classe}s()
+    {
+        return this.${vo}s;
+    }
+
+    /**
+     * Add a new $classe object in the Prevalent System
+     * @return
+     */
+    public $classe add$classe($classe $vo)
+    {
+    	${vo}.setId(new Long(next${classe}Id++));
+    	
+    	this.${vo}s.put(${vo}.getId(), ${vo});
+    	
+        return $vo;
+    }
+    
+    /**
+     * Delete the $classe object from the Prevalent System
+     * @param id
+     */
+    public void delete$classe(long id)
+    {
+    	this.${vo}s.remove(new Long(id));
+    }
+
+	/**-------------- end $classe -------------- **/

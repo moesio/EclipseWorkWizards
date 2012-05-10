@@ -1,0 +1,7 @@
+#set($dao = $stringUtils.uncapitalise($daoInterface.name))
+	/**
+	 * @return Returns the $daoClass.
+	 */
+	public $daoInterface.name get${daoInterface.name}() {
+		return new ${daoClass.name}();
+	}

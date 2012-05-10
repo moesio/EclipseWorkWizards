@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<EclipseWork>
+    <wizard>
+        <title>Add String bean!</title>
+
+		<component-page required="true">
+			<description>Spring</description>
+
+			<group checkbox="createDAOBean" >
+				<checkbox name="createDAOBean" label="Add Hibernate DAO ?" />
+				<file name="spring-daos.xml" label="spring-daos.xml: " required="true" value=""/>
+				<type name="hibernateDAO" label="HibernateModelDAO:" required="true" />
+				<textfield name="bean_dao" label="Type the name of the bean: " />
+				<checkbox name="singleton" label="Singleton ?" />
+			</group>
+
+			<group checkbox="createActionBean" >
+				<checkbox name="createActionBean" label="Add WebWork Action ?" />
+				<file name="applicationContext.xml" label="applicationContext.xml: " extensions="xml" required="true" value="#applicationContext.xml"/>
+				<file name="spring-actions.xml" label="spring-actions.xml: " required="true" value=""/>
+				<type name="actionClass" label="Action:" required="true" />
+				<textfield name="bean_action" label="Type the name of the bean: " />
+			</group>
+
+		</component-page>
+
+		<!-- Output Files -->
+        <output>
+			<xml-update file="spring-daos.xml">
+				<condition variable="createDAOBean" value="true" />
+				<bean id="${bean_dao}" class="${hibernateDAO}" singleton="false">
+					<property name="sessionFactory"><ref bean="sessionFactory"/></property>
+				</bean>
+			</xml-update>
+
+			<xml-update file="spring-actions.xml">
+					<condition variable="createActionBean" value="true" />
+					<bean id="${bean_action}" class="${actionClass}" singleton="false">
+						<property name="${bean_dao}"><ref bean="${bean_dao}"/></property>
+					</bean>
+			</xml-update>
+
+			<!-- applicationContext.xml -->
+			<xml-update file="applicationContext.xml" >
+				<condition variable="createActionBean" value="true" />
+				<bean id="autoProxyCreator" check-before-create="true">
+					<property name="beanNames" check-before-create="true">
+						<list check-before-create="true">
+							<value>${bean_action}</value>
+						</list>
+					</property>
+				</bean>
+			</xml-update>
+
+        </output>
+    </wizard>
+</EclipseWork>

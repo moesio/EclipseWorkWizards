@@ -1,0 +1,207 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<templates>
+	<category name="Geração da estrutura para CRUD">
+		<wizards>
+			<!-- 
+			<wizard-def description="Criar DAOs e Services" template="templates/seimos/daosEServices.xml" />
+			 -->
+			<wizard-def description="Criar DAO (interface e implementação)" template="templates/indole/05-springmapping/dao/createModelDao.xml"/>
+			<wizard-def description="Criar Service (interface e implementação)" template="templates/indole/05-springmapping/business/createModelManager.xml"/>
+		</wizards>
+	</category>
+	<!-- 
+	<category name="Configuração básica">
+		<category name="Configuração inicial">
+			<wizards>
+				<wizard-def description="00 - Criação da estrutura" template="templates/indole/00-estrutura/estrutura.xml"/>
+				<wizard-def description="01 - Configurar aplicação web" template="templates/indole/01-web/web.xml"/>
+				<wizard-def description="02 - Criar configuração mínima do xwork.xml" template="templates/indole/02-conf/xwork.xml"/>
+				<wizard-def description="03 - Adicionar suporte ao Spring" template="templates/indole/03-springcreator/springSupport.xml"/>
+				<wizard-def description="04 - Gerar configuração básica do Hibernate" template="templates/indole/02-conf/xwork-hibernate-stack.xml"/>
+			</wizards>
+		</category>
+		<category name="Entidades">
+			<wizards>
+				<wizard-def description="05 - Gerar POJO" template="templates/indole/04-pojo/pojo.xml"/>
+			</wizards>
+			
+			<category name="06-DAO">
+				<wizards>
+					<wizard-def description="Criar DAO (interface e implementação do Hibernate)" template="templates/indole/05-springmapping/dao/createModelDao.xml"/>
+					<wizard-def description="Adicionar os beans do DAO aos arquivos de contexto do Spring" template="templates/indole/05-springmapping/dao/addDaoBeansToSpringContext.xml"/>
+				</wizards>
+			</category>
+			
+			<category name="07-Manager">
+				<wizards>
+					<wizard-def description="Criar Manager (interface e implementação)" template="templates/indole/05-springmapping/business/createModelManager.xml"/>
+					<wizard-def description="Adicionar os beans do Manager aos arquivos de contexto do Spring"
+						template="templates/indole/05-springmapping/business/addBusinessBeansToSpringContext.xml"/>
+				</wizards>
+			</category>
+			
+			<category name="08-Listagem e Cadastro">
+				<wizards>
+					<wizard-def description="Criar e mapear Actions" template="templates/indole/08-crud/modelCrud.xml"/>
+					<wizard-def description="Validação de action (se não tiver sido feito no passo anterior)" template="templates/indole/08-crud/action-validation.xml"/>
+				</wizards>
+			</category>
+		</category>
+	</category>
+ 	<category name="Persistence">
+		<category name="DAO">
+			<wizards>
+				<wizard-def description="1 - DAOFactory" template="templates/dao/daoFactory.xml"/>
+				<wizard-def description="2 - DAO Interface" template="templates/dao/dao.xml"/>
+				<wizard-def description="3 - ModelDAO (extends DAO) " template="templates/dao/daoSubInterface.xml"/>
+				<wizard-def description="4 - Test Case" template="templates/dao/testcase/daoTestCase.xml"/>
+				<wizard-def description="Test" template="templates/dao/test.xml"/>
+			</wizards>
+		</category>
+		<category name="Hibernate">
+			<category name="config files">
+				<wizards>
+					<wizard-def description="hibernate.cfg.xml" template="templates/hibernate/hibernate.cfg.xml"/>
+					<wizard-def description="*.hbm.xml" template="templates/hibernate/hbm.xml"/>
+					<wizard-def description="SchemaExport" template="templates/hibernate/SchemaExport.xml"/>
+				</wizards>
+			</category>
+			<wizards>
+				<wizard-def description="1 - HibernateUtil - ThreadLocal" template="templates/hibernate/threadLocal.xml"/>
+				<wizard-def description="1 - HibernateSessionAware (IoC)" template="templates/webwork/ioc/hibernateSessionAware/hibernateSessionAware.xml"/>
+				<wizard-def description="2 - Hibernate DAOFactory" template="templates/hibernate/hibernateDAOFactory.xml"/>
+				<wizard-def description="3 - Hibernate Abstract DAO" template="templates/hibernate/hibernateDAO.xml"/>
+				<wizard-def description="4 - Hibernate Model DAO" template="templates/hibernate/modelDAO.xml"/>
+				<wizard-def description="5 - Hibernate Interceptor" template="templates/webwork/interceptors/hibernate/hibernateInterceptor.xml"/>
+				<wizard-def description="5 - Hibernate Filter" template="templates/hibernate/hibernateFilter.xml"/>
+			</wizards>
+		</category>
+		<category name="Prevayler">
+			<wizards>
+				<wizard-def description="1 - Prevayler System" template="templates/prevayler/prevaylerSupport.xml"/>
+				<wizard-def description="2 - PrevaylerDAOFactory" template="templates/prevayler/dao/prevaylerDAOFactory.xml"/>
+				<wizard-def description="3 - Prevayler*Model*DAO" template="templates/prevayler/dao/prevaylerDAO.xml"/>
+			</wizards>
+		</category>
+	</category>
+	<category name="WebWork">
+		<category name="Action">
+			<wizards>
+				<wizard-def description="Action" template="templates/webwork/action/action.xml"/>
+				<wizard-def description="Action.properties" template="templates/webwork/action/action.properties.xml"/>
+				<wizard-def description="Action-validation.xml" template="templates/webwork/validation/action-validation.xml"/>
+			</wizards>
+			<category name="CRUD">
+				<wizards>
+					<wizard-def description="CRUD Application" template="templates/webwork/crud/crud.xml"/>
+					<wizard-def description="Add findByName example!" template="templates/webwork/crud/action-findByProperty.xml"/>
+					<wizard-def description="CRUD Application using Spring" template="templates/webwork/crud/crud-spring.xml"/>
+					<wizard-def description="CRUD: J2ME HTTP Client" template="templates/webwork/crud/crud-j2me.xml"/>
+				</wizards>
+			</category>
+		</category>
+		<category name="Interceptors">
+			<wizards>
+				<wizard-def description="Hibernate Interceptor" template="templates/webwork/interceptors/hibernate/hibernateInterceptor.xml"/>
+				<wizard-def description="AuthorizeInterceptor" template="templates/webwork/interceptors/authorizeInterceptor.xml"/>
+				<wizard-def description="ExceptionHandler Interceptor" template="templates/webwork/interceptors/exceptionHandler.xml"/>
+			</wizards>
+		</category>
+		<category name="IoC">
+			<wizards>
+				<wizard-def description="Create XWork IoC Enabler" template="templates/webwork/ioc/model/ioc.xml"/>
+				<wizard-def description="HibernateSessionAware" template="templates/webwork/ioc/hibernateSessionAware/hibernateSessionAware.xml"/>
+			</wizards>
+		</category>
+		<category name="Result">
+			<wizards>
+				<wizard-def description="BufferResult " template="templates/webwork/result/BufferResult.xml"/>
+				<wizard-def description="DataOutputStreamResult " template="templates/webwork/result/DataOutputStreamResult.xml"/>
+			</wizards>
+		</category>
+		<category name="Type Conversion">
+			<wizards>
+				<wizard-def description="DateConverter " template="templates/webwork/conversion/DateConverter.xml"/>
+			</wizards>
+		</category>
+		<category name="Examples">
+			<wizards>
+				<wizard-def description="ExecuteAndWaitInterceptor" template="templates/webwork/examples/waitInterceptor/waitAction.xml"/>
+				<wizard-def description="FileUpload" template="templates/webwork/examples/upload/uploadAction.xml"/>
+				<wizard-def description="CeWolf" template="templates/webwork/examples/cewolf/cewolf.xml"/>
+				<wizard-def description="PrepareInterceptor" template="templates/webwork/examples/prepare/prepare.xml"/>
+				<wizard-def description="BufferResult" template="templates/webwork/examples/bufferresult/bufferresult.xml"/>
+			</wizards>
+			<category name="Jasper Reports">
+				<wizards>
+					<wizard-def description="1 - ANT Build" template="templates/webwork/examples/jasper/jasper-ant.xml"/>
+					<wizard-def description="2 - Simple Demo" template="templates/webwork/examples/jasper/jasper-demo.xml"/>
+					<wizard-def description="2 - CRUD" template="templates/webwork/examples/jasper/jasper.xml"/>
+				</wizards>
+			</category>
+			<category name="Do you would like to contribute with more examples?">
+				<wizards>
+					<wizard-def description="You are welcome!" template="templates/"/>
+				</wizards>
+			</category>
+		</category>
+		<category name="configuration">
+			<wizards>
+				<wizard-def description="xwork.xml" template="templates/webwork/conf/xwork.xml"/>
+				<wizard-def description="Create hibernate stack" template="templates/webwork/conf/xwork-hibernate-stack.xml"/>
+				<wizard-def description="Add 'include file=?' to xwork.xml" template="templates/webwork/conf/xwork-include.xml"/>
+			</wizards>
+		</category>
+	</category>
+	<category name="Sitemesh">
+		<wizards>
+			<wizard-def description="1 - Add Sitemesh support (web.xml)" template="templates/web/web.xml"/>
+			<wizard-def description="2 - Configure Sitemesh (decorators)" template="templates/sitemesh/sitemeshSupport.xml"/>
+		</wizards>
+	</category>
+	<category name="Spring">
+		<wizards>
+			<wizard-def description="3 - Add Spring support" template="templates/spring/springSupport.xml"/>
+			<wizard-def description="4 - Add Spring bean" template="templates/spring/addSpringBean.xml"/>
+		</wizards>
+	</category>
+	<category name="Web">
+		<wizards>
+			<wizard-def description="web.xml" template="templates/web/web.xml"/>
+		</wizards>
+	</category>
+	<category name="J2ME">
+		<wizards>
+			<wizard-def description="Hello Midlet" template="templates/j2me/helloMidlet.xml"/>
+			<wizard-def description="HTTP CRUD Midlet" template="templates/j2me/httpCRUD.xml"/>
+		</wizards>
+	</category>
+	<category name="Demo JDBC">
+		<wizards>
+			<wizard-def description="Demo Wizard - POJO / JDBC" template="templates/demo/Demo_POJO_JDBC.xml"/>
+		</wizards>
+	</category>
+	<category name="Step-by-Step">
+		<category name="Configuration">
+			<wizards>
+				<wizard-def description="1 - DAOFactory" template="templates/dao/daoFactory.xml"/>
+				<wizard-def description="2 - DAO Interface" template="templates/dao/dao.xml"/>
+				<wizard-def description="3 - HibernateUtil - ThreadLocal" template="templates/hibernate/threadLocal.xml"/>
+				<wizard-def description="4 - Hibernate DAOFactory" template="templates/hibernate/hibernateDAOFactory.xml"/>
+				<wizard-def description="5 - Hibernate Abstract DAO" template="templates/hibernate/hibernateDAO.xml"/>
+				<wizard-def description="6 - Hibernate Interceptor" template="templates/webwork/interceptors/hibernate/hibernateInterceptor.xml"/>
+				<wizard-def description="6 - Hibernate Filter" template="templates/hibernate/hibernateFilter.xml"/>
+				<wizard-def description="7 - SchemaExport" template="templates/hibernate/SchemaExport.xml"/>
+			</wizards>
+		</category>
+		<category name="CRUD">
+			<wizards>
+				<wizard-def description="1 - *.hbm.xml" template="templates/hibernate/hbm.xml"/>
+				<wizard-def description="2 - ModelDAO (extends DAO) " template="templates/dao/daoSubInterface.xml"/>
+				<wizard-def description="3 - Hibernate Model DAO" template="templates/hibernate/modelDAO.xml"/>
+				<wizard-def description="-> Now go to WebWork/Action/CRUD" />
+			</wizards>
+		</category>
+	</category>
+-->
+</templates>

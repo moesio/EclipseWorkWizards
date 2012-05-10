@@ -1,0 +1,183 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<EclipseWork>
+    <wizard>
+        <title>CRUD Application with Hibernate/Prevayler</title>
+
+		<component-page required="true">
+			<description>CRUD Application with Hibernate/Prevayler.</description>
+
+			<group>
+				<type name="model" label="POJO" required="true"/>
+			</group>
+
+			<textfield name="actionClass" label="Action Name:" required="true" value="" default-value="${model.name}Action"/>
+			<container name="actionPackage" label="Package:" required="true" type="package" value="#webwork.action.package"/>
+
+			<textfield name="listPageName" label="List Page:" required="true" extensions="vm,jsp,ftl,xstl" default-value="${model.uncapName}s"/>
+
+			<textfield name="editPageName" label="Edit Page:" required="true" extensions="vm,jsp,ftl,xslt" default-value="edit${model.name}"/>
+
+			<container name="resultName_folder" label="WebRoot:" required="true" type="folder" value="#webroot"/>
+
+			<!-- DAO: Hibernate, Prevayler, etc -->
+			<group name="daoGroup" label="DAO" checkbox="daoCheck">
+
+				<combo name="type" label="Choose how to persist your POJO´s" value="Hibernate DAO (DAO + ThreadLocal)" listener="true">
+					<elements>
+						<option value="prevaylerDAO">Prevayler DAO</option>
+						<option value="hibernateDAO">Hibernate DAO (DAO + ThreadLocal)</option>
+						<option value="useIoC">Don´t use a DAOFactory; I´ll use IoC</option>
+						<option value="hibernateSession">Hibernate Session (HibSession + IOC)</option>
+					</elements>
+				</combo>
+
+				<!-- improve this: I must put the same label!!! Implement a key-> <option key="a" -->
+				<type name="daoFactory" label="Abstract DAOFactory" radio="Prevayler DAO,Hibernate DAO (DAO + ThreadLocal)"/>
+				<type name="dao" label="DAO Interface" radio="Prevayler DAO,Hibernate DAO (DAO + ThreadLocal),Don´t use a DAOFactory; I´ll use IoC"/>
+
+				<!-- HibernateSession -->
+				<type name="hibernateAction" label="HibernateAction *Superclass for Hibernate-aware actions*" radio="Hibernate Session (HibSession + IOC)"/>
+
+			</group>
+
+			<group>
+				<combo name="viewType" label="View Layer:" value="FreeMarker">
+					<elements>
+						<option value="freemarker">FreeMarker</option>
+						<option value="velocity">Velocity</option>
+						<option value="dispatcher">JSP</option>
+						<option value="xslt">XSLT</option>
+					</elements>
+				</combo>
+			</group>
+
+		</component-page>
+
+		<component-page required="true">
+			<include file="includes/xwork_package.xml" />
+			<checkbox name="createStack" label="Create the Hibernate Interceptors Stack? " />
+		</component-page>
+
+		<variables>
+			<var name="namespace" value="xwork_package_namespace" />
+		</variables>
+
+		<!-- Output Files -->
+        <output>
+
+			<!-- Action -->
+			<template component="actionClass" velocity="CRUDAction.vm" extension="java" container="actionPackage">
+				<condition variable="type" value="prevaylerDAO||hibernateDAO||useIoC" />
+			</template>
+			<template component="actionClass" velocity="hibernate/HibernateSessionAction.vm" extension="java" container="actionPackage">
+				<condition variable="type" value="hibernateSession" />
+			</template>
+
+			<!-- Velocity -->
+            <template component="listPageName" velocity="list.vm" extension="vm" container="resultName_folder">
+				<condition variable="viewType" value="Velocity" />
+			</template>
+			<template component="editPageName" velocity="edit.vm" extension="vm" container="resultName_folder">
+				<condition variable="viewType" value="Velocity" />
+			</template>
+
+			<!-- JSP -->
+            <template component="listPageName" velocity="list.jsp.vm" extension="jsp" container="resultName_folder">
+				<condition variable="viewType" value="dispatcher" />
+			</template>
+			<template component="editPageName" velocity="edit.jsp.vm" extension="jsp" container="resultName_folder">
+				<condition variable="viewType" value="dispatcher" />
+			</template>
+
+			<!-- FreeMarker -->
+			<template component="listPageName" velocity="list.ftl.vm" extension="ftl" container="resultName_folder">
+				<condition variable="viewType" value="FreeMarker" />
+			</template>
+			<template component="editPageName" velocity="edit.ftl.vm" extension="ftl" container="resultName_folder">
+				<condition variable="viewType" value="FreeMarker" />
+			</template>
+
+			<!-- XSLT -->
+			<template component="listPageName" velocity="list.xslt.vm" extension="xslt" container="resultName_folder">
+				<condition variable="viewType" value="XSLT" />
+			</template>
+			<template component="editPageName" velocity="edit.xslt.vm" extension="xslt" container="resultName_folder">
+				<condition variable="viewType" value="XSLT" />
+			</template>
+
+			<!-- 
+				Update xwork.xml 
+				EclipseWork will look at the ProjectProperties settings to find the xwork.xml.
+			-->
+
+			<!--
+				HIBERNATE
+			-->
+			<xml-update file="xwork.xml">
+
+				<!-- Condition: Hibernate -->
+				<condition variable="type" value="hibernateDAO||hibernateSession||useIoC" />
+				<condition variable="checkUpdateXwork" value="true" />
+
+				<package name="${xwork_package_name}" extends="${xwork_package_extends}" namespace="$!namespace" check-before-create="true">
+				<if>
+					<condition variable="createStack" value="true" />
+					<comment> Hibernate Stack </comment>
+					<interceptors>
+							<interceptor-stack name="hibernateStack">
+								<interceptor-ref name="component" />
+								<interceptor-ref name="validationWorkflowStack"/>
+								<comment> Hibernate Interceptor to Open/Commit/Rollback Transactions </comment>
+								<interceptor-ref name="hibernate"/>
+							</interceptor-stack>
+					</interceptors>
+
+					<comment> default interceptor for all Actions in this package</comment>
+					<default-interceptor-ref name="hibernateStack" />
+				</if>
+					<action name="list" class="${actionClass}" method="list">
+						<result name="success" type="${viewType}">${listPageName}</result>
+					</action>
+					<action name="save" class="${actionClass}" method="save">
+						<result name="success" type="redirect">list.action</result>
+						<result name="input" type="${viewType}">${editPageName}</result>
+					</action>
+					<action name="load" class="${actionClass}" method="load">
+						<result name="success" type="${viewType}">${editPageName}</result>
+					</action>
+					<action name="delete" class="${actionClass}" method="delete">
+						<result name="success" type="redirect">list.action</result>
+					</action>
+				</package>
+			</xml-update>
+
+			<!--
+				PREVAYLER
+			-->
+			<xml-update file="xwork.xml">
+
+				<!-- Condition: Prevayler -->
+				<condition variable="type" value="prevaylerDAO" />
+				<condition variable="checkUpdateXwork" value="true" />
+
+				<package name="${xwork_package_name}" extends="${xwork_package_extends}" namespace="$!namespace" check-before-create="true">
+
+					<action name="list" class="${actionClass}" method="list">
+						<result name="success" type="${viewType}">${listPageName}</result>
+					</action>
+					<action name="save" class="${actionClass}" method="save">
+						<result name="success" type="redirect">list.action</result>
+						<result name="input" type="${viewType}">${editPageName}</result>
+					</action>
+					<action name="load" class="${actionClass}" method="load">
+						<result name="success" type="${viewType}">${editPageName}</result>
+					</action>
+					<action name="delete" class="${actionClass}" method="delete">
+						<result name="success" type="redirect">list.action</result>
+					</action>
+				</package>
+			</xml-update>
+
+        </output>
+    </wizard>
+</EclipseWork>

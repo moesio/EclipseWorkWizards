@@ -1,0 +1,12 @@
+<%@ taglib prefix="ww" uri="webwork" %>
+<html>
+  <head><title>File Upload</title></head>
+  <body>
+
+  <ww:form action="$xwork_action_name" enctype="multipart/form-data" method="post" >
+    <ww:file label="File" name="file"/>
+    <ww:submit value="Upload"/>
+  </ww:form>
+
+  </body>
+</html>

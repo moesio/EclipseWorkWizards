@@ -1,0 +1,9 @@
+#set($obj = $stringUtils.uncapitalise(${model.name}))
+<b>$stringUtils.capitalise(${model.name})s:</b><br>
+<%@ taglib uri="webwork" prefix="ww" %>
+
+<ww:iterator value="${obj}s">
+<br><ww:property/> - <a href="load.action?${obj}.id=<ww:property value='id'/>">Edit</a> &nbsp;&nbsp;<a href="delete.action?${obj}.id=<ww:property value='id'/>">Remove</a>
+</ww:iterator>
+	
+<hr><a href="load!default.action">Create</a>

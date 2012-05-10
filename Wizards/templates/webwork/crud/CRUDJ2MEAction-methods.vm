@@ -1,0 +1,67 @@
+#set($classe = ${model.elementName})
+#set($vo = $stringUtils.uncapitalise(${model.elementName}))
+#set($daoVar = $stringUtils.uncapitalise(${dao.name}))
+#set($daoType = $stringUtils.capitalise(${type}))
+
+/*** J2ME methods. Fill an arraylist to be used by the J2MEResult ***/
+	public String listJ2ME() throws Exception {
+		list();
+
+		data = new ArrayList();
+		for (Iterator iter = ${vo}s.iterator(); iter.hasNext();) {
+			$classe ${vo} = ($classe) iter.next();
+			//Please, choose one attribute
+			data.add(${vo}.get?());
+			data.add(String.valueOf(${vo}.getId()));
+		}
+
+		return Action.SUCCESS;
+	}
+	
+	public String loadJ2ME() throws Exception {
+		load();
+
+		data = new ArrayList();
+
+#foreach($f in $model.fields)
+#if($f.name!="id")
+		data.add(#if($f.type!="String")String.valueOf(#end${vo}.get${f.capName}()#if($f.type!="String"))#end);
+#end
+#end
+
+		return Action.SUCCESS;
+	}
+
+	public String saveJ2ME() throws Exception {
+		save();
+
+		data = new ArrayList();
+		data.add("$classe ID(" + ${vo}.getId() + ")");
+
+		return Action.SUCCESS;
+	}
+
+	public String inputJ2ME (){
+		data = new ArrayList();
+
+		Map errors = getFieldErrors();
+		Iterator iter = errors.entrySet().iterator();
+		while (iter.hasNext()) {
+			Map.Entry element = (Map.Entry) iter.next();
+			Object value = element.getValue();
+			String msg = null;
+			if(value instanceof List){
+				msg = (String) ((List)value).get(0);
+			}else{
+				msg=value.toString();
+			}
+			data.add(element.getKey()+":"+msg);		
+		}
+
+		return Action.SUCCESS;
+	}
+
+	public List getData() {
+		return data;
+	}
+/*** end J2ME methods ***/

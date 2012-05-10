@@ -1,0 +1,81 @@
+<html>
+<head>
+<@ww.head/>
+<#assign hideFrame="window.parent.window.document.getElementById('div_' + window.name).style.display = 'none'"/>
+<\#if ${model.uncapName}.id?exists>
+	<title>Editar $stringUtils.capitalise(${model.name})</title>
+	<#assign formAction="update.action"/>
+	<#assign buttonLabel="<u>A</u>tualizar"/>
+	<#assign accessKey="A"/>
+<\#else>
+	<title>Novo $stringUtils.capitalise(${model.name})</title>
+	<\#if hideMenu?exists>
+		<#assign formAction="innerInsert.action"/>
+	<\#else>
+		<#assign formAction="insert.action"/>
+	</\#if>
+	<#assign buttonLabel="<u>I</u>nserir"/>	
+	<#assign accessKey="I"/>
+</\#if>
+
+#set ($hasFileField=false)
+#foreach($f in $model.fields)
+#if($f.type=="File")
+#set ($hasFileField=true)
+#end
+#end
+</head>
+<body>
+<@ww.actionerror />
+<@ww.form name="form" action="${formAction}" validate="true" method="POST"#if ($hasFileField) enctype="multipart/form-data"#end>
+<\#include "${model.uncapName}-Form.ftl"/>
+	<\#if !${model.uncapName}.id?exists>
+		<\#if hideMenu?exists>
+			<@ww.hidden label="hideMenu" name="hideMenu" value="true" fieldValue="true"/>
+		<\#else>
+			<@ww.checkbox label="Continuar inserindo" name="continueInsert" value="true" fieldValue="true"/>
+		</\#if>
+	</\#if>
+#if($id != '')
+	<@ww.hidden label="$stringUtils.capitalise($id)" name="${model.uncapName}.${id}" />
+#end
+</@ww.form>
+
+#foreach($ff in $model.fields)
+#if($f.bean)
+
+<!-- ${f.bean} -->
+<\#if ${model.uncapName}.${f.bean.uncapName}?exists>
+<ul>
+<li><a href="../${f.bean.uncapName}/load.action?${f.bean.uncapName}.id=${${model.uncapName}.${f.bean.uncapName}.id}">${${model.uncapName}.${f.bean.uncapName}}</a></li>
+</ul>
+</\#if>
+#elseif($f.collection)
+
+<!-- $f.javaClass -->
+<\#if ${model.uncapName}.${f.javaClass.uncapName}s?exists>
+<#list ${model.uncapName}.${f.javaClass.uncapName}s as c>
+<ul>
+<li><a href="../${f.javaClass.uncapName}/load.action?${f.javaClass.uncapName}.id=${c.id}">${c}</a></li>
+</ul>
+</#list>
+</\#if>
+#end
+#end
+<hr class="divider"/>
+<div class="buttonGroup">
+<button onclick="customOnsubmit();document.form.submit();" class="button" accesskey="${accessKey}">
+${buttonLabel} 
+</button>
+<\#if !hideMenu?exists>
+<button onclick="window.location='list.action'" class="button" accesskey="V">
+<u>V</u>oltar
+</button>
+<\#else>
+<button onclick="${hideFrame}" class="button" accesskey="V">
+<u>F</u>echar
+</button>
+</\#if>
+</div>
+</body>
+</html>

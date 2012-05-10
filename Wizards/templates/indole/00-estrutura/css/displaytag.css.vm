@@ -1,0 +1,168 @@
+.wwrmTable 
+{
+	text-align: left;
+}
+
+.label {
+	font-family: Arial;
+	font-size: 13px;
+	vertical-align: middle;
+}
+
+a {
+	text-decoration:none;
+	color: black;
+	font-family:Arial;
+	font-size:13px;
+}
+a:hover {
+	text-decoration:underline;
+}
+
+.dados {
+	border: 1px solid #666;
+	width: 98%;
+	margin: 0px 0 10px 0 !important;
+}
+
+/*
+table {
+	border: 0px solid #666;
+	width: 80%;
+	margin: 20px 0 20px 0 !important;
+}
+
+
+th,td {
+	padding: 2px 4px 2px 4px !important;
+	text-align: left;
+	vertical-align: top;
+}
+*/
+
+thead tr {
+	background-color: #C3D3DF;
+	font-family: Arial;
+	font-size: 12px;
+}
+
+th.sorted {
+	background-color: #92B2C8;
+}
+
+th a,th a:visited {
+	color: black;
+}
+
+th a:hover {
+	text-decoration: underline;
+	color: black;
+}
+
+th.sorted a,th.sortable a {
+	background-position: right;
+	display: block;
+	width: 100%;
+}
+
+th.sortable a {
+	background-image: url(../imgs/arrow_off.png);
+	background-repeat: no-repeat;
+}
+
+th.order1 a {
+	background-image: url(../imgs/arrow_down.png);
+}
+
+th.order2 a {
+	background-image: url(../imgs/arrow_up.png);
+}
+
+tr.tableRowEven,tr.even {
+	background-color: #DEE6EC;
+	font-family:Arial;
+	font-size:13px;	
+}
+
+tr.odd {
+	background-color: #E9ECEF;
+	font-family:Arial;
+	font-size:13px;
+}
+
+tr.odd:hover {
+	background-color: #fef7bf;
+}
+
+tr.even:hover {
+	background-color: #fef7bf;
+}
+
+table.its thead tr {
+	background-color: #69c;
+}
+
+table.its tr.even {
+	background-color: #def;
+}
+
+div.exportlinks {
+	background-color: #eee;
+	border: 1px solid #666;
+	padding: 2px 4px 2px 4px;
+	margin: 2px 0 10px 0;
+	width: 97%;
+}
+
+span.export {
+	padding: 0 4px 1px 20px;
+	display: inline;
+	display: inline-block;
+	cursor: pointer;
+}
+
+span.excel {
+	background-image: url(../imgs/ico_file_excel.png);
+	background-repeat: no-repeat;
+}
+
+span.csv {
+	background-image: url(../imgs/ico_file_csv.png);
+	background-repeat: no-repeat;
+}
+
+span.xml {
+	background-image: url(../imgs/ico_file_xml.png);
+	background-repeat: no-repeat;
+}
+
+span.pdf {
+	background-image: url(../imgs/ico_file_pdf.png);
+	background-repeat: no-repeat;
+}
+
+span.pagebanner {
+	background-color: #F7F8F9;
+	/* border: 1px dotted #999; */
+	padding: 2px 4px 2px 4px;
+	width: 96%;
+	margin-top: 0px;
+	display: block;
+	/*border-bottom: none;*/
+	text-align: center;
+}
+
+span.pagelinks {
+	background-color: #F7F8F9;
+	/* border: 1px dotted #999; */
+	padding: 2px 4px 2px 4px;
+	width: 96%;
+	display: block;
+	/*border-top: none;*/
+	margin-bottom: 10px;
+	text-align: center;
+}
+
+span.pagelinks a {
+	color: #600;
+}

@@ -1,0 +1,39 @@
+#set($vo = $stringUtils.uncapitalise(${$class}))
+#if($package)
+package $package;
+#end
+
+import java.io.Serializable;
+
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.SequenceGenerator;
+
+/**
+ * @author $author
+ * @date $date.time
+ */
+@SuppressWarnings("serial")
+@Entity
+public class $class implements Serializable
+{
+	@Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "${vo}_sequence")
+    @SequenceGenerator(name = "${vo}_sequence", sequenceName = "${vo}_sequence", allocationSize = 1)
+	private Long id;
+	
+	// adicione os atributos da entidade e depois crie os getters e setters (Eclipse: alt + shift + S R)
+	
+	public Long getId()
+	{
+		return this.id;
+	}
+	
+	public void setId(Long id)
+	{
+		this.id = id;
+	}
+
+}

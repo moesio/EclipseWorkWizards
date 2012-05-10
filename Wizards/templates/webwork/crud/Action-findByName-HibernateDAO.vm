@@ -1,0 +1,13 @@
+#set($prop = $stringUtils.capitalise(${property}))
+
+/**
+ * @see ${dao.fullyName}#get${model.name}By$prop(java.lang.String)
+ */
+public Collection find${model.name}By${prop}(String $property) throws DAOException {
+	try {
+		return getCriteria().add(Expression.ilike("$property", $property, MatchMode.ANYWHERE)).list();
+	}
+	catch (HibernateException e) {
+		throw new DAOException(e);
+	}
+}

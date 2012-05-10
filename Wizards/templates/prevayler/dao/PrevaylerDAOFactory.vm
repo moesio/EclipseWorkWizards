@@ -1,0 +1,51 @@
+#if($package)
+package $package;
+#end
+
+import java.io.IOException;
+import java.io.Serializable;
+import org.apache.log4j.Logger;
+import org.prevayler.Prevayler;
+import org.prevayler.PrevaylerFactory;
+
+/**
+ * DAOFactory for Prevayler
+ * 
+ * @author $author
+ */
+public class $class extends $daoFactory implements Serializable {
+
+	private Prevayler prevayler;
+
+	private static Logger log = Logger.getLogger(${class}.class);
+
+	private String prevaylerBaseDir = "$prevaylerBaseDir";
+
+	/**
+	 * @return
+	 * @throws ClassNotFoundException
+	 * @throws IOException
+	 */
+	private Prevayler getPrevayler() {
+		if(prevayler == null) {
+			PrevaylerFactory factory = new PrevaylerFactory();
+			factory.configurePrevalentSystem(new ${prevaylerSystem}());
+			factory.configurePrevalenceBase(prevaylerBaseDir);
+
+			try {
+				this.prevayler = factory.create();
+			}
+			catch (Exception e) {
+				log.error("Error to start Prevayler: " + e.getMessage());
+				throw new RuntimeException("Error to start Prevayler: " + e.getMessage());
+			}
+
+			${prevaylerSnapshot} snapshot = new ${prevaylerSnapshot}(prevayler);
+			snapshot.start();
+			log.info("Prevayler System Initialized");
+		}
+
+		return prevayler;
+	}
+
+}

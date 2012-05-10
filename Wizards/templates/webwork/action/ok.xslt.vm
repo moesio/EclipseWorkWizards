@@ -1,0 +1,17 @@
+#set($pojo = ${model.uncapName})
+<?xml version="1.0"?>
+<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.0">
+    <xsl:output method="html" media-type="text/html"/>
+
+    <xsl:template match="result">
+        <html>
+            <head>
+                <title>HelloWorld XSLT</title>
+            </head>
+            <body>
+                Text: $!someText
+            </body>
+        </html>
+    </xsl:template>
+
+</xsl:stylesheet>

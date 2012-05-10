@@ -1,0 +1,223 @@
+#set($classe = ${model.elementName})
+#set($vo = $stringUtils.uncapitalise(${model.elementName}))
+#set($daoVar = $stringUtils.uncapitalise(${dao.name}))
+#if($crud_spring)
+#set($daoVar = $bean_dao)
+#end
+#set($daoType = $stringUtils.capitalise(${type}))
+#if($package)
+package $package;
+#end
+
+import java.util.HashMap;
+#set ($hasFileField=false)
+#set ($hasBeanField=false)
+#foreach($f in $model.fields)
+#if($f.type=="File")
+#set ($hasFileField=true)
+#end
+#if($f.bean)
+#set ($hasBeanField=true)
+import ${dao.package}.${f.bean.name}Manager;
+#end
+#end
+
+#if($hasBeanField)
+import java.util.Collection;
+#end
+import com.opensymphony.xwork.ModelDriven;
+import com.opensymphony.xwork.Preparable;
+import com.opensymphony.xwork.Action;
+#if($extends)import $extends.fullyName;#end
+import com.opensymphony.xwork.ActionSupport;
+#if($model)
+import $model.fullyName;
+#if($daoFactory)
+import $daoFactory.fullyName;
+#end
+import $dao.fullyName;
+#end
+#if($hasFileField)
+import br.com.indole.web.util.File;
+import br.com.indole.web.util.FileWriter;
+import br.com.indole.web.util.HttpResponseFileWriter;
+#end
+
+/**
+ * @author $author
+ * @date $date.time
+ */
+@SuppressWarnings("serial")
+public class $class extends ActionSupport implements Preparable, ModelDriven
+{
+#if($daoFactory)
+	private ${dao.name} ${daoVar} =#if($ioc) null#else ${daoFactory.name}.get${daoType}Factory().get${dao.name}()#end;
+#else
+	private ${dao.name} ${daoVar} = null;
+#end
+
+#if($model)
+	private $model.name $vo;
+#end
+
+#if($hasFileField)
+	//TODO: deve ser injetado pelo Spring/Webwork.
+	private FileWriter fileWriter = new HttpResponseFileWriter();
+#end
+	private String hideMenu;
+    private boolean continueInsert;
+    private HashMap<String, String> option = new HashMap<String, String>();
+    
+	/** Relacionamentos **/
+
+#foreach($f in $model.fields)
+#if($f.bean)
+	/// --- ${f.bean.fullyName} --- //
+	private ${f.bean.name}Manager ${f.bean.uncapName}Manager = null;
+	private Collection ${f.bean.uncapName}s = null;
+#end 
+#end
+
+	/**
+	 * @see com.opensymphony.xwork.Action#execute()
+	 */
+	public String execute() throws Exception {
+		return Action.SUCCESS;
+	}
+
+	public void prepare() throws Exception
+	{
+		if($vo != null && ${vo}.getId() != null) {
+			$vo = ($classe) ${daoVar}.get(${vo}.getId());
+		}
+	
+#foreach($f in $model.fields)
+#if($f.bean)
+		//${f.bean.fullyName}
+		this.${f.bean.uncapName}s = ${f.bean.uncapName}Manager.get();
+#end
+#end		
+	}
+
+	public String prepareInsert() throws Exception {
+
+		return Action.SUCCESS;
+	}
+
+	public String prepareUpdate() throws Exception {
+		return Action.SUCCESS;
+	}
+
+	public String insert() throws Exception {
+		${daoVar}.save($vo);
+        if (isContinueInsert())
+            return Action.SUCCESS;
+        else
+            return "stop";
+	}
+
+    public String innerInsert() throws Exception
+    {
+        $model.name $vo = ${daoVar}.save(this.$vo);
+        option.put("value", ${vo}.getId().toString());
+        // TODO Colocar descrição textual para label em vez do código
+        option.put("label", ${vo}.getId().toString());
+        return SUCCESS;
+    }
+
+	public String update() throws Exception {
+		${daoVar}.update($vo);
+
+		return Action.SUCCESS;
+	}
+
+#foreach($f in $model.fields)
+#if($f.type=="File" )
+	public String show${stringUtils.capitalise($f.name)}() throws Exception
+	{
+		File ${stringUtils.uncapitalise($f.name)} = ${daoVar}.getFile("${stringUtils.capitalise($f.name)}", ${vo}.getId());
+		if (${stringUtils.uncapitalise($f.name)} != null && ${stringUtils.uncapitalise($f.name)}.getBytes() != null)
+		{
+			fileWriter.write(${stringUtils.uncapitalise($f.name)});
+		}
+		return Action.SUCCESS;
+	}
+#end
+#end
+
+#if($validate)
+	public void validate(){
+		// validate your objects here!
+	}	
+#end
+
+	public $classe get${classe}(){
+		if($vo == null){
+			$vo = new ${classe}();
+		}
+		return $vo;
+	}
+
+	public void set${classe}(${classe} $vo){
+		this.${vo}=$vo;
+	}
+	
+	public Object getModel()
+	{		
+		return get${classe}();
+	}
+	
+#if(!$daoFactory)
+
+	public void set$stringUtils.capitalise(${daoVar})(${dao.name} ${daoVar}){
+		this.${daoVar}=${daoVar};
+	}
+#end
+
+    public boolean isContinueInsert()
+    {
+        return continueInsert;
+    }
+    
+    public void setContinueInsert(boolean continueInsert)
+    {
+    	this.continueInsert = continueInsert;
+    }
+    
+    public String getHideMenu()
+    {
+        return hideMenu;
+    }
+
+    public void setHideMenu(String hideMenu)
+    {
+        this.hideMenu = hideMenu;
+    }
+
+    public HashMap<String, String> getOption()
+    {
+        return option;
+    }
+
+    public void setOption(HashMap<String, String> option)
+    {
+        this.option = option;
+    }
+
+	/** Relacionamentos **/
+#foreach($f in $model.fields)
+#if($f.bean)
+
+	/// --- ${f.bean.fullyName} --- //
+	public void set${f.bean.name}Manager(${f.bean.name}Manager ${f.bean.uncapName}Manager) {
+		this.${f.bean.uncapName}Manager = ${f.bean.uncapName}Manager;
+	}
+	public Collection get${f.bean.name}s() {
+		return ${f.bean.uncapName}s;
+	}
+	public void set${f.bean.name}s(Collection ${f.bean.uncapName}s) {
+		this.${f.bean.uncapName}s = ${f.bean.uncapName}s;
+	}
+#end 
+#end
+}

@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN" "http://www.springframework.org/dtd/spring-beans.dtd">
+
+<beans>
+	<!-- Hibernate - JDBC Connection Settings -->
+	<bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+		<property name="driverClassName"><value>$hibernate_driver</value></property>
+		<property name="url"><value>$hibernate_url</value></property>
+		<property name="username"><value>$username</value></property>
+		<property name="password"><value>$!password</value></property>
+	</bean>
+
+	<!-- Hibernate Sessin Factory -->
+	<bean id="sessionFactory" class="org.springframework.orm.hibernate3.LocalSessionFactoryBean">
+		<property name="dataSource"><ref bean="dataSource"/></property>
+		<property name="hibernateProperties">
+			<props>
+				<prop key="hibernate.dialect">$hibernate_dialect</prop>
+				<prop key="show_sql">true</prop>
+			</props>
+		</property>
+		<!-- Mapping files -->
+		<property name="mappingResources">
+			<list>
+
+			</list>
+		</property>
+	</bean>
+
+	<bean id="autoProxyCreator" class="org.springframework.aop.framework.autoproxy.BeanNameAutoProxyCreator" dependency-check="none">
+		<property name="proxyTargetClass">
+			<value>true</value>
+		</property>
+		<property name="interceptorNames">
+			<list>
+				<value>transactionInterceptor</value>
+			</list>
+		</property>
+		<property name="beanNames">
+			<list>
+				<!--<value>pessoaAction</value>-->
+			</list>
+		</property>
+	</bean>
+
+	<!-- Transaction Manager -->
+	<bean id="transactionManager" class="org.springframework.orm.hibernate3.HibernateTransactionManager">
+		<property name="sessionFactory"><ref local="sessionFactory"/></property>
+	</bean>
+
+	<!-- Transaction Interceptor -->
+	<bean id="transactionInterceptor" class="org.springframework.transaction.interceptor.TransactionInterceptor" dependency-check="none">
+		<property name="transactionManager"><ref bean="transactionManager"/></property>
+		<property name="transactionAttributes">
+			<props>
+				<prop key="save*">PROPAGATION_REQUIRED</prop>
+				<prop key="delete">PROPAGATION_REQUIRED</prop>
+				<!-- default, readOnly -->
+				<prop key="*">PROPAGATION_REQUIRED,readOnly</prop>
+			</props>
+		</property>
+	</bean>
+
+</beans>

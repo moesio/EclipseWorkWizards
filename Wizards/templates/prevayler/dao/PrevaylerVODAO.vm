@@ -1,0 +1,107 @@
+#set($classe = ${model.elementName})
+#set($vo = $stringUtils.uncapitalise(${model.elementName}))
+#if($package)
+package $package;
+#end
+
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
+
+import org.prevayler.Prevayler;
+
+import $model.fullyName;
+import $daoInterface.fullyName;
+import $saveTransaction.fullyName;
+import $deleteTransaction.fullyName;
+
+/**
+ * Prevayler DAO for $model
+ * 
+ * @author $author
+ */
+public class $class implements $daoInterface.name{
+	private Prevayler prevayler;
+
+	/**
+	 * @param prevayler
+	 */
+	public $class(Prevayler prevayler) {
+		this.prevayler = prevayler;
+	}
+
+	/**
+	 * @see webwork.dao.DAO#load(java.io.Serializable)
+	 */
+	public Object load(Serializable id) throws DAOException {
+		return ((${system}) prevayler.prevalentSystem()).get${classe}(id);
+	}
+
+	/**
+	 * @see webwork.dao.DAO#list()
+	 */
+	public List list() throws DAOException {
+		Collection c = ((${system}) prevayler.prevalentSystem())
+				.get${classe}s().values();
+
+		if(c == null)
+			return null;
+
+		List ${vo}s = new ArrayList(c);
+
+		sort(${vo}s);
+
+		return ${vo}s;
+	}
+
+	private void sort(List ${vo}s) {
+		/** sort by id desc */
+		Collections.sort(${vo}s, new Comparator() {
+			public int compare(Object obj1, Object obj2) {
+				return ((${classe}) obj1).getId().longValue() > ((${classe}) obj2)
+						.getId().longValue() ? -1 : 1;
+			}
+		});
+	}
+
+	/**
+	 * @see webwork.dao.DAO#save(java.lang.Object)
+	 */
+	public void save(Object ${vo}) throws DAOException {
+		try {
+			prevayler.execute(new ${saveTransaction.name}((${classe}) ${vo}));
+		}
+		catch (Exception e) {
+			throw new DAOException(e);
+		}
+	}
+
+	/**
+	 * @see webwork.dao.DAO#saveOrUpdate(java.lang.Object, java.io.Serializable)
+	 */
+	public void saveOrUpdate(Object ${vo}, Serializable id) throws DAOException {
+		save(${vo});
+	}
+
+	/**
+	 * @see webwork.dao.DAO#delete(java.lang.Object)
+	 */
+	public void delete(Object ${vo}) throws DAOException {
+		try {
+			prevayler.execute(new ${deleteTransaction.name}(((${classe}) ${vo}).getId()));
+		}
+		catch (Exception e) {
+			throw new DAOException(e);
+		}
+	}
+
+	/**
+	 * @see webwork.dao.DAO#deleteAll(java.util.List)
+	 */
+	public void deleteAll(List ids) throws DAOException {
+		//TODO
+	}
+}

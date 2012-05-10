@@ -1,0 +1,8 @@
+#xwork.default.invalid.fieldvalue=Campo inválido
+#webwork.messages.invalid.token=O formulário não pode ser reenviado.
+#file.upload.keep.current.file=&lt; manter arquivo atual &gt;
+#format.money={0,number,currency}
+#format.date={0,date,dd/MM/yyyy}
+#displaytag.empty.list=<tr class="empty"><td colspan="0">Nenhum registro encontrado.</td></tr></tr>
+#error.header.message=Atenção, você deve corrigir o(s) error(s) abaixo para prosseguir
+#error.required=Campo obrigatório

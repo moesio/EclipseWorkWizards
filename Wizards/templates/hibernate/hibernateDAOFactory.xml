@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<EclipseWork>
+    <wizard>
+        <title>DAO Factory for Hibernate</title>
+
+        <component-page required="true">
+            <description>Create a HibernateDAOFactory.</description>
+
+			<container name="package" label="Package:" required="true" type="package" value=""/>
+	        <textfield name="hibernateDAOFactory" label="Class:" required="true" extension="java" value="HibernateDAOFactory"/>
+
+			<type name="daoFactory" label="Abstract DAOFactory: " required="true"/>
+
+        </component-page>
+
+		<!-- Output Files -->
+        <output>
+            <template component="hibernateDAOFactory" velocity="HibernateDAOFactory.vm" extension="java" container="package"/>
+
+			<!-- Update DAOFactory -->
+			<template component="daoFactory" method="DAOFactory-method-update.vm" extension="java" container="package"/>
+        </output>
+    </wizard>
+</EclipseWork>

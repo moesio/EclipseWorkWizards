@@ -1,0 +1,13 @@
+#if($package)
+package $package;
+#end
+
+import $daoInterface.fullyName;
+
+/**
+ * @author $author
+ */
+public interface $class extends $daoInterface.name {
+
+	/** add more methods here **/
+}

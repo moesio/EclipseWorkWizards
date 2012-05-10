@@ -1,0 +1,3 @@
+#set($prop = $stringUtils.capitalise(${property}))
+
+	public Collection find${model.name}By${prop}(String $property) throws DAOException;

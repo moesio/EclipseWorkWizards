@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+
+<decorators defaultdir="/decorators">
+	<excludes>
+		<pattern>${decorators}/menu.ftl</pattern>
+		<pattern>/dwr/**</pattern>
+		<pattern>/webwork/**</pattern>
+		<pattern>/index.html</pattern>
+	</excludes>
+	
+	<decorator name="controle" page="controle.ftl">
+		<pattern>/controle/**</pattern>
+	</decorator>
+
+	<decorator name="inner" page="inner.ftl">
+		<pattern>/**/prepareInnerInsert*</pattern>
+		<pattern>/**/innerInsert*</pattern>
+	</decorator>
+	
+	<decorator name="app" page="main.ftl">
+		<pattern>/**</pattern>
+	</decorator>
+</decorators>

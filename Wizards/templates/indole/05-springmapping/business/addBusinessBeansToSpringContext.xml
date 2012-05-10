@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<EclipseWork>
+	<wizard>
+		<title>Manager</title>
+
+		<component-page required="true">
+			<description>Adiciona os beans do Manager aos arquivos de contexto do Spring</description>
+
+			<group>
+				<file name="contextFile" label="applicationContext-business.xml:" extensions="xml" required="true" value="#applicationContext-business.xml" />
+			</group>
+			<group>
+				<type name="proxyInterface" label="Interface do Manager:" required="true" />
+				<textfield name="proxyName" label="Nome do Proxy:" default-value="${proxyInterface.uncapName}" required="true" />
+
+				<type name="targetImpl" label="Implementação do Manager:" required="true" />
+				<textfield name="targetName" label="Nome do Target:" default-value="${proxyInterface.uncapName}Target" required="true" />
+
+				<textfield name="daoName" label="Bean da propriedade DAO (&lt;entidade&gt;Dao):" value="" required="true" />
+			</group>
+
+		</component-page>
+
+		<!-- Output Files -->
+		<output>
+			<xml-update file="contextFile">
+				<bean id="${targetName}" class="${targetImpl}">
+					<property name="dao">
+						<ref bean="${daoName}" />
+					</property>
+				</bean>
+
+				<bean id="${proxyName}" parent="parentManager">
+					<property name="proxyInterfaces">
+						<value>${proxyInterface}</value>
+					</property>
+					<property name="target">
+						<ref bean="${targetName}" />
+					</property>
+				</bean>
+			</xml-update>
+		</output>
+	</wizard>
+</EclipseWork>

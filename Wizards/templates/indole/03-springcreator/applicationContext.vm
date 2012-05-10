@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN" "http://www.springframework.org/dtd/spring-beans.dtd">
+
+<beans>
+  <!-- Default manager transaction configuration -->
+  <bean id="transactionInterceptor" class="org.springframework.transaction.interceptor.TransactionInterceptor">
+    <property name="transactionManager">
+      <ref bean="transactionManager" />
+    </property>
+    <property name="transactionAttributes">
+      <props>
+        <prop key="*">PROPAGATION_REQUIRED</prop>
+      </props>
+    </property>
+  </bean>
+
+  <bean id="modelValidationAdvice" class="br.com.indole.commons.web.validation.aop.advice.ModelValidationAdvice" />
+
+  <bean id="validatorAdvisor" class="org.springframework.aop.support.RegexpMethodPointcutAdvisor">
+    <property name="advice">
+      <ref local="modelValidationAdvice" />
+    </property>
+    <property name="patterns">
+      <list>
+        <value>.*\.save</value>
+        <value>.*\.update</value>
+      </list>
+    </property>
+  </bean>
+
+  <!-- Default manager template -->
+  <bean id="parentManager" class="org.springframework.aop.framework.ProxyFactoryBean" abstract="true">
+    <property name="interceptorNames">
+      <list>
+        <idref bean="securityInterceptor" />
+        <idref bean="transactionInterceptor" />
+        <value>validatorAdvisor</value>
+      </list>
+    </property>
+  </bean>
+  
+</beans>

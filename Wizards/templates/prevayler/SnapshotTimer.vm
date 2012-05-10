@@ -1,0 +1,37 @@
+#if($package)
+package $package;
+#end
+
+import java.io.IOException;
+import org.apache.log4j.Logger;
+import org.prevayler.Prevayler;
+
+/**
+ * @author $author
+ */
+public class $class extends Thread {
+
+	private Prevayler prevayler;
+	private Logger logger=Logger.getLogger(${class}.class);
+	
+	public $class(Prevayler prevayler) {
+		this.prevayler = prevayler;
+		logger.info("Starting Prevayler System!");
+	}
+
+	public void run() {
+		super.run();
+		try {
+			while (true) {
+				Thread.sleep(1000 * 5);
+				prevayler.takeSnapshot();
+			}
+		}
+		catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+		catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+}

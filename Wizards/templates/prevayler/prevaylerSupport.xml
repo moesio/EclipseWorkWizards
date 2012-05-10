@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<EclipseWork>
+    <wizard>
+        <title>Add Prevayler Support to the Project</title>
+
+        <component-page required="true">
+            <description>Prevayler Sistem</description>
+
+			<group name="system" label="Prevayler System" checkbox="checkSystem">
+				<checkbox name="checkSystem" label="Create:" value="true"/>
+				<textfield name="prevaylerSystemClass" label="Class:" required="true" value="PrevaylerSystem"/>
+				<container name="prevaylerSystemPackage" label="Package:" required="true" type="package" value=""/>
+			</group>
+
+			<group name="transaction" label="Prevayler Transaction" checkbox="checkTransaction">
+				<checkbox name="checkTransaction" label="Create:" value="true"/>
+				<textfield name="prevaylerTransactionClass" label="Class:" required="true" value="PrevaylerTransaction"/>
+				<container name="prevaylerTransactionPackage" label="Package:" required="true" type="package" value=""/>
+			</group>
+
+			<group name="snapshot" label="Prevayler SnapshotTimer" checkbox="checkSnapshot">
+				<checkbox name="checkSnapshot" label="Create:" value="true"/>
+				<textfield name="prevaylerSnapshotClass" label="Class:" required="true" value="PrevaylerSnapshotTimer"/>
+				<container name="prevaylerSnapshotPackage" label="Package:" required="true" type="package" value=""/>
+			</group>
+			
+			
+
+        </component-page>
+
+        <output>
+            <template component="prevaylerSystemClass" velocity="PrevaylerSystem.vm" extension="java" container="prevaylerSystemPackage"/>
+            <template component="prevaylerTransactionClass" velocity="PrevaylerTransaction.vm" extension="java" container="prevaylerTransactionPackage"/>
+			<template component="prevaylerSnapshotClass" velocity="SnapshotTimer.vm" extension="java" container="prevaylerSnapshotPackage"/>
+        </output>
+
+    </wizard>
+</EclipseWork>

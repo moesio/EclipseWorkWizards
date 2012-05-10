@@ -1,0 +1,14 @@
+<%@ taglib uri="webwork" prefix="ww" %>
+
+<META HTTP-EQUIV="Refresh" CONTENT="2;URL=<ww:url includeParams="all"/>">
+
+<textarea cols="70" rows="5">
+<action name="wait" class="Action" >
+	<interceptor-ref name="executeAndWaitStack"/>
+	<result name="wait" type="dispatcher">/wait.jsp</result>
+	<result name="success" type="dispatcher">/wait-ok.jsp</result>
+</action>
+</textarea>
+
+<br><br>
+<b>$waitText</b>

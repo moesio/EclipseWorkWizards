@@ -1,0 +1,86 @@
+<%@ taglib prefix='ww' uri='webwork' %>
+<%@ page import="org.acegisecurity.ui.AbstractProcessingFilter" %>
+<%@ page import="org.acegisecurity.ui.webapp.AuthenticationProcessingFilter" %>
+<%@ page import="org.acegisecurity.AuthenticationException" %>
+<%@ page pageEncoding="ISO-8859-1" %>
+<html>
+	<head>
+		<style type="text/css">
+			#login{
+				position: absolute;
+				left: 50%;
+				top: 50%;
+				margin-left: -150px;
+				margin-top: -100px;
+				width: 300px;
+				background-image: url("");
+				background-repeat: repeat-y;
+			}
+			#logintop {
+				background-image: url("");
+				background-repeat: repeat-y;
+			}
+			#loginmiddle{
+			}
+			#loginbottom {
+				background-image: url("");
+				background-repeat: repeat-y;
+			}
+			body {
+				font-family: verdana;
+				background-image: url("");
+				background-position: 100% 0%;
+				background-repeat: no-repeat;
+			}
+			#logo {
+				position: absolute;
+				bottom: 0px;
+				left: 0px;
+				width: 200;
+				height: 70;
+				background-image: url("");
+				background-position: 100% 0%;
+				background-repeat: no-repeat;
+			}
+			input {
+				border: 1px solid #ccc;
+			}
+			#errologin {
+				font-size: 10px;
+				margin: 0 20 0 20;
+				text-align: center;
+			}
+		</style>
+	</head>
+  <body onLoad="document.forms[0].elements[0].focus()">
+  	<div id="login">
+	  	<div id="logintop">&nbsp;</div>
+			<form action="<ww:url value='j_acegi_security_check'/>" method="POST">
+			  	<div id="loginmiddle">
+			  			<br/>
+						<table align="center">
+                            <tr><td><u>U</u>suário:</td><td><input accesskey="u" type='text' name='j_username' <% if("1".equals(request.getParameter("login_error"))) { %>value='<%= session.getAttribute(AuthenticationProcessingFilter.ACEGI_SECURITY_LAST_USERNAME_KEY) %>'<% } %>></td></tr>
+							<tr><td><u>S</u>enha:</td><td><input accesskey="s" type='password' name='j_password'></td></tr>
+							<tr><td colspan="2" align="center"><br/><input name="submit" type="submit" value="Login"></td></tr>
+						</table>
+					    <% 
+					    
+						if (session.getAttribute(AbstractProcessingFilter.ACEGI_SECURITY_LAST_EXCEPTION_KEY) != null)
+					    { 
+					    %>
+						<br/>
+					    <div id="errologin">
+					      <font color="red" >
+                            Não foi possível realizar o login.<br/>
+					        Erro: <%= ((AuthenticationException) session.getAttribute(AbstractProcessingFilter.ACEGI_SECURITY_LAST_EXCEPTION_KEY)).getMessage() %>
+					        <br><br>
+					      </font>
+					     </div>
+					    <% } %>
+				</div>
+		    </form>
+	  	<div id="loginbottom">&nbsp;</div>
+  	</div>
+  	<div id="logo">&nbsp;</div>
+  </body>
+</html>

@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<EclipseWork>
+<wizard>
+        <title>DAO Pattern</title>
+
+        <component-page required="true">
+            <description>Interface for all DAO´s.</description>
+
+			<container name="packageDAO" label="Package:" required="true" type="package" />
+            <textfield name="classDAO" label="DAO Interface:" required="true" extension="java" value="DAO"/>
+
+			<group label="Don´t need to throw any exceptions to use 'Hibernate 3' or 'Springs DAO´s'">
+				<checkbox name="checkThrows" label="throws DAOException ?" value="false"/>
+			</group>
+
+			<group name="g0" label="Exception" checkbox="createDAOException">
+				<checkbox name="createDAOException" label="Create DAOException" />
+
+				<container name="packageDAOException" label="Package:" required="true" type="package" />
+		        <textfield name="classDAOException" label="DAO Exception:" required="true" extension="java" value="DAOException"/>
+			</group>
+
+        </component-page>
+
+		<!-- Output Files -->
+        <output>
+            <template component="classDAO" velocity="DAO.vm" extension="java" container="packageDAO"/>
+
+			<!-- Only creates if the checkbox is checked -->
+			<template component="classDAOException" velocity="DAOException.vm" extension="java" container="packageDAOException" >
+				<condition variable="createDAOException" value="true" />
+			</template>
+
+        </output>
+    </wizard>
+</EclipseWork>

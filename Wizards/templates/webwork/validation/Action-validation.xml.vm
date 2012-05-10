@@ -1,0 +1,14 @@
+#set($obj = $stringUtils.uncapitalise(${pojo.name}))
+<!DOCTYPE validators PUBLIC "-//OpenSymphony Group//XWork Validator 1.0//EN"
+    "http://www.opensymphony.com/xwork/xwork-validator-1.0.2.dtd">
+<validators>
+#foreach($f in $pojo.fields)
+#if(${f.type} == "String" )
+	<field name="${obj}.${f.name}">
+        <field-validator type="requiredstring">
+            <message>$f.name is required.</message>
+        </field-validator>
+    </field>
+#end
+#end
+</validators>

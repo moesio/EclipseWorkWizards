@@ -1,0 +1,11 @@
+<html>
+	<head>
+		<title>
+			$display-name
+		</title>
+		<meta http-equiv="refresh" content="0; url=index.action"></meta>
+	</head>
+	<body>
+		$display-name
+	</body>
+</html>

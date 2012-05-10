@@ -1,0 +1,146 @@
+#if($package)
+package $package;
+#end
+
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.hibernate.HibernateException;
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.hibernate.Transaction;
+import org.hibernate.cfg.Configuration;
+
+/**
+ * This is for Hibernate version 2.x & 3.x
+ *
+ * Hibernate is designed to be useable in any kind of Java application,
+ * including applications that make extensive use of multithreading. So,
+ * unlike the ODMG API, Hibernate's native API does not use the current
+ * thread to maintain associations between Session and Transaction or
+ * between Session and application thread. This can be inconvenient for
+ * J2EE applications where access to a Session instance is always from
+ * a particular thread. It is particularly inconvenient when using a DAO
+ * pattern, when the different DAO classes need to obtain the (same)
+ * current session.
+ *
+ * A thread-local variable effectively provides a separate copy of its
+ * value for each thread that uses it. Each thread can see only the value
+ * associated with that thread, and is unaware that other threads may be
+ * using or modifying their own copies.
+ * 
+ * @author Gavin King
+#if($author)
+ * @author $author
+#end
+ */
+public class $class {
+
+	private static Log log = LogFactory.getLog(HibernateUtil.class);
+
+	private static Configuration configuration;
+
+	private static SessionFactory sessionFactory;
+
+	private static final ThreadLocal threadSession = new ThreadLocal();
+
+	private static final ThreadLocal threadTransaction = new ThreadLocal();
+
+	// Create the initial SessionFactory from the default configuration files
+	static {
+		try {
+			configuration = new Configuration();
+			sessionFactory = configuration.configure().buildSessionFactory();
+		}
+		catch (Throwable ex) {
+			// We have to catch Throwable, otherwise we will miss
+			// NoClassDefFoundError and other subclasses of Error
+			log.error("Building SessionFactory failed.", ex);
+			throw new ExceptionInInitializerError(ex);
+		}
+	}
+
+	/**
+	 * Returns the SessionFactory used for this static class.
+	 * 
+	 * @return SessionFactory
+	 */
+	public static SessionFactory getSessionFactory() {
+		return sessionFactory;
+	}
+
+	/**
+	 * Retrieves the current Session local to the thread. <p/> If no Session is
+	 * open, opens a new Session for the running thread.
+	 * 
+	 * @return Session
+	 */
+	public static Session getSession() {
+		Session s = (Session) threadSession.get();
+		if(s == null) {
+			log.debug("Opening new Session for this thread.");
+			s = getSessionFactory().openSession();
+			threadSession.set(s);
+		}
+		return s;
+	}
+
+	/**
+	 * Closes the Session local to the thread.
+	 */
+	public static void closeSession() {
+		Session s = (Session) threadSession.get();
+		threadSession.set(null);
+		if(s != null && s.isOpen()) {
+			log.debug("Closing Session of this thread.");
+			s.close();
+		}
+	}
+
+	/**
+	 * Start a new database transaction.
+	 */
+	public static void beginTransaction() {
+		Transaction tx = (Transaction) threadTransaction.get();
+		if(tx == null) {
+			log.debug("Starting new database transaction in this thread.");
+			tx = getSession().beginTransaction();
+			threadTransaction.set(tx);
+		}
+	}
+
+	/**
+	 * Commit the database transaction.
+	 */
+	public static void commitTransaction() {
+		Transaction tx = (Transaction) threadTransaction.get();
+		try {
+			if(tx != null && !tx.wasCommitted() && !tx.wasRolledBack()) {
+				log.debug("Committing database transaction of this thread.");
+				tx.commit();
+			}
+			threadTransaction.set(null);
+		}
+		catch (HibernateException ex) {
+			rollbackTransaction();
+			throw ex;
+		}
+	}
+
+	/**
+	 * Rollback the database transaction.
+	 */
+	public static void rollbackTransaction() {
+		Transaction tx = (Transaction) threadTransaction.get();
+		try {
+			threadTransaction.set(null);
+			if(tx != null && !tx.wasCommitted() && !tx.wasRolledBack()) {
+				log
+						.debug("Tyring to rollback database transaction of this thread.");
+				tx.rollback();
+			}
+		}
+		finally {
+			closeSession();
+		}
+	}
+}

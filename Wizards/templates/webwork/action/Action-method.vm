@@ -1,0 +1,10 @@
+#if($methodName)
+	/**
+	 * @return
+	 * @throws Exception
+	 */
+	public String $methodName() throws Exception
+	{
+		return Action.SUCCESS;
+	}
+#end

@@ -1,0 +1,57 @@
+#if($package)
+package $package;
+#end
+
+import java.io.PrintWriter;
+
+import javax.servlet.http.HttpServletResponse;
+
+import com.opensymphony.webwork.dispatcher.WebWorkResultSupport;
+import com.opensymphony.xwork.ActionInvocation;
+
+/**
+ * <result-type name="buffer" class="$name.fullyName" default="false"/>
+ *
+ * @author Ricardo Lecheta
+ */
+public class $class extends WebWorkResultSupport {
+    protected String buffer = "buffer";
+
+    /**
+     * @return Returns the inputName.
+     */
+    public String getBuffer() {
+        return (buffer);
+    }
+
+    /**
+     * @param inputName The inputName to set.
+     */
+    public void setBuffer(String inputName) {
+        this.buffer = inputName;
+    }
+
+    /**
+     * @see com.opensymphony.xwork.Result#execute(com.opensymphony.xwork.ActionInvocation)
+     */
+    protected void doExecute(String finalLocation, ActionInvocation invocation) throws Exception {
+        // Find the inputstream from the invocation variable stack
+        StringBuffer sb = (StringBuffer) invocation.getStack().findValue(buffer);
+
+        // Find the Response in context
+        HttpServletResponse oResponse = (HttpServletResponse) invocation.getInvocationContext().get(HTTP_RESPONSE);
+
+        // Set the content type
+        oResponse.setContentType("text/plain");
+        oResponse.setContentLength(sb.length());
+
+        // Print
+		PrintWriter writer = oResponse.getWriter();
+
+		writer.print(sb.toString());
+
+		// Flush
+		writer.flush();
+		writer.close();
+    }
+}

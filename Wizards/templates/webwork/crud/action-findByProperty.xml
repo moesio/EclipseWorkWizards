@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<EclipseWork>
+    <wizard>
+        <title>WebWork Action + Hibernate</title>
+
+		<component-page>
+			<description>select * from ? where column like %xxx%</description>
+
+			<group>
+				<type name="model" label="POJO" required="true" value="model.Escola"/>
+			</group>
+
+			<type name="action" label="Action:" required="true" value="action.EscolaAction"/>
+
+			<type name="dao" label="DAO Model Interface" required="true" value="dao.EscolaDAO"/>
+
+			<type name="hibernateDAO" label="HibernateModelDAO" required="true" value="hibernate.dao.HibernateEscolaDAO"/>
+
+			<textfield name="property" label="Property to find" required="true" value="nome"/>
+			
+			<group label="Web">
+				<container name="container" label="WebRoot:" required="true" type="folder" value="#webroot"/>
+				<textfield name="jsp" label="JSP: " required="true" />
+			</group>
+			
+			
+		</component-page>
+
+		<component-page required="true">
+			<include file="includes/xwork_package.xml" />
+		</component-page>
+
+		<variables>
+			<var name="namespace" value="xwork_package_namespace" />
+		</variables>
+
+		<!-- Output Files -->
+        <output>
+
+			<!-- Action -->
+			<template component="action" method="Action-findByName.vm" />
+
+			<template component="dao" method="Action-findByName-DAO.vm" />
+
+			<template component="hibernateDAO" method="Action-findByName-HibernateDAO.vm" />
+
+			<template component="jsp" velocity="Action-findByName-jsp.vm" extension="jsp" container="container" />
+
+			<xml-update file="xwork.xml">
+				<package name="${xwork_package_name}" extends="${xwork_package_extends}" namespace="$!namespace" check-before-create="true">
+				    <action name="find${model.name}By$stringUtils.capitalise(${property})" class="${action.fullyName}" method="find${model.name}By$stringUtils.capitalise(${property})">
+				      <result name="success" type="freemarker">${namespace}/$stringUtils.uncapitalise(${model.elementName})s.ftl</result>
+				    </action>
+				</package>
+			</xml-update>
+
+        </output>
+    </wizard>
+</EclipseWork>

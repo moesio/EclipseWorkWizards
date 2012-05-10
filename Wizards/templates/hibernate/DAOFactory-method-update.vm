@@ -1,0 +1,8 @@
+
+	/**
+	 * Get the DAOFactory to Hibernate
+	 * @return
+	 */
+	public static DAOFactory get${hibernateDAOFactory.name}() {
+		return new ${hibernateDAOFactory.name}();
+	}

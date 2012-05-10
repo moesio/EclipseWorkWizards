@@ -1,0 +1,6 @@
+#set($obj = $stringUtils.uncapitalise(${model.name}))
+<b>$stringUtils.capitalise(${model.name})s:</b><br>
+
+#foreach($f in $model.fields)
+<br><b>$stringUtils.uncapitalise(${f.name})</b>: $!$stringUtils.uncapitalise(${model.name}).${f.name}
+#end
