@@ -2,9 +2,7 @@
 <templates>
 	<category name="Geração da estrutura para CRUD">
 		<wizards>
-			<!-- 
 			<wizard-def description="Criar DAOs e Services" template="templates/seimos/daosEServices.xml" />
-			 -->
 			<wizard-def description="Criar DAO (interface e implementação)" template="templates/indole/05-springmapping/dao/createModelDao.xml"/>
 			<wizard-def description="Criar Service (interface e implementação)" template="templates/indole/05-springmapping/business/createModelManager.xml"/>
 		</wizards>
