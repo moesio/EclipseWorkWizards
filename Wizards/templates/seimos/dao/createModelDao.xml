@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<EclipseWork>
+	<wizard>
+		<title>DAO</title>
+
+		<component-page required="true">
+			<description>Cria Hibernate DAO</description>
+
+			<group>
+				<type name="model" label="POJO:" required="true" />
+			</group>
+
+			<group label="DAO Interface">
+				<textfield name="daoInterface" label="Nome:" required="true" extension="java" default-value="${model.name}Dao" />
+				<type name="baseDaoInterface" label="Extends:" required="true" value="br.com.seimos.commons.dao.GenericDao" />
+				<container name="packageInterface" label="Pacote:" required="true" type="package" value="#daoInterfacePackage"/>
+			</group>
+			
+			<group label="DAO Implementation">
+				<textfield name="daoImpl" label="Class:" required="true" extension="java" default-value="${model.name}DaoImpl" />
+				<type name="baseDaoImpl" label="Extends:" required="true" value="br.com.seimos.commons.dao.GenericDaoImpl" />
+				<container name="packageImpl" label="Pacote:" required="true" type="package" value="#daoHibernatePackage"/>	
+			</group>
+
+		</component-page>
+		<!-- Output Files -->
+		<output>
+			<!-- Creates the Manager interface -->
+			<template component="daoInterface" velocity="DaoInterface.vm" extension="java" container="packageInterface" />
+
+			<template component="daoImpl" velocity="DaoHibernate.vm" extension="java" container="packageImpl" />
+		</output>
+	</wizard>
+</EclipseWork>

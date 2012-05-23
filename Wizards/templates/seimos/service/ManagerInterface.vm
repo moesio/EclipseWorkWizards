@@ -1,0 +1,27 @@
+#if($package)
+package $package;
+#end
+
+#set ($hasFileField=false)
+#foreach($f in $model.fields)
+#if($f.type=="File")
+#set ($hasFileField=true)
+#end
+#end
+#if($hasFileField)
+import br.com.indole.model.type.File;
+#end
+import $baseManagerInterface.fullyName;
+import $model.fullyName;
+
+/**
+ * @author $author
+ * @date $date
+ */
+public interface $class extends $baseManagerInterface.name<$model.name> {
+#foreach($f in $model.fields)
+#if($f.type=="File" )
+	public File find${stringUtils.capitalise($f.name)}(Long id);
+#end
+#end
+}

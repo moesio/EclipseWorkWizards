@@ -1,0 +1,19 @@
+/* Model */ 
+App.Models.${model.name} = Backbone.Model.extend({ 
+	url: function() { 
+		return this.id ? '${model.name}/' + this.id : '${model.name}'; 
+	} 
+}); 
+
+/* Collection */
+App.Collections.${model.name}s = MonetCollection.extend({
+	model: App.Models.${model.name},
+	url: '${model.name}'
+});
+
+/* Router */ 
+App.Routers.${model.name} = App.Routers.BaseRoute.extend({ 
+	initialize: function() { 
+		this.init('${model.name}', App.Models.${model.name}, App.Collections.${model.name}s); 
+	} 
+}); 

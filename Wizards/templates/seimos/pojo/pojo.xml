@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<EclipseWork>
+    <wizard>
+        <title>Criação do POJO</title>
+
+        <component-page required="true">
+            <description>Criação do Modelo</description>
+
+			<container name="modelPackage" label="Pacote dos modelos:" required="true" type="package" value="#modelPackage"/>
+            <textfield name="pojo" label="Entidade" required="true" extension="java" value=""/>
+        </component-page>
+
+		<!-- Output Files -->
+        <output>
+            <template component="pojo" velocity="pojo.vm" extension="java" container="modelPackage"/>
+        </output>
+    </wizard>
+</EclipseWork>

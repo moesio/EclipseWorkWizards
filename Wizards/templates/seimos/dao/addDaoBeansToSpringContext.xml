@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<EclipseWork>
+    <wizard>
+        <title>DAO</title>
+
+		<component-page required="true">
+			<description>Adiciona DAO beans ao arquivos de contexto do Spring</description>
+
+			<group label="Proxy Bean">
+				<file name="fileDao" label="applicationContext-dao.xml:" extensions="xml" required="true" value="#applicationContext-dao.xml"/>
+				<type name="proxyDao" label="Interface do DAO:" required="true" />
+				<textfield name="proxyName" label="Nome do Proxy:" default-value="${proxyDao.uncapName}" required="true"/>
+			</group>
+
+			<group label="Target Bean">
+				<file name="fileDaoTarget" label="applicationContext-dao-hibernate.xml:" extensions="xml" required="true" value="#applicationContext-dao-hibernate.xml"/>
+				<type name="targetDao" label="Implementação DAO:" required="true" />
+				<textfield name="targetName" label="Nome do Target:" default-value="${proxyDao.uncapName}Target" required="true"/>
+			</group>
+
+		</component-page>
+
+		<!-- Output Files -->
+        <output>
+			<xml-update file="fileDao">
+				<bean id="${proxyName}" class="org.springframework.aop.framework.ProxyFactoryBean">
+				    <property name="proxyInterfaces">
+				      <value>${proxyDao}</value>
+				    </property>
+				    <property name="target">
+				      <ref bean="${targetName}" />
+				    </property>
+				</bean>
+			</xml-update>
+
+			<xml-update file="fileDaoTarget">
+				<bean id="${targetName}" class="${targetDao}">
+					<property name="sessionFactory"><ref bean="sessionFactory"/></property>
+				</bean>
+			</xml-update>
+        </output>
+    </wizard>
+</EclipseWork>

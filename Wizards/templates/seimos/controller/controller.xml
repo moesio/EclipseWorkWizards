@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<EclipseWork>
+	<wizard>
+		<title>Controllers</title>
+
+		<component-page required="true">
+			<description>Controller</description>
+
+			<group>
+				<type name="model" label="POJO:" required="true" />
+			</group>
+			<group>
+				<type name="baseController" label="GenericController: "
+					required="true" value="br.com.seimos.commons.controller.GenericCrudController" />
+				<type name="serviceInterface" label="Interface Service da entidade: "
+					required="true" value="" />
+				<container name="controller.package" label="Controller Package:"
+					required="true" type="package" value="" />
+			</group>
+
+		</component-page>
+
+		<output>
+
+			<template component="controllerImpl" expression="${model.name}Controller"
+				velocity="Controller.vm" extension="java" container="controller.package" />
+
+		</output>
+
+	</wizard>
+</EclipseWork>

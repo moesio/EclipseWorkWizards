@@ -2,9 +2,12 @@
 <templates>
 	<category name="Geração da estrutura para CRUD">
 		<wizards>
-			<wizard-def description="Criar DAOs e Services" template="templates/seimos/daosEServices.xml" />
-			<wizard-def description="Criar DAO (interface e implementação)" template="templates/indole/05-springmapping/dao/createModelDao.xml"/>
-			<wizard-def description="Criar Service (interface e implementação)" template="templates/indole/05-springmapping/business/createModelManager.xml"/>
+			<wizard-def description="Criar DAO, Service e Controller" template="templates/seimos/crud.xml" />
+			<wizard-def description="Mapeamento" template="templates/seimos/pojo/pojo.xml"/>
+			<wizard-def description="DAO" template="templates/seimos/dao/createModelDao.xml"/>
+			<wizard-def description="Service" template="templates/seimos/service/createModelManager.xml"/>
+			<wizard-def description="Controller" template="templates/seimos/controller/controller.xml"/>
+			<wizard-def description="Parte cliente (js)" template="templates/seimos/js/js.xml"/>
 		</wizards>
 	</category>
 	<!-- 
@@ -201,5 +204,5 @@
 			</wizards>
 		</category>
 	</category>
--->
+	-->
 </templates>

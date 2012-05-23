@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<EclipseWork>
+	<wizard>
+		<title>Parte cliente em javascript</title>
+
+		<component-page required="true">
+			<description>Criação dos scripts</description>
+
+			<type name="model" label="Modelo (domain):" required="true" />
+			<container name="resource" label="Pasta:" required="true" type="folder" />
+
+		</component-page>
+
+		<!-- Output Files -->
+		<output>
+			<template component="${model.name}_crud.js" velocity="js.vm" extension="js" container="resource" />
+		</output>
+	</wizard>
+</EclipseWork>

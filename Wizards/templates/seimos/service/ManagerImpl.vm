@@ -1,0 +1,45 @@
+#if($package)
+package $package;
+#end
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import $baseManagerImpl.fullyName;
+
+import $daoPropertyInterface.fullyName;
+import $model.fullyName;
+#set ($hasFileField=false)
+#foreach($f in $model.fields)
+#if($f.type=="File")
+#set ($hasFileField=true)
+#end
+#end
+#if($hasFileField)
+import br.com.indole.model.type.File;
+#end
+
+/**
+ * @author $author
+ * @date $date
+ */
+@Service("${stringUtils.uncapitalise($model.name)}Service")
+public class $class extends $baseManagerImpl.name<$model.name, $daoPropertyInterface.name> implements $managerInterface.name {
+#foreach($f in $model.fields)
+#if($f.type=="File" )
+	public File find${stringUtils.capitalise($f.name)}(Long id)
+	{
+		return getDao().find${stringUtils.capitalise($f.name)}(id);
+	}
+#end
+#end
+
+	@Autowired
+	private $daoPropertyInterface.name $stringUtils.uncapitalise($daoPropertyInterface.name);
+
+	@Override
+	public $daoPropertyInterface.name getDao() {
+		return $stringUtils.uncapitalise($daoPropertyInterface.name);
+	}
+
+}

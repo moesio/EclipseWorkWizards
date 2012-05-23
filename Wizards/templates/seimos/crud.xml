@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <EclipseWork>
 	<wizard>
-		<title>Criação de DAOs, Services e Controllers</title>
+		<title>Criação de DAO, Service,Controller e javascript</title>
 
 		<model-page required="true">
-			<description>Adicione POJOs para criar DAOs e Services</description>
+			<description>Adicione modelos de domínio para criar DAO, Service, Controller e javascript</description>
 		</model-page>
 		
         <component-page required="true">
@@ -44,6 +44,10 @@
 				<container name="controller.package" label="Controller Package:" required="true" type="package" value=""/>
 			</group>
 		</group>
+		
+		<group>
+			<container name="resource" label="Pasta:" required="true" type="folder" />
+		</group>
 				
         </component-page>
 
@@ -58,6 +62,8 @@
 <!-- 			</condition> -->
 
 			<template component="controllerImpl"   expression="${model.name}Controller"  velocity="Controller.vm"       extension="java" container="controller.package" />
+			
+			<template component="${model.name}_crud.js" velocity="js/js.vm" extension="js" container="resource" />
 
 		</output>
 		
