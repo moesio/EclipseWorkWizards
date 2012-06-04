@@ -15,7 +15,7 @@ import $model.fullyName;
  * @author $author
  * @date $date
  */
-@Service("${stringUtils.uncapitalise($model.name)}")
+@Service("${stringUtils.uncapitalise($model.name)}Service")
 public class $class extends $baseServiceImpl.name<$model.name, $daoInterface.name> implements $serviceInterface.name {
 
 	@Autowired
